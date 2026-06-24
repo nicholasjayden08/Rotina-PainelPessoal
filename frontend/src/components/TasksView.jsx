@@ -6,7 +6,7 @@ import { EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
 import { STATUSES } from '../constants';
 
 export function TasksView({ tarefas, loading, error, criar, atualizar, atualizarStatus, excluir }) {
-  const [filter, setFilter] = useState('todas');
+  const [filter, setFilter] = useState('pendentes');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
 
@@ -54,9 +54,9 @@ export function TasksView({ tarefas, loading, error, criar, atualizar, atualizar
 
       <div className="filter-row">
         {[
-          { id: 'todas', label: `todas (${tarefas.length})` },
           { id: 'pendentes', label: `pendentes (${tarefas.filter((t) => t.status !== 'CONCLUIDO').length})` },
           { id: 'concluidas', label: `concluídas (${tarefas.filter((t) => t.status === 'CONCLUIDO').length})` },
+          { id: 'todas', label: `todas (${tarefas.length})` },
         ].map((f) => (
           <button
             key={f.id}
