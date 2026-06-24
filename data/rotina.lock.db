@@ -1,6 +1,6 @@
 #FileLock
-#Wed Jun 24 12:42:14 GMT-03:00 2026
+#Wed Jun 24 13:55:21 GMT-03:00 2026
 hostName=mini-de-thiago
-id=19efa4bd5e094c4c75b224cfa1bf2afce7308738406
+id=19efa8ec37fdbed155307139a810001a69f377bb9d9
 method=file
-server=192.168.15.20\:51022
+server=192.168.15.20\:51180
