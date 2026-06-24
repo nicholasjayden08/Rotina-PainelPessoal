@@ -1,0 +1,116 @@
+import { useState } from 'react';
+import { Save } from 'lucide-react';
+import { ModalShell, FormField } from './Shared';
+import { TASK_TYPES, EFFORT_LEVELS, PRIORITIES, STATUSES } from '../constants';
+
+export function TaskFormModal({ initial, onSave, onClose }) {
+  const [nome, setNome] = useState(initial?.nome || '');
+  const [descricao, setDescricao] = useState(initial?.descricao || '');
+  const [status, setStatus] = useState(initial?.status || 'NAO_INICIADO');
+  const [tipos, setTipos] = useState(initial?.tipos || []);
+  const [prioridade, setPrioridade] = useState(initial?.prioridade || 'MEDIA');
+  const [esforco, setEsforco] = useState(initial?.esforco || 'MEDIA');
+  const [prazo, setPrazo] = useState(initial?.prazo || '');
+  const [saving, setSaving] = useState(false);
+  const [erro, setErro] = useState(null);
+
+  function toggleTipo(id) {
+    setTipos((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }
+
+  async function handleSave() {
+    if (!nome.trim()) return;
+    setSaving(true);
+    setErro(null);
+    try {
+      await onSave({
+        nome: nome.trim(),
+        descricao: descricao.trim(),
+        status,
+        tipos,
+        prioridade,
+        esforco,
+        prazo: prazo || null,
+      });
+    } catch (e) {
+      setErro(e.message);
+      setSaving(false);
+    }
+  }
+
+  return (
+    <ModalShell title={initial ? 'editar tarefa' : 'nova tarefa'} onClose={onClose}>
+      <FormField label="nome da tarefa">
+        <input
+          autoFocus
+          className="input"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          placeholder="ex: revisar matriz de pipeline"
+        />
+      </FormField>
+
+      <FormField label="descrição">
+        <textarea
+          className="input"
+          style={{ height: 64, resize: 'vertical' }}
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          placeholder="opcional"
+        />
+      </FormField>
+
+      <div className="form-row form-row-responsive">
+        <FormField label="status">
+          <select className="input" value={status} onChange={(e) => setStatus(e.target.value)}>
+            {STATUSES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
+          </select>
+        </FormField>
+        <FormField label="prazo">
+          <input type="date" className="input" value={prazo || ''} onChange={(e) => setPrazo(e.target.value)} />
+        </FormField>
+      </div>
+
+      <div className="form-row form-row-responsive">
+        <FormField label="prioridade">
+          <select className="input" value={prioridade} onChange={(e) => setPrioridade(e.target.value)}>
+            {PRIORITIES.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+          </select>
+        </FormField>
+        <FormField label="nível de esforço">
+          <select className="input" value={esforco} onChange={(e) => setEsforco(e.target.value)}>
+            {EFFORT_LEVELS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+          </select>
+        </FormField>
+      </div>
+
+      <FormField label="tipo de tarefa">
+        <div className="chip-row">
+          {TASK_TYPES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => toggleTipo(t.id)}
+              className="chip"
+              style={{
+                borderColor: tipos.includes(t.id) ? t.color : '#2A2E35',
+                color: tipos.includes(t.id) ? t.color : '#7A7F88',
+                background: tipos.includes(t.id) ? t.color + '14' : 'transparent',
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </FormField>
+
+      {erro && <p className="error-block">⚠ {erro}</p>}
+
+      <div className="modal-actions">
+        <button className="secondary-btn" onClick={onClose}>cancelar</button>
+        <button className="primary-btn" onClick={handleSave} disabled={saving}>
+          <Save size={14} /> {saving ? 'salvando...' : 'salvar'}
+        </button>
+      </div>
+    </ModalShell>
+  );
+}

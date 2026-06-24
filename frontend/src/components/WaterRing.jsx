@@ -1,0 +1,39 @@
+import { WATER_GOAL } from '../constants';
+
+export function WaterRing({ value, onChange }) {
+  const v = value || 0;
+  const pct = Math.min(1, v / WATER_GOAL);
+  const r = 54;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - pct);
+
+  return (
+    <div className="water-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r={r} fill="none" stroke="#21252B" strokeWidth="10" />
+        <circle
+          cx="70" cy="70" r={r} fill="none" stroke="#5B9FED" strokeWidth="10"
+          strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
+          transform="rotate(-90 70 70)"
+          style={{ transition: 'stroke-dashoffset 0.3s ease' }}
+        />
+        <text x="70" y="65" textAnchor="middle" fontSize="22" fontWeight="600" fill="#EDEFF2" fontFamily="JetBrains Mono, monospace">
+          {v.toFixed(1)}L
+        </text>
+        <text x="70" y="84" textAnchor="middle" fontSize="11" fill="#7A7F88">
+          de {WATER_GOAL}L
+        </text>
+      </svg>
+      <div className="water-buttons">
+        {[0.25, 0.5, 1].map((inc) => (
+          <button key={inc} className="water-btn" onClick={() => onChange(Math.round((v + inc) * 100) / 100)}>
+            +{inc}L
+          </button>
+        ))}
+        <button className="water-btn-reset" onClick={() => onChange(0)}>
+          zerar
+        </button>
+      </div>
+    </div>
+  );
+}
