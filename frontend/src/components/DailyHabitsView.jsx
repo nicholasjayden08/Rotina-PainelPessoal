@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Clock, CheckSquare, Edit3, Trash2 } from 'lucide-react';
+import { Plus, Clock, Edit3, Trash2, Check } from 'lucide-react';
 import { DailyHabitFormModal } from './DailyHabitFormModal';
 import { EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
 import { PERIODS } from '../constants';
@@ -61,8 +61,10 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
               <div className="task-list">
                 {g.items.map((h) => (
                   <div key={h.id} className="habit-row">
-                    <button onClick={() => alternarFeito(h.id)} className="check-btn" aria-label="marcar como feito">
-                      <CheckSquare size={18} strokeWidth={2} color={h.feito ? '#3DDC84' : '#5A5F68'} fill={h.feito ? '#3DDC84' : 'none'} />
+                    <button onClick={() => alternarFeito(h.id)} className="habit-check-btn" aria-label="marcar como feito">
+                      <span className={`habit-check-box ${h.feito ? 'habit-check-box-done' : ''}`}>
+                        {h.feito && <Check size={13} strokeWidth={3} color="#0D0F12" />}
+                      </span>
                     </button>
                     <div style={{ flex: 1 }}>
                       <p className="habit-name" style={{ textDecoration: h.feito ? 'line-through' : 'none', opacity: h.feito ? 0.5 : 1 }}>
