@@ -1,5 +1,5 @@
 import { FormField } from './Shared';
-import { CheckSquare } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { MOODS, SLEEP_QUALITY } from '../constants';
 
 export function TodayForm({ registro, onChange }) {
@@ -59,8 +59,10 @@ function CheckboxPill({ label, checked, onChange }) {
         background: checked ? '#3DDC8414' : 'transparent',
       }}
     >
-      <CheckSquare size={14} fill={checked ? '#3DDC84' : 'none'} color={checked ? '#3DDC84' : '#5A5F68'} />
-      {label}
+      <span className={`habit-check-box ${checked ? 'habit-check-box-done' : ''}`}>
+            {checked && <Check size={11} strokeWidth={3} color="#0D0F12" />}
+      </span>
+        {label}
     </button>
   );
 }
