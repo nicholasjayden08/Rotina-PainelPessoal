@@ -1,4 +1,4 @@
-import { Flame, CheckSquare, Droplet, Calendar } from 'lucide-react';
+import { Flame, Check, Droplet, Calendar } from 'lucide-react';
 import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
 import { HeatmapStrip } from './HeatmapStrip';
@@ -66,7 +66,9 @@ export function HomeView({ tarefas, habitos, registroHoje, historico14, onAtuali
             <div className="mini-list">
               {habitos.slice(0, 5).map((h) => (
                 <div key={h.id} className="mini-item">
-                  <CheckSquare size={15} strokeWidth={2} color={h.feito ? '#3DDC84' : '#5A5F68'} fill={h.feito ? '#3DDC84' : 'none'} />
+                  <span className={`habit-check-box ${h.feito ? 'habit-check-box-done' : ''}`}>
+                        {h.feito && <Check size={11} strokeWidth={3} color="#0D0F12" />}
+                  </span>
                   <span className="mini-item-text" style={{ textDecoration: h.feito ? 'line-through' : 'none', opacity: h.feito ? 0.55 : 1 }}>
                     {h.nome}
                   </span>
