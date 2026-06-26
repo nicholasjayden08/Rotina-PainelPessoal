@@ -1,12 +1,18 @@
+function toLocalISO(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export function todayISO() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
+  return toLocalISO(new Date());
 }
 
 export function daysAgo(n) {
   const d = new Date();
   d.setDate(d.getDate() - n);
-  return d.toISOString().slice(0, 10);
+  return toLocalISO(d);
 }
 
 export function fmtDateLabel(iso) {
