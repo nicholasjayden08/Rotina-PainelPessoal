@@ -10,8 +10,7 @@ function buildSeries(historico, dias) {
   const days = rangeDays(dias);
   const map = {};
   historico.forEach((e) => { map[e.data] = e; });
-  return days.map((d) => ({ date: d, label: fmtDateLabel(d).slice(0, 6), entry: map[d] || null }));
-}
+  return days.map((d) => ({ date: d, label: fmtDateLabel(d), entry: map[d] || null }));}
 
 const tooltipStyle = {
   background: '#1B1F26',
@@ -23,30 +22,39 @@ const tooltipStyle = {
 
 export function WaterChart({ historico, dias }) {
   const data = buildSeries(historico, dias).map((d) => ({
+    date: d.date,
     label: d.label,
     agua: d.entry?.agua || 0,
   }));
 
   return (
-    <div className="chart-block">
-      <p className="chart-title">
-        <Droplet size={13} color="#5B9FED" style={{ verticalAlign: -2, marginRight: 5 }} />
-        água por dia
-      </p>
-      <ResponsiveContainer width="100%" height={160}>
-        <BarChart data={data} margin={{ top: 8, right: 4, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1F2329" vertical={false} />
-          <XAxis dataKey="label" stroke="#5A5F68" fontSize={10} tickLine={false} axisLine={{ stroke: '#1F2329' }} />
-          <YAxis stroke="#5A5F68" fontSize={10} tickLine={false} axisLine={false} width={28} />
-          <Tooltip
-            contentStyle={tooltipStyle}
-            formatter={(value) => [`${value}L`, 'água']}
-          />
-          <ReferenceLine y={WATER_GOAL} stroke="#E8A33D" strokeDasharray="4 4" strokeOpacity={0.6} />
-          <Bar dataKey="agua" fill="#5B9FED" radius={[4, 4, 0, 0]} maxBarSize={28} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+      <div className="chart-block">
+        <p className="chart-title">
+          <Droplet size={13} color="#5B9FED" style={{ verticalAlign: -2, marginRight: 5 }} />
+          água por dia
+        </p>
+        <ResponsiveContainer width="100%" height={160}>
+          <BarChart data={data} margin={{ top: 8, right: 4, left: -20, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1F2329" vertical={false} />
+            <XAxis
+                dataKey="date"
+                tickFormatter={(value, index) => data[index]?.label.slice(0, 6) || ''}
+                stroke="#5A5F68"
+                fontSize={10}
+                tickLine={false}
+                axisLine={{ stroke: '#1F2329' }}
+            />
+            <YAxis stroke="#5A5F68" fontSize={10} tickLine={false} axisLine={false} width={28} />
+            <Tooltip
+                contentStyle={tooltipStyle}
+                formatter={(value) => [`${value}L`, 'água']}
+                labelFormatter={(value, payload) => payload?.[0]?.payload?.label || value}
+            />
+            <ReferenceLine y={WATER_GOAL} stroke="#E8A33D" strokeDasharray="4 4" strokeOpacity={0.6} />
+            <Bar dataKey="agua" fill="#5B9FED" radius={[4, 4, 0, 0]} maxBarSize={28} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
   );
 }
 
