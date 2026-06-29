@@ -14,7 +14,7 @@ import './index.css';
 
 export default function App() {
   const [view, setView] = useState('home');
-  const [range, setRange] = useState(14);
+  const [range, setRange] = useState(7);
   const isMobile = useIsMobile();
   const online = useApiHealth();
 
