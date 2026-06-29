@@ -26,6 +26,11 @@ export function fmtDatePT(iso) {
   return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
+export function fmtTimePT(time) {
+  if (!time) return '';
+  return time.slice(0, 5);
+}
+
 export function rangeDays(n) {
   const arr = [];
   for (let i = n - 1; i >= 0; i--) arr.push(daysAgo(i));
