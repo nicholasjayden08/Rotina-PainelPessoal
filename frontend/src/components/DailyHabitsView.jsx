@@ -29,7 +29,7 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
     <div className="view-wrap fade-in">
       <header className="page-header page-header-responsive">
         <div>
-          <p className="eyebrow">rotina</p>
+          <p className="eyebrow">routinely</p>
           <h1 className="page-title">hábitos diários</h1>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
