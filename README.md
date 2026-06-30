@@ -1,4 +1,4 @@
-# rotina — painel pessoal de tarefas e hábitos
+# routinely — painel pessoal de tarefas e hábitos
 
 App pessoal com backend Java (Spring Boot + H2) e frontend React, pra substituir
 o controle manual no Notion: tarefas do dia, hábitos diários e hábitos atômicos
