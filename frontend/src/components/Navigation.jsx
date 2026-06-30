@@ -12,7 +12,7 @@ export function Sidebar({ view, setView, online }) {
     <nav className="sidebar">
       <div className="logo">
         <span className="logo-bracket">~/</span>
-        <span className="logo-text">rotina</span>
+          <span className="logo-text">routinely</span>
       </div>
       <div className="nav-list">
         {NAV_ITEMS.map((item) => {
@@ -42,7 +42,7 @@ export function MobileHeader({ online }) {
     <header className="mobile-header">
       <div className="logo">
         <span className="logo-bracket">~/</span>
-        <span className="logo-text">rotina</span>
+          <span className="logo-text">routinely</span>
       </div>
       <ConnectionIndicator online={online} />
     </header>
