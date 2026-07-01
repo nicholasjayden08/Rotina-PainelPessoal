@@ -49,6 +49,23 @@ export function useHabitosDiarios() {
     }
   }
 
+  async function reordenar(habitosOrdenados) {
+    const anterior = habitos;
+    setHabitos(habitosOrdenados);
+    try {
+      const payload = habitosOrdenados.map((h, index) => ({
+        id: h.id,
+        periodo: h.periodo,
+        ordem: index,
+      }));
+      const atualizados = await habitosDiariosApi.reordenar(payload);
+      setHabitos(atualizados);
+    } catch (e) {
+      setHabitos(anterior);
+      setError(e.message);
+    }
+  }
+
   async function resetarDia() {
     const atualizados = await habitosDiariosApi.resetarDia();
     setHabitos(atualizados);
@@ -59,5 +76,4 @@ export function useHabitosDiarios() {
     setHabitos((prev) => prev.filter((h) => h.id !== id));
   }
 
-  return { habitos, loading, error, criar, atualizar, alternarFeito, resetarDia, excluir, recarregar: carregar };
-}
+  return { habitos, loading, error, criar, atualizar, alternarFeito, reordenar, resetarDia, excluir, recarregar: carregar };}
