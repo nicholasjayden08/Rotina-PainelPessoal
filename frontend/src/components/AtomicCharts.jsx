@@ -81,7 +81,7 @@ export function HabitsConsistencyGrid({ historico, dias }) {
                     key={d.date}
                     title={`${d.date}: ${on ? 'feito' : 'não feito'}`}
                     className="grid-chart-cell"
-                    style={{ background: on ? row.color : '#1A1D22' }}
+                    style={{ background: on ? row.color : '#2c2c2c' }}
                   />
                 );
               })}
