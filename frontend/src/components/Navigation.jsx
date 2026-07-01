@@ -24,7 +24,7 @@ export function Sidebar({ view, setView, online }) {
               onClick={() => setView(item.id)}
               className={`nav-item ${active ? 'nav-item-active' : ''}`}
             >
-              <Icon size={16} strokeWidth={1.75} />
+              <Icon size={16} strokeWidth={active ? 2 : 1.75} color={active ? '#3DDC84' : undefined} />
               <span>{item.id === 'tasks' ? 'tarefas do dia' : item.id === 'daily' ? 'hábitos diários' : item.id === 'atomic' ? 'hábitos atômicos' : item.label}</span>
             </button>
           );
