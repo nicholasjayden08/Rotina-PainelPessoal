@@ -1,5 +1,6 @@
 package com.nicholas.rotina.controller;
 
+import com.nicholas.rotina.dto.ReordenarHabitosRequest;
 import com.nicholas.rotina.dto.HabitoDiarioRequest;
 import com.nicholas.rotina.model.HabitoDiario;
 import com.nicholas.rotina.repository.HabitoDiarioRepository;
@@ -22,7 +23,7 @@ public class HabitoDiarioController {
 
     @GetMapping
     public List<HabitoDiario> listarTodos() {
-        return repository.findAll();
+        return repository.findAllByOrderByOrdemAsc();
     }
 
     @PostMapping
@@ -31,6 +32,11 @@ public class HabitoDiarioController {
         habito.setNome(request.getNome());
         if (request.getPeriodo() != null) habito.setPeriodo(request.getPeriodo());
         habito.setMeta(request.getMeta());
+        int proximaOrdem = repository.findAllByOrderByOrdemAsc().stream()
+                .mapToInt(HabitoDiario::getOrdem)
+                .max()
+                .orElse(-1) + 1;
+        habito.setOrdem(proximaOrdem);
         HabitoDiario salvo = repository.save(habito);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
@@ -55,6 +61,19 @@ public class HabitoDiarioController {
                     return ResponseEntity.ok(repository.save(habito));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/reordenar")
+    public ResponseEntity<List<HabitoDiario>> reordenar(@Valid @RequestBody ReordenarHabitosRequest request) {
+        List<HabitoDiario> atualizados = request.getHabitos().stream().map(item -> {
+            HabitoDiario habito = repository.findById(item.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("hábito não encontrado: " + item.getId()));
+            habito.setPeriodo(item.getPeriodo());
+            habito.setOrdem(item.getOrdem());
+            return habito;
+        }).toList();
+        repository.saveAll(atualizados);
+        return ResponseEntity.ok(repository.findAllByOrderByOrdemAsc());
     }
 
     @PostMapping("/resetar-dia")
