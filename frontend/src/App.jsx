@@ -66,8 +66,8 @@ export default function App() {
               loading={habitosState.loading}
               error={habitosState.error}
               criar={habitosState.criar}
-              atualizar={habitosState.atualizar}
               alternarFeito={habitosState.alternarFeito}
+              reordenar={habitosState.reordenar}
               resetarDia={habitosState.resetarDia}
               excluir={habitosState.excluir}
             />
