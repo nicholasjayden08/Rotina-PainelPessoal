@@ -24,6 +24,9 @@ public class HabitoDiario {
     @Column(nullable = false)
     private boolean feito = false;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int ordem = 0;
+
     public HabitoDiario() {
     }
 
@@ -65,5 +68,12 @@ public class HabitoDiario {
 
     public void setFeito(boolean feito) {
         this.feito = feito;
+    }
+
+    public int getOrdem() {
+        return ordem;
+    }
+    public void setOrdem(int ordem) {
+        this.ordem = ordem;
     }
 }
