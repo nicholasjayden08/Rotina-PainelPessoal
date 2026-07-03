@@ -308,3 +308,23 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .input { width: 100%; padding: 9px 11px; border-radius: 7px; background: #191919; border: 1px solid #262A30; color: #f0efed; font-size: 13px; outline: none; }
 .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .chip { padding: 7px 13px; border-radius: 7px; border: 1px solid; font-size: 12.5px; cursor: pointer; }
+
+
+/* ── Markdown Preview ─────────────────────────────────── */
+.markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+  color: #f0efed; font-weight: 600; margin: 16px 0 8px;
+}
+.markdown-preview h1 { font-size: 20px; }
+.markdown-preview h2 { font-size: 17px; }
+.markdown-preview h3 { font-size: 15px; }
+.markdown-preview p { margin-bottom: 10px; color: #d0cfcd; }
+.markdown-preview ul, .markdown-preview ol { padding-left: 20px; margin-bottom: 10px; }
+.markdown-preview li { margin-bottom: 4px; color: #d0cfcd; }
+.markdown-preview strong { color: #f0efed; font-weight: 600; }
+.markdown-preview em { color: #c8c7c5; font-style: italic; }
+.markdown-preview code { background: #2c2c2c; color: #3DDC84; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+.markdown-preview pre { background: #2c2c2c; border-radius: 8px; padding: 14px; margin-bottom: 12px; overflow-x: auto; }
+.markdown-preview pre code { background: transparent; padding: 0; color: #3DDC84; }
+.markdown-preview blockquote { border-left: 3px solid #3DDC84; padding-left: 12px; color: #7A7F88; margin: 10px 0; }
+.markdown-preview a { color: #5B9FED; text-decoration: underline; }
+.markdown-preview hr { border: none; border-top: 1px solid #2c2c2c; margin: 16px 0; }
