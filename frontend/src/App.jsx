@@ -22,7 +22,7 @@ export default function App() {
   const habitosState = useHabitosDiarios();
   const registroHojeState = useRegistroHoje();
   const historicoState = useHistoricoAtomico(range);
-  const historico14State = useHistoricoAtomico(14);
+  const historicoAnualState = useHistoricoAtomico(365);
   const historicoCompletoState = useHistoricoCompleto();
 
   // Enquanto não sabemos se a API está online, evita piscar a tela de erro.
@@ -41,7 +41,7 @@ export default function App() {
               tarefas={tarefasState.tarefas}
               habitos={habitosState.habitos}
               registroHoje={registroHojeState.registro}
-              historico14={historico14State.historico}
+              historicoAnual={historicoAnualState.historico}
               onAtualizarAgua={(v) => registroHojeState.atualizarCampo({ agua: v })}
               setView={setView}
               loadingResumo={habitosState.loading}
