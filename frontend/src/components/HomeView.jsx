@@ -1,19 +1,18 @@
 import { Flame, Check, Droplet, Calendar } from 'lucide-react';
 import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
-import { HeatmapStrip } from './HeatmapStrip';
+import { YearHeatmap } from './YearHeatmap';
 import { computeStreak } from '../utils/streak';
 import { fmtDatePT, rangeDays } from '../utils/date';
 import { WATER_GOAL } from '../constants';
 
-export function HomeView({ tarefas, habitos, registroHoje, historico14, onAtualizarAgua, setView, loadingResumo }) {
-  const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
+export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {  const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
   const altas = pendentes.filter((t) => t.prioridade === 'ALTA');
   const feitos = habitos.filter((h) => h.feito).length;
   const total = habitos.length;
   const pctHabitos = total ? Math.round((feitos / total) * 100) : 0;
   const agua = registroHoje?.agua || 0;
-  const streak = computeStreak(historico14);
+  const streak = computeStreak(historicoAnual);
 
   const dataStr = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -80,10 +79,9 @@ export function HomeView({ tarefas, habitos, registroHoje, historico14, onAtuali
 
         <section className="panel panel-full">
           <div className="panel-header">
-            <h2 className="panel-title">últimos 14 dias</h2>
-            <span className="panel-sub">água · estudos · trabalho · acordar cedo</span>
+            <h2 className="panel-title">consistência anual</h2>
           </div>
-          <HeatmapStrip historico={historico14} />
+          <YearHeatmap historico={historicoAnual} />
         </section>
 
         <section className="panel panel-full">
