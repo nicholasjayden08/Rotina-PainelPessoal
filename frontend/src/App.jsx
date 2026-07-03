@@ -10,6 +10,8 @@ import { useApiHealth } from './hooks/useApiHealth';
 import { useTarefas } from './hooks/useTarefas';
 import { useHabitosDiarios } from './hooks/useHabitosDiarios';
 import { useRegistroHoje, useHistoricoAtomico, useHistoricoCompleto } from './hooks/useRegistrosAtomicos';
+import { NotesView } from './components/NotesView';
+import { useNotas } from './hooks/useNotas';
 import './index.css';
 
 export default function App() {
@@ -24,6 +26,7 @@ export default function App() {
   const historicoState = useHistoricoAtomico(range);
   const historicoAnualState = useHistoricoAtomico(365);
   const historicoCompletoState = useHistoricoCompleto();
+  const notasState = useNotas();
 
   // Enquanto não sabemos se a API está online, evita piscar a tela de erro.
   if (online === false) {
@@ -88,6 +91,17 @@ export default function App() {
               loadingCompleto={historicoCompletoState.loading}
               onExcluirRegistro={historicoCompletoState.excluir}
             />
+          )}
+
+          {view === 'notes' && (
+              <NotesView
+                  notas={notasState.notas}
+                  loading={notasState.loading}
+                  error={notasState.error}
+                  criar={notasState.criar}
+                  atualizar={notasState.atualizar}
+                  excluir={notasState.excluir}
+              />
           )}
         </main>
       </div>
