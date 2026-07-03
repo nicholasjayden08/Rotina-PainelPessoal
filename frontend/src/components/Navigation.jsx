@@ -1,10 +1,11 @@
-import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff } from 'lucide-react';
+import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { id: 'home', label: 'painel', icon: Home },
-  { id: 'tasks', label: 'tarefas', icon: CheckSquare },
-  { id: 'daily', label: 'hábitos', icon: Sun },
-  { id: 'atomic', label: 'atômicos', icon: Activity },
+    { id: 'home', label: 'painel', icon: Home },
+    { id: 'tasks', label: 'tarefas', icon: CheckSquare },
+    { id: 'daily', label: 'hábitos', icon: Sun },
+    { id: 'atomic', label: 'atômicos', icon: Activity },
+    { id: 'notes', label: 'notas', icon: BookOpen },
 ];
 
 export function Sidebar({ view, setView, online }) {
@@ -25,7 +26,7 @@ export function Sidebar({ view, setView, online }) {
               className={`nav-item ${active ? 'nav-item-active' : ''}`}
             >
               <Icon size={16} strokeWidth={active ? 2 : 1.75} color={active ? '#3DDC84' : undefined} />
-              <span>{item.id === 'tasks' ? 'tarefas do dia' : item.id === 'daily' ? 'hábitos diários' : item.id === 'atomic' ? 'hábitos atômicos' : item.label}</span>
+                <span>{item.id === 'tasks' ? 'tarefas do dia' : item.id === 'daily' ? 'hábitos diários' : item.id === 'atomic' ? 'hábitos atômicos' : item.id === 'notes' ? 'notas' : item.label}</span>
             </button>
           );
         })}
