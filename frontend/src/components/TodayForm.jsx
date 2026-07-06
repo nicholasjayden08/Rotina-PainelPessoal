@@ -43,6 +43,7 @@ export function TodayForm({ registro, onChange }) {
         <CheckboxPill label="acordar cedo" checked={!!registro.acordarCedo} onChange={(v) => onChange({ acordarCedo: v })} />
         <CheckboxPill label="estudos" checked={!!registro.estudos} onChange={(v) => onChange({ estudos: v })} />
         <CheckboxPill label="trabalho" checked={!!registro.trabalho} onChange={(v) => onChange({ trabalho: v })} />
+        <CheckboxPill label="academia" checked={!!registro.academia} onChange={(v) => onChange({ academia: v})}/>
       </div>
     </div>
   );
