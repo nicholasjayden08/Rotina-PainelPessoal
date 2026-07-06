@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { WATER_GOAL } from '../constants';
 
-const COLORS = ['#2c2c2c', '#1a4a2e', '#206b3e', '#2a9050', '#3DDC84'];
+const COLORS = ['#2c2c2c', '#143824', '#1A5A35', '#238A4A', '#2FCB6B', '#3DDC84'];
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
 function scoreFor(entry) {
@@ -11,6 +11,7 @@ function scoreFor(entry) {
     if (entry.estudos) s++;
     if (entry.trabalho) s++;
     if (entry.acordarCedo) s++;
+    if (entry.academia) s++;
     return s;
 }
 
@@ -92,7 +93,7 @@ export function YearHeatmap({ historico }) {
                                 {week.map((day, di) => (
                                     <div
                                         key={di}
-                                        title={day.iso && day.score >= 0 ? `${day.iso}: ${day.score}/4 hábitos` : undefined}
+                                        title={day.iso && day.score >= 0 ? `${day.iso}: ${day.score}/5 hábitos` : undefined}
                                         style={{
                                             width: 10,
                                             height: 10,
