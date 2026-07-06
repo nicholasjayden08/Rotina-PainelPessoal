@@ -10,6 +10,7 @@ function scoreFor(entry) {
   if (entry.estudos) s++;
   if (entry.trabalho) s++;
   if (entry.acordarCedo) s++;
+  if (entry.academia) s++;
   return s;
 }
 
@@ -26,7 +27,7 @@ export function HeatmapStrip({ historico }) {
         const score = scoreFor(map[d]);
         return (
           <div key={d} className="heatmap-cell">
-            <div className="heatmap-box" style={{ background: COLORS[score] }} title={`${d}: ${score}/4`} />
+            <div className="heatmap-box" style={{ background: COLORS[score] }} title={`${d}: ${score}/5`} />
             <span className="heatmap-label">{fmtDateLabel(d).split(' ')[0]}</span>
           </div>
         );
