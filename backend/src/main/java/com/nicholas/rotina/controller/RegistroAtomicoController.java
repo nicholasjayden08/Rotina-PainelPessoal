@@ -65,6 +65,7 @@ public class RegistroAtomicoController {
         if (request.getAcordarCedo() != null) registro.setAcordarCedo(request.getAcordarCedo());
         if (request.getEstudos() != null) registro.setEstudos(request.getEstudos());
         if (request.getTrabalho() != null) registro.setTrabalho(request.getTrabalho());
+        if (request.getAcademia() != null) registro.setAcademia(request.getAcademia());
         if (request.getAgua() != null) registro.setAgua(request.getAgua());
         if (request.getHumor() != null) registro.setHumor(request.getHumor());
         if (request.getSono() != null) registro.setSono(request.getSono());
