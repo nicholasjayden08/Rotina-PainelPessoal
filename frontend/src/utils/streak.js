@@ -11,7 +11,7 @@ export function computeStreak(historico) {
   for (let i = 0; i < 365; i++) {
     const iso = daysAgo(i);
     const e = map[iso];
-    const qualifica = e && ((e.agua || 0) >= WATER_GOAL || e.estudos || e.trabalho || e.acordarCedo);
+    const qualifica = e && ((e.agua || 0) >= WATER_GOAL || e.estudos || e.trabalho || e.acordarCedo || e.academia);
     if (qualifica) {
       streak++;
     } else {
