@@ -64,6 +64,7 @@ export function HabitsConsistencyGrid({ historico, dias }) {
     { key: 'estudos', label: 'estudos', color: '#3DDC84' },
     { key: 'trabalho', label: 'trabalho', color: '#5B9FED' },
     { key: 'acordarCedo', label: 'acordar cedo', color: '#E8A33D' },
+    { key: 'academia', label: 'academia', color: '#D946EF'}
   ];
 
   return (
