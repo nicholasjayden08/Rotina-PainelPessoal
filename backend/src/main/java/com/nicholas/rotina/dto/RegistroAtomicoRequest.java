@@ -11,6 +11,7 @@ public class RegistroAtomicoRequest {
     private Boolean acordarCedo;
     private Boolean estudos;
     private Boolean trabalho;
+    private Boolean academia;
     private Double agua;
     private Humor humor;
     private QualidadeSono sono;
@@ -45,6 +46,14 @@ public class RegistroAtomicoRequest {
 
     public void setTrabalho(Boolean trabalho) {
         this.trabalho = trabalho;
+    }
+
+    public Boolean getAcademia() {
+        return academia;
+    }
+
+    public void setAcademia(Boolean academia) {
+        this.academia = academia;
     }
 
     public Double getAgua() {
