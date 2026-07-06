@@ -29,6 +29,9 @@ public class RegistroAtomico {
     private boolean trabalho = false;
 
     @Column(nullable = false)
+    private boolean academia;
+
+    @Column(nullable = false)
     private double agua = 0.0;
 
     @Enumerated(EnumType.STRING)
@@ -90,6 +93,14 @@ public class RegistroAtomico {
 
     public void setTrabalho(boolean trabalho) {
         this.trabalho = trabalho;
+    }
+
+    public boolean isAcademia() {
+        return academia;
+    }
+
+    public void setAcademia(boolean academia) {
+        this.academia = academia;
     }
 
     public double getAgua() {
