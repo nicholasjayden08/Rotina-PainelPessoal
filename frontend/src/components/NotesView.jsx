@@ -125,7 +125,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
                                     value={titulo}
                                     onChange={handleTituloChange}
                                     placeholder="título da nota"
-                                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f0efed', fontSize: 16, fontWeight: 600, fontFamily: 'inherit' }}
+                                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f0efed', fontSize: 16, fontWeight: 700, fontFamily: 'inherit' }}
                                 />
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                                     {salvando && <span style={{ fontSize: 11, color: '#5A5F68' }}>salvando...</span>}
@@ -141,7 +141,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
                                     value={conteudo}
                                     onChange={handleConteudoChange}
                                     placeholder={`escreva sua nota em markdown...\n\n# título\n**negrito**, *itálico*\n- item de lista`}
-                                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', resize: 'none', color: '#f0efed', fontSize: 13, lineHeight: 1.7, padding: '20px', fontFamily: 'inherit', overflowY: 'auto' }}
+                                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', resize: 'none', color: '#f0efed', fontSize: 13, lineHeight: 1.7, padding: '20px', fontFamily: 'inherit', overflowY: 'auto', fontWeight: 400 }}
                                 />
                             ) : (
                                 <div style={{ flex: 1, overflowY: 'auto', padding: '20px', color: '#f0efed', fontSize: 13, lineHeight: 1.7 }} className="markdown-preview">
