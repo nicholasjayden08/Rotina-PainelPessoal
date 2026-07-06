@@ -33,6 +33,7 @@ export function AtomicHabitsView({
   const studyDays = days.filter((d) => map[d]?.estudos).length;
   const workDays = days.filter((d) => map[d]?.trabalho).length;
   const earlyDays = days.filter((d) => map[d]?.acordarCedo).length;
+  const gymDays = days.filter((d) => map[d]?.academia).length;
 
   return (
     <div className="view-wrap fade-in">
@@ -74,6 +75,7 @@ export function AtomicHabitsView({
           <MetricCard label="dias de estudo" value={studyDays} sub={`de ${range} dias`} />
           <MetricCard label="dias de trabalho" value={workDays} sub={`de ${range} dias`} />
           <MetricCard label="acordou cedo" value={earlyDays} sub={`de ${range} dias`} />
+          <MetricCard label="dias de academia" value={gymDays} sub={`de ${range} dias`}/>
         </div>
 
         {loadingHistorico ? (
