@@ -15,8 +15,14 @@ import { useNotas } from './hooks/useNotas';
 import './index.css';
 
 export default function App() {
-  const [view, setView] = useState('home');
-  const [range, setRange] = useState(14);
+  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes'];
+  const hashView = window.location.hash.replace('#', '');
+  const [view, setViewState] = useState(VALID_VIEWS.includes(hashView) ? hashView : 'home');
+
+  function setView(v) {
+    window.location.hash = v;
+    setViewState(v);
+  }  const [range, setRange] = useState(14);
   const isMobile = useIsMobile();
   const online = useApiHealth();
 
