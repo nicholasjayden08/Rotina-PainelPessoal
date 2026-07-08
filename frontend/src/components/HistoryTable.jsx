@@ -12,6 +12,7 @@ export function HistoryTable({ historico, onDelete }) {
         <thead>
           <tr>
             <th className="th">data</th>
+            <th className="th">dormi às</th>
             <th className="th">acordei às</th>
             <th className="th">água</th>
             <th className="th">humor</th>
@@ -27,6 +28,7 @@ export function HistoryTable({ historico, onDelete }) {
           {historico.map((e) => (
             <tr key={e.id}>
               <td className="td">{fmtDatePT(e.data)}</td>
+              <td className="td">{fmtTimePT(e.dormiAs) || '—'}</td>
               <td className="td">{fmtTimePT(e.acordeiAs) || '—'}</td>
               <td className="td">{(e.agua || 0)}L</td>
               <td className="td">{findLabel(MOODS, e.humor) || '—'}</td>
