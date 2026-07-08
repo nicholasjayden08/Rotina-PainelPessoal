@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 public class RegistroAtomicoRequest {
 
+    private LocalTime dormiAs;
     private LocalTime acordeiAs;
     private Boolean acordarCedo;
     private Boolean estudos;
@@ -15,6 +16,10 @@ public class RegistroAtomicoRequest {
     private Double agua;
     private Humor humor;
     private QualidadeSono sono;
+
+    public LocalTime getDormiAs() { return dormiAs; }
+
+    public void setDormiAs(LocalTime dormiAs) { this.dormiAs = dormiAs; }
 
     public LocalTime getAcordeiAs() {
         return acordeiAs;
