@@ -7,6 +7,15 @@ export function TodayForm({ registro, onChange }) {
 
   return (
     <div className="today-form-grid">
+        <FormField label="dormi às">
+            <input
+                type="time"
+                className="input"
+                value={registro.dormiAs || ''}
+                onChange={(e) => onChange({ dormiAs: e.target.value || null })}
+            />
+        </FormField>
+
       <FormField label="acordei às">
         <input
           type="time"
