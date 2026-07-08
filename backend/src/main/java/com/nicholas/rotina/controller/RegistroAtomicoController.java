@@ -61,6 +61,7 @@ public class RegistroAtomicoController {
         LocalDate localDate = LocalDate.parse(data);
         RegistroAtomico registro = buscarOuCriarPorData(localDate);
 
+        if (request.getDormiAs() != null) registro.setDormiAs(request.getDormiAs());
         if (request.getAcordeiAs() != null) registro.setAcordeiAs(request.getAcordeiAs());
         if (request.getAcordarCedo() != null) registro.setAcordarCedo(request.getAcordarCedo());
         if (request.getEstudos() != null) registro.setEstudos(request.getEstudos());
