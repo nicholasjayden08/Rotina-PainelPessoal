@@ -17,6 +17,8 @@ public class RegistroAtomico {
     @Column(nullable = false, unique = true)
     private LocalDate data;
 
+    private LocalTime dormiAs;
+
     private LocalTime acordeiAs;
 
     @Column(nullable = false)
@@ -62,6 +64,10 @@ public class RegistroAtomico {
     public void setData(LocalDate data) {
         this.data = data;
     }
+
+    public LocalTime getDormiAs() { return dormiAs; }
+
+    public void setDormiAs(LocalTime dormiAs) {this.dormiAs = dormiAs;}
 
     public LocalTime getAcordeiAs() {
         return acordeiAs;
