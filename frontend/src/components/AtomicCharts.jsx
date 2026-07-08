@@ -16,7 +16,7 @@ const tooltipStyle = {
   background: '#1B1F26',
   border: '1px solid #2A2E35',
   borderRadius: 8,
-  fontSize: 12,
+  fontSize: 11,
   color: '#EDEFF2',
 };
 
@@ -93,40 +93,109 @@ export function HabitsConsistencyGrid({ historico, dias }) {
     </div>
   );
 }
+function calcularHorasSono(dormiAs, acordeiAs) {
+  if (!dormiAs || !acordeiAs) return '—';
+
+  const [horaDormir, minutoDormir] = dormiAs.split(':').map(Number);
+  const [horaAcordar, minutoAcordar] = acordeiAs.split(':').map(Number);
+
+  let inicio = horaDormir * 60 + minutoDormir;
+  let fim = horaAcordar * 60 + minutoAcordar;
+
+  // caso tenha dormido antes da meia-noite e acordado no dia seguinte
+  if (fim < inicio) {
+    fim += 24 * 60;
+  }
+
+  const totalMinutos = fim - inicio;
+
+  const horas = Math.floor(totalMinutos / 60);
+  const minutos = totalMinutos % 60;
+
+  return `${horas}h ${minutos}min`;
+}
+
+function SleepTooltip({ active, payload, label }) {
+  if (!active || !payload || !payload.length) return null;
+  const item = payload[0].payload;
+  return (
+      <div style={{ ...tooltipStyle, padding: 10 }}>
+        <div style={{ marginBottom: 6 }}>
+          {label}
+          {item.humorLabel !== '—' && ` · ${item.humorLabel}`}
+        </div>
+
+        {item.horasSono !== '—' && (
+            <div>
+              Dormiu: {item.horasSono}
+            </div>
+        )}
+
+        <div>
+          Qualidade: {item.sono ? `${item.sono}/5` : '—'}
+        </div>
+      </div>
+  );
+}
 
 export function MoodSleepChart({ historico, dias }) {
   const data = buildSeries(historico, dias).map((d) => {
     const sleep = SLEEP_QUALITY.find((s) => s.id === d.entry?.sono);
     const mood = MOODS.find((m) => m.id === d.entry?.humor);
+
     return {
       label: d.label,
       sono: sleep ? sleep.score : null,
       humorLabel: mood ? mood.label : '—',
+      horasSono: calcularHorasSono(
+          d.entry?.dormiAs,
+          d.entry?.acordeiAs
+      ),
     };
   });
 
   return (
-    <div className="chart-block">
-      <p className="chart-title">qualidade do sono (humor no detalhe ao passar o mouse)</p>
-      <ResponsiveContainer width="100%" height={160}>
-        <LineChart data={data} margin={{ top: 8, right: 4, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1F2329" vertical={false} />
-          <XAxis dataKey="label" stroke="#5A5F68" fontSize={10} tickLine={false} axisLine={{ stroke: '#1F2329' }} />
-          <YAxis domain={[0, 5]} stroke="#5A5F68" fontSize={10} tickLine={false} axisLine={false} width={28} />
-          <Tooltip
-            contentStyle={tooltipStyle}
-            formatter={(value, name, props) => {
-              if (name === 'sono') return [value ? `${value}/5` : 'sem registro', 'sono'];
-              return [value, name];
-            }}
-            labelFormatter={(label, payload) => {
-              const humor = payload?.[0]?.payload?.humorLabel;
-              return `${label}${humor && humor !== '—' ? ` · humor: ${humor}` : ''}`;
-            }}
-          />
-          <Line type="monotone" dataKey="sono" stroke="#5B9FED" strokeWidth={2} dot={{ r: 3, fill: '#5B9FED' }} connectNulls />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+      <div className="chart-block">
+        <p className="chart-title">
+          qualidade do sono (humor no detalhe ao passar o mouse)
+        </p>
+        <ResponsiveContainer width="100%" height={160}>
+          <LineChart
+              data={data}
+              margin={{ top: 8, right: 4, left: -20, bottom: 0 }}
+          >
+            <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#1F2329"
+                vertical={false}
+            />
+            <XAxis
+                dataKey="label"
+                stroke="#5A5F68"
+                fontSize={10}
+                tickLine={false}
+                axisLine={{ stroke: '#1F2329' }}
+            />
+            <YAxis
+                domain={[0, 5]}
+                stroke="#5A5F68"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                width={28}
+            />
+            <Tooltip content={<SleepTooltip />} />
+
+            <Line
+                type="monotone"
+                dataKey="sono"
+                stroke="#5B9FED"
+                strokeWidth={2}
+                dot={{ r: 3, fill: '#5B9FED' }}
+                connectNulls
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
   );
 }
