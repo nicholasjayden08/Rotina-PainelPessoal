@@ -5,7 +5,7 @@ const NAV_ITEMS = [
     { id: 'tasks', label: 'tarefas', icon: CheckSquare },
     { id: 'daily', label: 'hábitos', icon: Sun },
     { id: 'atomic', label: 'atômicos', icon: Activity },
-    { id: 'annotation', label: 'anotações', icon: BookOpen },
+    { id: 'notes', label: 'anotações', icon: BookOpen },
 ];
 
 export function Sidebar({ view, setView, online }) {
