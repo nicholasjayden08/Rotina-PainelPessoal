@@ -12,10 +12,12 @@ import { useHabitosDiarios } from './hooks/useHabitosDiarios';
 import { useRegistroHoje, useHistoricoAtomico, useHistoricoCompleto } from './hooks/useRegistrosAtomicos';
 import { NotesView } from './components/NotesView';
 import { useNotas } from './hooks/useNotas';
+import { StatisticsView } from './components/StatisticsView'
+import { useMesesEstatisticas } from './hooks/useEstatisticas';
 import './index.css';
 
 export default function App() {
-  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes'];
+  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes', 'statistics'];
   const hashView = window.location.hash.replace('#', '');
   const [view, setViewState] = useState(VALID_VIEWS.includes(hashView) ? hashView : 'home');
 
@@ -33,6 +35,7 @@ export default function App() {
   const historicoAnualState = useHistoricoAtomico(365);
   const historicoCompletoState = useHistoricoCompleto();
   const notasState = useNotas();
+  const estatisticasState = useMesesEstatisticas();
 
   // Enquanto não sabemos se a API está online, evita piscar a tela de erro.
   if (online === false) {
@@ -107,6 +110,14 @@ export default function App() {
                   criar={notasState.criar}
                   atualizar={notasState.atualizar}
                   excluir={notasState.excluir}
+              />
+          )}
+
+          {view === 'statistics' && (
+              <StatisticsView
+                  meses={estatisticasState.meses}
+                  loading={estatisticasState.loading}
+                  error={estatisticasState.error}
               />
           )}
         </main>
