@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen } from 'lucide-react';
+import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn } from 'lucide-react';
 
 const NAV_ITEMS = [
     { id: 'home', label: 'painel', icon: Home },
@@ -6,6 +6,7 @@ const NAV_ITEMS = [
     { id: 'daily', label: 'hábitos', icon: Sun },
     { id: 'atomic', label: 'atômicos', icon: Activity },
     { id: 'notes', label: 'anotações', icon: BookOpen },
+    { id: 'statistics', label: 'estatísticas', icon: ChartColumn},
 ];
 
 export function Sidebar({ view, setView, online }) {
