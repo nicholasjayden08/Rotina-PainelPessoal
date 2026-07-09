@@ -14,4 +14,6 @@ public interface RegistroAtomicoRepository extends JpaRepository<RegistroAtomico
     Optional<RegistroAtomico> findByData(LocalDate data);
 
     List<RegistroAtomico> findByDataBetweenOrderByDataAsc(LocalDate inicio, LocalDate fim);
+
+    List<RegistroAtomico> findByDataBetween(LocalDate inicio, LocalDate fim);
 }
