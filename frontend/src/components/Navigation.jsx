@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn } from 'lucide-react';
+import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap } from 'lucide-react';
 
 const NAV_ITEMS = [
     { id: 'home', label: 'painel', icon: Home },
@@ -13,8 +13,8 @@ export function Sidebar({ view, setView, online }) {
   return (
     <nav className="sidebar">
       <div className="logo">
-        <span className="logo-bracket">~/</span>
-          <span className="logo-text">routinely</span>
+          <Zap size={18} className="logo-icon" fill="#9652F6" color="#9652F6" />
+          <span className="logo-text">Routinely</span>
       </div>
       <div className="nav-list">
         {NAV_ITEMS.map((item) => {
@@ -43,8 +43,8 @@ export function MobileHeader({ online }) {
   return (
     <header className="mobile-header">
       <div className="logo">
-        <span className="logo-bracket">~/</span>
-          <span className="logo-text">routinely</span>
+          <Zap size={18} className="logo-icon" fill="#9652F6" color="#9652F6" />
+          <span className="logo-text">Routinely</span>
       </div>
       <ConnectionIndicator online={online} />
     </header>
