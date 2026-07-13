@@ -35,6 +35,15 @@ public class EstatisticasController {
 
         repository.findAll()
                 .stream()
+                .filter(r -> r.getAgua() > 0
+                        || r.getHumor() != null
+                        || r.getSono() != null
+                        || r.isEstudos()
+                        || r.isTrabalho()
+                        || r.isAcademia()
+                        || r.isAcordarCedo()
+                        || r.getAcordeiAs() != null
+                        || r.getDormiAs() != null)
                 .sorted(Comparator.comparing(RegistroAtomico::getData).reversed())
                 .forEach(registro -> {
                     String chave = registro.getData().getYear()
@@ -42,7 +51,6 @@ public class EstatisticasController {
                             + registro.getData().getMonthValue();
                     meses.putIfAbsent(chave, registro);
                 });
-
         List<EstatisticaMesRequest> resposta = new ArrayList<>();
 
         for (RegistroAtomico registro : meses.values()) {
