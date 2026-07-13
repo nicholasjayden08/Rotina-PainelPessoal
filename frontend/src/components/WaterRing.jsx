@@ -17,7 +17,7 @@ export function WaterRing({ value, onChange }) {
           transform="rotate(-90 70 70)"
           style={{ transition: 'stroke-dashoffset 0.3s ease' }}
         />
-        <text x="70" y="65" textAnchor="middle" fontSize="22" fontWeight="600" fill="#EDEFF2" fontFamily="JetBrains Mono, monospace">
+        <text x="70" y="65" textAnchor="middle" fontSize="22" fontWeight="600" fill="#EDEFF2" fontFamily="system-ui, -apple-system, sans-serif">
           {v.toFixed(1)}L
         </text>
         <text x="70" y="84" textAnchor="middle" fontSize="11" fill="#7A7F88">
