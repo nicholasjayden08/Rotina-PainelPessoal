@@ -1,5 +1,14 @@
 import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap } from 'lucide-react';
 
+function Logo() {
+    return (
+        <div className="logo">
+            <Zap size={18} className="logo-icon" fill="#9652F6" color="#9652F6" />
+            <span className="logo-text">Routinely</span>
+        </div>
+    );
+}
+
 const NAV_ITEMS = [
     { id: 'home', label: 'painel', icon: Home },
     { id: 'tasks', label: 'tarefas', icon: CheckSquare },
@@ -13,7 +22,7 @@ export function Sidebar({ view, setView, online }) {
   return (
     <nav className="sidebar">
       <div className="logo">
-          <Zap size={18} className="logo-icon" fill="#9652F6" color="#9652F6" />
+          <Logo />
           <span className="logo-text">Routinely</span>
       </div>
       <div className="nav-list">
@@ -43,7 +52,7 @@ export function MobileHeader({ online }) {
   return (
     <header className="mobile-header">
       <div className="logo">
-          <Zap size={18} className="logo-icon" fill="#9652F6" color="#9652F6" />
+          <Logo />
           <span className="logo-text">Routinely</span>
       </div>
       <ConnectionIndicator online={online} />
