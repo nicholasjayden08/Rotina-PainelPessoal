@@ -1,7 +1,7 @@
 import { rangeDays, fmtDateLabel } from '../utils/date';
 import { WATER_GOAL } from '../constants';
 
-const COLORS = ['#1A1D22', '#163826', '#1C5235', '#1F7A45', '#3DDC84'];
+const COLORS = ['#1A1D22', '#163826', '#1C5235', '#1F7A45', '#2FCB6B', '#3DDC84'];
 
 function scoreFor(entry) {
   if (!entry) return 0;
