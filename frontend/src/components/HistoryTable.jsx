@@ -36,7 +36,7 @@ export function HistoryTable({ historico, onDelete }) {
               <td className="td">{e.acordarCedo ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
               <td className="td">{e.estudos ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
               <td className="td">{e.trabalho ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
-              <td className="td">{e.academia ? <CheckSquare size={14} color="#3DDC84" /> : '_'}</td>
+              <td className="td">{e.academia ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
               <td className="td">
                 <button className="icon-btn" onClick={() => onDelete(e.id)} aria-label="excluir registro">
                   <Trash2 size={13} />
