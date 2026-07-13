@@ -59,9 +59,15 @@ public class TarefaController {
         if (novoStatus == null) {
             return ResponseEntity.badRequest().build();
         }
+        StatusTarefa status;
+        try {
+            status = StatusTarefa.valueOf(novoStatus);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
         return repository.findById(id)
                 .map(tarefa -> {
-                    tarefa.setStatus(StatusTarefa.valueOf(novoStatus));
+                    tarefa.setStatus(status);
                     return ResponseEntity.ok(repository.save(tarefa));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
