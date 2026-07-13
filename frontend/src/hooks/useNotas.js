@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { notasApi } from '../api/notas';
 
 export function useNotas() {
@@ -6,14 +6,22 @@ export function useNotas() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        let ativo = true;
+    const carregar = useCallback(async () => {
         setLoading(true);
-        notasApi.listar()
-            .then((dados) => { if (ativo) { setNotas(dados); setLoading(false); } })
-            .catch((e) => { if (ativo) { setError(e.message); setLoading(false); } });
-        return () => { ativo = false; };
+        setError(null);
+        try {
+            const dados = await notasApi.listar();
+            setNotas(dados);
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        carregar();
+    }, [carregar]);
 
     async function criar(dados) {
         const nova = await notasApi.criar(dados);
