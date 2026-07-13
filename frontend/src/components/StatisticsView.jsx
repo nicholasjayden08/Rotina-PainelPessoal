@@ -61,7 +61,7 @@ export function StatisticsView({ meses, loading, error }) {
 
             {!resumoState.loading && r && (
                 <>
-                    <div className="metrics" style={{ marginBottom: 16 }}>
+                    <div className="metrics-grid" style={{ marginBottom: 16 }}>
                         <MetricCard
                             label="dias registrados"
                             value={`${r.diasRegistrados}/${r.totalDiasMes}`}
