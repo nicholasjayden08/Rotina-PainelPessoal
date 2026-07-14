@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { MonthSelector } from './MonthSelector';
 import { LoadingBlock, ErrorBlock, MetricCard } from './Shared';
 import { useResumoEstatisticas } from '../hooks/useEstatisticas';
+import { useInsights } from '../hooks/useInsights';
 
 function StatBar({ label, dias, percentual, color = '#3DDC84' }) {
     return (
@@ -17,10 +18,55 @@ function StatBar({ label, dias, percentual, color = '#3DDC84' }) {
     );
 }
 
+const INSIGHT_CORES = {
+    sono: '#5B9FED',
+    humor: '#E8A33D',
+    agua: '#3DDC84',
+};
+
+function InsightsCard({ insights, dadosSuficientes, loading }) {
+    if (loading) return null;
+
+    return (
+        <section className="panel" style={{ marginTop: 16 }}>
+            <div className="panel-header">
+                <h2 className="panel-title">insights do mês</h2>
+            </div>
+            <div style={{ marginTop: 16 }}>
+                {!dadosSuficientes && (
+                    <p style={{ fontSize: 13, color: '#5A5F68', lineHeight: 1.5 }}>
+                        ainda não há registros suficientes para gerar insights confiáveis esse mês.
+                    </p>
+                )}
+                {dadosSuficientes && insights.length === 0 && (
+                    <p style={{ fontSize: 13, color: '#5A5F68', lineHeight: 1.5 }}>
+                        nenhum padrão relevante encontrado nos dados desse mês.
+                    </p>
+                )}
+                {dadosSuficientes && insights.map((insight, i) => (
+                    <div
+                        key={i}
+                        style={{
+                            display: 'flex',
+                            gap: 10,
+                            padding: '10px 0',
+                            borderBottom: i < insights.length - 1 ? '1px solid #2c2c2c' : 'none',
+                        }}
+                    >
+                        <span style={{ width: 4, borderRadius: 2, background: INSIGHT_CORES[insight.tipo] || '#3DDC84', flexShrink: 0 }} />
+                        <span style={{ fontSize: 13, color: '#d8d7d4', lineHeight: 1.5 }}>{insight.mensagem}</span>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+}
+
 export function StatisticsView({ meses, loading, error }) {
     const [selectedMonth, setSelectedMonth] = useState('');
     const [ano, mes] = selectedMonth ? selectedMonth.split('-').map(Number) : [];
     const resumoState = useResumoEstatisticas(ano, mes);
+    const insightsState = useInsights(ano, mes);
 
     useEffect(() => {
         if (!selectedMonth && meses.length > 0) {
@@ -96,6 +142,12 @@ export function StatisticsView({ meses, loading, error }) {
                             <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} color="#E8A33D" />
                         </div>
                     </section>
+
+                    <InsightsCard
+                        insights={insightsState.insights}
+                        dadosSuficientes={insightsState.dadosSuficientes}
+                        loading={insightsState.loading}
+                    />
                 </>
             )}
         </div>
