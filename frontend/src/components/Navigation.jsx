@@ -21,10 +21,7 @@ const NAV_ITEMS = [
 export function Sidebar({ view, setView, online }) {
   return (
     <nav className="sidebar">
-      <div className="logo">
-          <Logo />
-          <span className="logo-text">Routinely</span>
-      </div>
+        <Logo />
       <div className="nav-list">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -51,10 +48,7 @@ export function Sidebar({ view, setView, online }) {
 export function MobileHeader({ online }) {
   return (
     <header className="mobile-header">
-      <div className="logo">
-          <Logo />
-          <span className="logo-text">Routinely</span>
-      </div>
+        <Logo />
       <ConnectionIndicator online={online} />
     </header>
   );
