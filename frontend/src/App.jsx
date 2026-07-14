@@ -14,10 +14,11 @@ import { NotesView } from './components/NotesView';
 import { useNotas } from './hooks/useNotas';
 import { StatisticsView } from './components/StatisticsView'
 import { useMesesEstatisticas } from './hooks/useEstatisticas';
+import { FocusView } from './components/FocusView';
 import './index.css';
 
 export default function App() {
-  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes', 'statistics'];
+  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes', 'statistics', 'focus'];
   const hashView = window.location.hash.replace('#', '');
   const [view, setViewState] = useState(VALID_VIEWS.includes(hashView) ? hashView : 'home');
 
@@ -119,6 +120,10 @@ export default function App() {
                   loading={estatisticasState.loading}
                   error={estatisticasState.error}
               />
+          )}
+
+          {view === 'focus' && (
+              <FocusView />
           )}
         </main>
       </div>
