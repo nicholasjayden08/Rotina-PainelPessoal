@@ -328,3 +328,27 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .markdown-preview blockquote { border-left: 3px solid #3DDC84; padding-left: 12px; color: #7A7F88; margin: 10px 0; }
 .markdown-preview a { color: #5B9FED; text-decoration: underline; }
 .markdown-preview hr { border: none; border-top: 1px solid #2c2c2c; margin: 16px 0; }
+
+/* ---------- FOCUS ---------- */
+
+.focus-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; padding: 2rem 1rem; }
+.focus-config { width: 100%; max-width: 420px; display: flex; flex-direction: column;gap: 10px; }
+.focus-config label { font-size: 11.5px;color: #7A7F88; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.focus-timer { font-size: 72px; font-weight: 600; letter-spacing: -3px; color: #f0efed; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 1rem 0; }
+.focus-actions { display: flex; gap: 10px; justify-content: center; }
+@media (max-width: 640px) {
+  .focus-timer { font-size: 56px; }
+  .focus-actions { width: 100%; }
+  .focus-actions button { flex: 1; }
+}
+
+/* ---------- FOCUS IMMERSIVE ---------- */
+
+.focus-immersive { position: fixed; inset: 0; background: #000; z-index: 200; display: flex; align-items: center; justify-content: center; }
+.immersive-content { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.immersive-content .focus-timer { font-size: 110px; }
+.immersive-content h2 { font-size: 22px; font-weight: 500; color: #f0efed; }
+.immersive-content span { color: #7A7F88; font-size: 13px; }
+@media (max-width: 640px) {
+  .immersive-content .focus-timer { font-size: 72px; }
+}
