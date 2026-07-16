@@ -1,11 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFocusTimer } from '../hooks/useFocusTimer';
+
+function tocarBeep(ctx) {
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        [0, 0.25, 0.5].forEach((t) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.15, ctx.currentTime + t);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + t);
+            osc.stop(ctx.currentTime + t + 0.2);
+        });
+    } catch {
+        // navegador sem suporte a Web Audio, ignora
+    }
+}
+
+function notificarFimDoFoco(titulo) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    new Notification('Sessão de foco concluída', {
+        body: titulo || 'Sua sessão de foco terminou.',
+        icon: '/favicon.svg',
+    });
+}
 
 export function FocusView() {
     const [focusTime, setFocusTime] = useState(25);
     const [focusTitle, setFocusTitle] = useState('');
     const [sessionActive, setSessionActive] = useState(false);
     const [immersiveMode, setImmersiveMode] = useState(false);
+    const audioCtxRef = useRef(null);
+
+
+    function handleFocusFinish() {
+        tocarBeep(audioCtxRef.current);
+        notificarFimDoFoco(focusTitle);
+    }
 
     const {
         minutes,
@@ -14,7 +50,7 @@ export function FocusView() {
         start,
         pause,
         reset
-    } = useFocusTimer(focusTime);
+    } = useFocusTimer(focusTime, handleFocusFinish);
 
     useEffect(() => {
         function handleKeyDown(event) {
@@ -33,6 +69,12 @@ export function FocusView() {
 
     function handleStart() {
         setSessionActive(true);
+        if (!audioCtxRef.current) {
+            audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
         start();
     }
 
