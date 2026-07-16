@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef , useState } from 'react';
 
-export function useFocusTimer(initialMinutes) {
+export function useFocusTimer(initialMinutes, onFinish) {
     const [timeLeft, setTimeLeft] = useState(initialMinutes * 60);
     const [running, setRunning] = useState(false);
+    const onFinishRef = useRef(onFinish);
+
+    useEffect(() => {
+        onFinishRef.current = onFinish;
+    }, [onFinish]);
 
     useEffect(() => {
         setTimeLeft(initialMinutes * 60);
@@ -15,6 +20,7 @@ export function useFocusTimer(initialMinutes) {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     setRunning(false);
+                    onFinishRef.current?.();
                     return 0;
                 }
 
