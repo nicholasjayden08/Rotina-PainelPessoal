@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFocusTimer } from '../hooks/useFocusTimer';
+import { FocusHistoryTable } from './FocusHistoryTable';
+import { LoadingBlock, ErrorBlock } from './Shared';
 
 function tocarBeep(ctx) {
     if (!ctx) return;
@@ -30,7 +32,7 @@ function notificarFimDoFoco(titulo) {
     });
 }
 
-export function FocusView() {
+export function FocusView({ sessions, loading, error, criarSessao, excluirSessao }) {
     const [focusTime, setFocusTime] = useState(25);
     const [focusTitle, setFocusTitle] = useState('');
     const [sessionActive, setSessionActive] = useState(false);
@@ -39,8 +41,16 @@ export function FocusView() {
 
 
     function handleFocusFinish() {
+
         tocarBeep(audioCtxRef.current);
         notificarFimDoFoco(focusTitle);
+
+        const duracaoArredondada = Math.max(1, Math.round(focusTime));
+
+        criarSessao({
+            titulo: focusTitle,
+            duracaoMinutos: duracaoArredondada
+        }).catch(() => {});
     }
 
     const {
@@ -213,6 +223,18 @@ export function FocusView() {
                         </div>
                     </div>
 
+                )}
+            </section>
+
+            <section className="panel" style={{ marginTop: '1.25rem' }}>
+                <div className="panel-header">
+                    <h2 className="panel-title">histórico de sessões</h2>
+                </div>
+                <ErrorBlock text={error} />
+                {loading ? (
+                    <LoadingBlock text="carregando sessões..." />
+                ) : (
+                    <FocusHistoryTable sessions={sessions} onDelete={excluirSessao} />
                 )}
             </section>
         </div>
