@@ -15,6 +15,7 @@ import { useNotas } from './hooks/useNotas';
 import { StatisticsView } from './components/StatisticsView'
 import { useMesesEstatisticas } from './hooks/useEstatisticas';
 import { FocusView } from './components/FocusView';
+import { useFoco } from './hooks/useFoco';
 import './index.css';
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
   const historicoCompletoState = useHistoricoCompleto();
   const notasState = useNotas();
   const estatisticasState = useMesesEstatisticas();
+  const focoState = useFoco();
 
   // Enquanto não sabemos se a API está online, evita piscar a tela de erro.
   if (online === false) {
@@ -123,7 +125,13 @@ export default function App() {
           )}
 
           {view === 'focus' && (
-              <FocusView />
+              <FocusView
+                  sessions={focoState.sessions}
+                  loading={focoState.loading}
+                  error={focoState.error}
+                  criarSessao={focoState.criar}
+                  excluirSessao={focoState.excluir}
+              />
           )}
         </main>
       </div>
