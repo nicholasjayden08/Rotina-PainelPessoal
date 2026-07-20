@@ -41,6 +41,7 @@ export function useFocusTimer(initialMinutes, onFinish) {
     }, [running]);
 
     function start() {
+        if (timeLeft <= 0) return;
         finishedRef.current = false;
         setRunning(true);
     }
