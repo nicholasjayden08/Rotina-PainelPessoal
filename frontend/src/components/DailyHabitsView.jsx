@@ -16,13 +16,14 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DailyHabitFormModal } from './DailyHabitFormModal';
-import { EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
+import { EmptyHint, LoadingBlock, ErrorBlock, ModalShell} from './Shared';
 import { PERIODS } from '../constants';
 
 export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alternarFeito, reordenar, resetarDia, excluir }) {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [activeId, setActiveId] = useState(null);
+    const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const sensors = useSensors(
       useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -86,7 +87,7 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
             <h1 className="page-title">hábitos diários</h1>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="secondary-btn" onClick={resetarDia}>
+            <button className="secondary-btn" onClick={() => setShowResetConfirm(true)}>
               <Clock size={14} /> resetar dia
             </button>
             <button className="primary-btn" onClick={() => { setEditing(null); setShowForm(true); }}>
@@ -116,8 +117,28 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
             </DndContext>
         )}
 
-        {showForm && (
+{showForm && (
             <DailyHabitFormModal initial={editing} onSave={handleSave} onClose={() => { setShowForm(false); setEditing(null); }} />
+        )}
+
+        {showResetConfirm && (
+            <ModalShell title="RESETAR DIA" onClose={() => setShowResetConfirm(false)}>
+              <p style={{ fontSize: 13, color: '#d8d7d4', lineHeight: 1.5, marginBottom: 4 }}>
+                isso vai desmarcar todos os {habitos.length} hábitos de hoje como não feitos. essa ação não pode ser desfeita.
+              </p>
+              <div className="modal-actions">
+                <button className="secondary-btn" onClick={() => setShowResetConfirm(false)}>
+                  cancelar
+                </button>
+                <button
+                    className="primary-btn"
+                    style={{ background: '#E2504A' }}
+                    onClick={() => { resetarDia(); setShowResetConfirm(false); }}
+                >
+                  resetar mesmo assim
+                </button>
+              </div>
+            </ModalShell>
         )}
       </div>
   );
