@@ -68,8 +68,7 @@ export function MobileTabBar({ view, setView }) {
             className="mobile-tab-item"
             style={{ color: active ? '#3DDC84' : '#7A7F88' }}
           >
-            <Icon size={20} strokeWidth={active ? 2.25 : 1.75} />
-            <span className="mobile-tab-label">{item.label}</span>
+              <Icon size={22} strokeWidth={active ? 2.25 : 1.75} />
           </button>
         );
       })}
