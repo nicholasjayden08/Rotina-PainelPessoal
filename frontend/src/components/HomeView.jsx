@@ -5,6 +5,7 @@ import { YearHeatmap } from './YearHeatmap';
 import { computeStreak } from '../utils/streak';
 import { getTarefaMaisUrgente } from '../utils/tarefas';
 import { fmtDatePT, rangeDays } from '../utils/date';
+import { HomeAlerts} from "./HomeAlerts";
 import { WATER_GOAL } from '../constants';
 
 export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {
@@ -16,6 +17,20 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
   const agua = registroHoje?.agua || 0;
   const streak = computeStreak(historicoAnual);
   const proximoPasso = getTarefaMaisUrgente(tarefas);
+  const registrouHabitosHoje =
+      !!registroHoje &&
+      (
+          registroHoje.humor !== null ||
+          registroHoje.sono !== null ||
+          registroHoje.dormiAs !== null ||
+          registroHoje.acordeiAs !== null ||
+          registroHoje.acordarCedo ||
+          registroHoje.estudos ||
+          registroHoje.trabalho ||
+          registroHoje.academia
+      );  const horaAtual = new Date().getHours();
+  const streakEmRisco = horaAtual >= 18 && !registroHoje;
+
 
   const dataStr = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -122,6 +137,13 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
             </div>
           )}
         </section>
+
+        <HomeAlerts
+            aguaAtual={agua}
+            registrouHoje={registrouHabitosHoje}
+            streakEmRisco={streakEmRisco}
+            onAbrirHabitosAtomicos={() => setView('atomic')}
+        />
       </div>
     </div>
   );
