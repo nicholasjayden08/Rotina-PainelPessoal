@@ -1,18 +1,21 @@
-import { Flame, Check, Droplet, Calendar } from 'lucide-react';
+import { Flame, Check, Droplet, Calendar, AlertTriangle } from 'lucide-react';
 import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
 import { YearHeatmap } from './YearHeatmap';
 import { computeStreak } from '../utils/streak';
+import { getTarefaMaisUrgente } from '../utils/tarefas';
 import { fmtDatePT, rangeDays } from '../utils/date';
 import { WATER_GOAL } from '../constants';
 
-export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {  const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
+export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {
+  const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
   const altas = pendentes.filter((t) => t.prioridade === 'ALTA');
   const feitos = habitos.filter((h) => h.feito).length;
   const total = habitos.length;
   const pctHabitos = total ? Math.round((feitos / total) * 100) : 0;
   const agua = registroHoje?.agua || 0;
   const streak = computeStreak(historicoAnual);
+  const proximoPasso = getTarefaMaisUrgente(tarefas);
 
   const dataStr = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -32,6 +35,18 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
           <span>{streak} {streak === 1 ? 'dia' : 'dias'} de streak</span>
         </div>
       </header>
+
+      {proximoPasso && (
+          <button className="overdue-banner" onClick={() => setView('tasks')}>
+            <AlertTriangle size={16} color="#E2504A" strokeWidth={2} />
+            <div className="overdue-banner-text">
+              <span className="overdue-banner-label">próximo passo</span>
+              <span className="overdue-banner-task">
+              {proximoPasso.nome} — atrasada há {proximoPasso.diasAtraso} {proximoPasso.diasAtraso === 1 ? 'dia' : 'dias'}
+            </span>
+            </div>
+          </button>
+      )}
 
       <div className="metrics-grid">
         <MetricCard label="tarefas pendentes" value={pendentes.length} sub={`de ${tarefas.length} no total`} onClick={() => setView('tasks')} />
