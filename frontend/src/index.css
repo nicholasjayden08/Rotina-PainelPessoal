@@ -158,6 +158,15 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
   background: #1B1611; border: 1px solid #3A2D1A; font-size: 12.5px; color: #E8A33D;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+.overdue-banner {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 12px 14px; border-radius: 10px; margin-bottom: 1.25rem; cursor: pointer;
+  background: #1F1414; border: 1px solid #3D2222;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.overdue-banner-text { display: flex; flex-direction: column; gap: 2px; }
+.overdue-banner-label { font-size: 11px; color: #E2504A; text-transform: uppercase; letter-spacing: 0.04em; }
+.overdue-banner-task { font-size: 13.5px; color: #f0efed; }
 
 /* ---------- METRICS / PANELS ---------- */
 
