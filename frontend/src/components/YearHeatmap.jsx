@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { WATER_GOAL } from '../constants';
+import { computeStreakInfo } from '../utils/streak';
 
 const COLORS = ['#2c2c2c', '#143824', '#1A5A35', '#238A4A', '#2FCB6B', '#3DDC84'];
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -53,14 +54,10 @@ export function YearHeatmap({ historico }) {
             weekIndex++;
         }
 
-        const allKeys = Object.keys(map).sort();
-        let totalActive = 0, curStreak = 0, bestStreak = 0;
-        allKeys.forEach((k) => {
-            if (scoreFor(map[k]) > 0) { curStreak++; totalActive++; bestStreak = Math.max(bestStreak, curStreak); }
-            else curStreak = 0;
-        });
+        const totalActive = Object.keys(map).filter((k) => scoreFor(map[k]) > 0).length;
+        const { current: currentStreak, best: bestStreak } = computeStreakInfo(historico);
 
-        return { weeks, monthPositions, totalActive, currentStreak: curStreak, bestStreak };
+        return { weeks, monthPositions, totalActive, currentStreak, bestStreak };
     }, [historico]);
 
     const totalWeeks = weeks.length;
