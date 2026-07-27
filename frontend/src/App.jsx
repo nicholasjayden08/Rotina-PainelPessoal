@@ -76,16 +76,17 @@ export default function App() {
           )}
 
           {view === 'daily' && (
-            <DailyHabitsView
-              habitos={habitosState.habitos}
-              loading={habitosState.loading}
-              error={habitosState.error}
-              criar={habitosState.criar}
-              alternarFeito={habitosState.alternarFeito}
-              reordenar={habitosState.reordenar}
-              resetarDia={habitosState.resetarDia}
-              excluir={habitosState.excluir}
-            />
+              <DailyHabitsView
+                  habitos={habitosState.habitos}
+                  loading={habitosState.loading}
+                  error={habitosState.error}
+                  criar={habitosState.criar}
+                  atualizar={habitosState.atualizar}
+                  alternarFeito={habitosState.alternarFeito}
+                  reordenar={habitosState.reordenar}
+                  resetarDia={habitosState.resetarDia}
+                  excluir={habitosState.excluir}
+              />
           )}
 
           {view === 'atomic' && (
