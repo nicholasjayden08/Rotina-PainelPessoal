@@ -41,7 +41,7 @@ export function HomeAlerts({
     return (
         <section className="panel panel-full">
             <div className="panel-header">
-                <h2 className="panel-title">centro de atenção</h2>
+                <h2 className="panel-title">avisos</h2>
             </div>
 
             <div className="mini-list">
