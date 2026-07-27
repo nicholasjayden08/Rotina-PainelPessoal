@@ -1,23 +1,32 @@
 import { daysAgo } from './date';
 import { WATER_GOAL } from '../constants';
 
-export function computeStreak(historico) {
-  const map = {};
-  historico.forEach((e) => {
-    map[e.data] = e;
-  });
+function qualifica(entry) {
+  if (!entry) return false;
+  return (entry.agua || 0) >= WATER_GOAL || entry.estudos || entry.trabalho || entry.acordarCedo || entry.academia;
+}
 
-  let streak = 0;
-  for (let i = 0; i < 365; i++) {
+// Percorre os últimos 365 dias do calendário (não só as datas com registro),
+// então um dia sem nenhum registro quebra a sequência corretamente.
+export function computeStreakInfo(historico) {
+  const map = {};
+  historico.forEach((e) => { map[e.data] = e; });
+
+  let current = 0, best = 0;
+  for (let i = 364; i >= 0; i--) {
     const iso = daysAgo(i);
-    const e = map[iso];
-    const qualifica = e && ((e.agua || 0) >= WATER_GOAL || e.estudos || e.trabalho || e.acordarCedo || e.academia);
-    if (qualifica) {
-      streak++;
-    } else {
-      if (i === 0) continue; // hoje pode ainda não ter sido preenchido, não quebra o streak por isso
-      break;
+    const isHoje = i === 0;
+    if (qualifica(map[iso])) {
+      current++;
+      best = Math.max(best, current);
+    } else if (!isHoje) {
+      current = 0; // hoje sem registro ainda não quebra a sequência
     }
   }
-  return streak;
+
+  return { current, best };
+}
+
+export function computeStreak(historico) {
+  return computeStreakInfo(historico).current;
 }
