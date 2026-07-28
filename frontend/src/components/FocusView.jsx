@@ -77,6 +77,28 @@ export function FocusView({ sessions, loading, error, criarSessao, excluirSessao
 
     }, []);
 
+    useEffect(() => {
+        if (immersiveMode) {
+            document.documentElement.requestFullscreen?.().catch(() => {});
+        } else if (document.fullscreenElement) {
+            document.exitFullscreen?.().catch(() => {});
+        }
+    }, [immersiveMode]);
+
+    useEffect(() => {
+        function handleFullscreenChange() {
+            if (!document.fullscreenElement) {
+                setImmersiveMode(false);
+            }
+        }
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+        };
+    }, []);
+
     function handleStart() {
         setSessionActive(true);
         if (!audioCtxRef.current) {
