@@ -73,7 +73,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
                     <div style={{ padding: '16px 14px 12px', borderBottom: '1px solid #2c2c2c', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div>
                             <p className="eyebrow">routinely</p>
-                            <h1 className="page-title" style={{ fontSize: 18, marginBottom: 0 }}>notas</h1>
+                            <h1 className="page-title" style={{ fontSize: 18, marginBottom: 0 }}>anotações</h1>
                         </div>
                         <button className="icon-btn" onClick={handleNova} title="nova nota"><Plus size={16} /></button>
                     </div>
