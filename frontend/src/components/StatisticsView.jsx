@@ -130,6 +130,19 @@ export function StatisticsView({ meses, loading, error }) {
                         />
                     </div>
 
+                    <div className="metrics-grid" style={{ marginBottom: 16 }}>
+                        <MetricCard
+                            label="horário médio de dormir"
+                            value={r.mediaDormiAs}
+                            sub="baseado no mês"
+                        />
+                        <MetricCard
+                            label="horário médio de acordar"
+                            value={r.mediaAcordeiAs}
+                            sub="baseado no mês"
+                        />
+                    </div>
+
                     <section className="panel">
                         <div className="panel-header">
                             <h2 className="panel-title">consistência de hábitos</h2>
