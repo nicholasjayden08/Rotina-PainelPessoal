@@ -149,7 +149,41 @@ public class EstatisticasController {
             response.setMediaSono("—");
         }
 
+        // Média de horário: dormir e acordar (média circular, cruzamento de meia-noite)
+        List<java.time.LocalTime> horariosDormir = registros.stream()
+                .map(RegistroAtomico::getDormiAs)
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toList());
+
+        List<java.time.LocalTime> horariosAcordar = registros.stream()
+                .map(RegistroAtomico::getAcordeiAs)
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toList());
+
+        response.setMediaDormiAs(mediaCircular(horariosDormir));
+        response.setMediaAcordeiAs(mediaCircular(horariosAcordar));
+
         return response;
+    }
+
+    private String mediaCircular(List<java.time.LocalTime> horarios) {
+        if (horarios.isEmpty()) return "—";
+
+        double sumSin = 0, sumCos = 0;
+        for (java.time.LocalTime t : horarios) {
+            double angulo = 2 * Math.PI * t.toSecondOfDay() / 86400.0;
+            sumSin += Math.sin(angulo);
+            sumCos += Math.cos(angulo);
+        }
+
+        double anguloMedio = Math.atan2(sumSin, sumCos);
+        if (anguloMedio < 0) anguloMedio += 2 * Math.PI;
+
+        int segundosMedios = (int) Math.round(anguloMedio / (2 * Math.PI) * 86400);
+        int h = (segundosMedios / 3600) % 24;
+        int m = (segundosMedios % 3600) / 60;
+
+        return String.format("%02d:%02d", h, m);
     }
 
     private String traduzirHumor(com.nicholas.rotina.model.Humor humor) {
