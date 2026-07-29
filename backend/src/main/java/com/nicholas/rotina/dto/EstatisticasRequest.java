@@ -20,6 +20,8 @@ public class EstatisticasRequest {
     private String humorPredominante;
 
     private String mediaSono;
+    private String mediaDormiAs;
+    private String mediaAcordeiAs;
 
     public int getDiasRegistrados() {
         return diasRegistrados;
@@ -124,4 +126,12 @@ public class EstatisticasRequest {
     public void setMediaSono(String mediaSono) {
         this.mediaSono = mediaSono;
     }
+
+    public String getMediaDormiAs() { return mediaDormiAs; }
+
+    public void setMediaDormiAs(String mediaDormiAs) { this.mediaDormiAs = mediaDormiAs; }
+
+    public String getMediaAcordeiAs() { return mediaAcordeiAs; }
+
+    public void setMediaAcordeiAs(String mediaAcordeiAs) { this.mediaAcordeiAs = mediaAcordeiAs; }
 }
