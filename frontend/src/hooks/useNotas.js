@@ -40,5 +40,17 @@ export function useNotas() {
         setNotas((prev) => prev.filter((n) => n.id !== id));
     }
 
-    return { notas, loading, error, criar, atualizar, excluir };
+    async function fixar(id) {
+        const atualizada = await notasApi.fixar(id);
+        setNotas((prev) => {
+            const proximas = prev.map((n) => n.id === id ? atualizada : n);
+            return [...proximas].sort((a, b) => {
+                if (a.fixado !== b.fixado) return a.fixado ? -1 : 1;
+                return new Date(b.dataAtualizacao) - new Date(a.dataAtualizacao);
+            });
+        });
+        return atualizada;
+    }
+
+    return { notas, loading, error, criar, atualizar, excluir, fixar };
 }
