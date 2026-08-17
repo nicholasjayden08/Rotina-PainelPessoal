@@ -16,8 +16,8 @@ export function TaskFormModal({ initial, onSave, onClose, onDraftChange }) {
 
   useEffect(() => {
     if (!onDraftChange) return;
-    OnDraftChange({nome, descricao, status, tipos, prioridade, esforco, prazo});
-  }, [nome, descricao, prioridade, esforco, prazo]);
+    onDraftChange({nome, descricao, status, tipos, prioridade, esforco, prazo});
+  }, [nome, descricao, status, tipos, prioridade, esforco, prazo]);
 
   function toggleTipo(id) {
     setTipos((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
