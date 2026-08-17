@@ -9,6 +9,7 @@ export function TasksView({ tarefas, loading, error, criar, atualizar, atualizar
   const [filter, setFilter] = useState('pendentes');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [draftNovaTarefa, setDraftNovaTarefa] = useState(null);
 
   const filtradas = useMemo(() => {
     if (filter === 'concluidas') return tarefas.filter((t) => t.status === 'CONCLUIDO');
@@ -26,6 +27,7 @@ export function TasksView({ tarefas, loading, error, criar, atualizar, atualizar
       await atualizar(editing.id, dados);
     } else {
       await criar(dados);
+      setDraftNovaTarefa(null);
     }
     setShowForm(false);
     setEditing(null);
@@ -91,6 +93,7 @@ export function TasksView({ tarefas, loading, error, criar, atualizar, atualizar
           initial={editing}
           onSave={handleSave}
           onClose={() => { setShowForm(false); setEditing(null); }}
+          onDraftChange={editing ? undefined : setDraftNovaTarefa}
         />
       )}
     </div>
