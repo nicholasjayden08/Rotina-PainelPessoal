@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Save } from 'lucide-react';
 import { ModalShell, FormField } from './Shared';
 import { TASK_TYPES, EFFORT_LEVELS, PRIORITIES, STATUSES } from '../constants';
 
-export function TaskFormModal({ initial, onSave, onClose }) {
+export function TaskFormModal({ initial, onSave, onClose, onDraftChange }) {
   const [nome, setNome] = useState(initial?.nome || '');
   const [descricao, setDescricao] = useState(initial?.descricao || '');
   const [status, setStatus] = useState(initial?.status || 'NAO_INICIADO');
@@ -13,6 +13,11 @@ export function TaskFormModal({ initial, onSave, onClose }) {
   const [prazo, setPrazo] = useState(initial?.prazo || '');
   const [saving, setSaving] = useState(false);
   const [erro, setErro] = useState(null);
+
+  useEffect(() => {
+    if (!onDraftChange) return;
+    OnDraftChange({nome, descricao, status, tipos, prioridade, esforco, prazo});
+  }, [nome, descricao, prioridade, esforco, prazo]);
 
   function toggleTipo(id) {
     setTipos((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
