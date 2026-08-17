@@ -337,6 +337,44 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .markdown-preview a { color: #5B9FED; text-decoration: underline; }
 .markdown-preview hr { border: none; border-top: 1px solid #2c2c2c; margin: 16px 0; }
 
+/* ---------- NOTES ---------- */
+
+.notes-layout { display: flex; flex: 1; overflow: hidden; }
+
+.notes-sidebar { width: 240px; min-width: 240px; background: #202020; border-right: 1px solid #2c2c2c; display: flex; flex-direction: column; height: 100%; }
+.notes-sidebar-header { padding: 16px 14px 12px; border-bottom: 1px solid #2c2c2c; display: flex; align-items: center; justify-content: space-between; }
+.notes-sidebar-header .page-title { font-size: 18px; margin-bottom: 0; }
+
+.notes-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+.notes-list-item {
+  padding: 10px 14px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px;
+  border-left: 2px solid transparent;
+}
+.notes-list-item-active { background: #2c2c2c; border-left-color: #3DDC84; }
+.notes-list-item-icon { margin-top: 2px; flex-shrink: 0; color: #5A5F68; }
+.notes-list-item-body { flex: 1; min-width: 0; }
+.notes-list-item-title { font-size: 13px; color: #f0efed; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notes-list-item-title-active { font-weight: 500; }
+.notes-list-item-meta { font-size: 10px; color: #5A5F68; margin-top: 2px; }
+.notes-list-item-delete { opacity: 0.4; flex-shrink: 0; }
+
+.notes-editor { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.notes-editor-empty { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: #5A5F68; }
+.notes-editor-empty p { font-size: 13px; }
+
+.notes-editor-header { padding: 12px 20px; border-bottom: 1px solid #2c2c2c; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.notes-title-input { flex: 1; background: transparent; border: none; outline: none; color: #f0efed; font-size: 16px; font-weight: 700; font-family: inherit; }
+.notes-editor-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.notes-save-status { font-size: 11px; color: #5A5F68; }
+.notes-save-status-saved { color: #3DDC84; }
+
+.notes-textarea {
+  flex: 1; background: transparent; border: none; outline: none; resize: none; color: #f0efed;
+  font-size: 13px; line-height: 1.7; padding: 20px; font-family: inherit; overflow-y: auto; font-weight: 400;
+}
+.notes-preview-body { flex: 1; overflow-y: auto; padding: 20px; color: #f0efed; font-size: 13px; line-height: 1.7; }
+.notes-preview-empty { color: #5A5F68; }
+
 /* ---------- FOCUS ---------- */
 
 .focus-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; padding: 2rem 1rem; }
