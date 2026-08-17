@@ -114,6 +114,7 @@ export default function App() {
                   criar={notasState.criar}
                   atualizar={notasState.atualizar}
                   excluir={notasState.excluir}
+                  fixar={notasState.fixar}
               />
           )}
 
