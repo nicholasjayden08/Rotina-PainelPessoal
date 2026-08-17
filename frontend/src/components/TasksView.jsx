@@ -89,12 +89,12 @@ export function TasksView({ tarefas, loading, error, criar, atualizar, atualizar
       )}
 
       {showForm && (
-        <TaskFormModal
-          initial={editing}
-          onSave={handleSave}
-          onClose={() => { setShowForm(false); setEditing(null); }}
-          onDraftChange={editing ? undefined : setDraftNovaTarefa}
-        />
+          <TaskFormModal
+              initial={editing || draftNovaTarefa}
+              onSave={handleSave}
+              onClose={() => { setShowForm(false); setEditing(null); }}
+              onDraftChange={editing ? undefined : setDraftNovaTarefa}
+          />
       )}
     </div>
   );
