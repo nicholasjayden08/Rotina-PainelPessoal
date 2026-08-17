@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Plus, Trash2, FileText, Eye, Edit3 } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Plus, Trash2, FileText, Eye, Edit3, Search, Pin } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { LoadingBlock, ErrorBlock, EmptyHint } from './Shared';
 
@@ -10,16 +10,26 @@ function fmtDataNota(iso) {
         ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
-export function NotesView({ notas, loading, error, criar, atualizar, excluir }) {
+export function NotesView({ notas, loading, error, criar, atualizar, excluir, fixar }) {
     const [idSelecionado, setIdSelecionado] = useState(null);
     const [titulo, setTitulo] = useState('');
     const [conteudo, setConteudo] = useState('');
     const [modo, setModo] = useState('editar');
     const [salvando, setSalvando] = useState(false);
+    const [busca, setBusca] = useState('');
     const saveTimeout = useRef(null);
     const ultimoSalvo = useRef({ titulo: '', conteudo: '' });
 
     const notaSelecionada = notas.find((n) => n.id === idSelecionado) || null;
+
+    const notasFiltradas = useMemo(() => {
+        const termo = busca.trim().toLowerCase();
+        if (!termo) return notas;
+        return notas.filter((n) =>
+            (n.titulo || '').toLowerCase().includes(termo) ||
+            (n.conteudo || '').toLowerCase().includes(termo)
+        );
+    }, [notas, busca]);
 
     useEffect(() => {
         if (idSelecionado == null) return;
@@ -64,6 +74,11 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
         if (idSelecionado === id) setIdSelecionado(null);
     }
 
+    async function handleFixar(id, e) {
+        e.stopPropagation();
+        await fixar(id);
+    }
+
     return (
         <div className="view-wrap fade-in" style={{ padding: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className="notes-layout">
@@ -78,14 +93,26 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
                         <button className="icon-btn" onClick={handleNova} title="nova nota"><Plus size={16} /></button>
                     </div>
 
+                    <div className="notes-search-wrap">
+                        <Search size={13} className="notes-search-icon" />
+                        <input
+                            value={busca}
+                            onChange={(e) => setBusca(e.target.value)}
+                            placeholder="buscar notas..."
+                            className="notes-search-input"
+                        />
+                    </div>
+
                     <div className="notes-list">
                         <ErrorBlock text={error} />
                         {loading ? (
                             <LoadingBlock text="carregando notas..." />
                         ) : notas.length === 0 ? (
                             <EmptyHint text="nenhuma nota ainda. crie a primeira!" />
+                        ) : notasFiltradas.length === 0 ? (
+                            <EmptyHint text="nenhuma nota encontrada." />
                         ) : (
-                            notas.map((n) => (
+                            notasFiltradas.map((n) => (
                                 <div
                                     key={n.id}
                                     onClick={() => setIdSelecionado(n.id)}
@@ -98,6 +125,13 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir }) 
                                         </p>
                                         <p className="notes-list-item-meta">{fmtDataNota(n.dataAtualizacao)}</p>
                                     </div>
+                                    <button
+                                        className={`icon-btn notes-list-item-pin ${n.fixado ? 'notes-list-item-pin-active' : ''}`}
+                                        onClick={(e) => handleFixar(n.id, e)}
+                                        title={n.fixado ? 'desafixar' : 'fixar'}
+                                    >
+                                        <Pin size={12} />
+                                    </button>
                                     <button className="icon-btn notes-list-item-delete" onClick={(e) => handleExcluir(n.id, e)}><Trash2 size={12} /></button>
                                 </div>
                             ))
