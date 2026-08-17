@@ -19,6 +19,9 @@ public class Nota {
     private String conteudo;
 
     @Column(nullable = false)
+    private boolean fixado = false;
+
+    @Column(nullable = false)
     private LocalDateTime dataCriacao;
 
     @Column(nullable = false)
@@ -57,6 +60,14 @@ public class Nota {
 
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
+    }
+
+    public boolean isFixado() {
+        return fixado;
+    }
+
+    public void setFixado(boolean fixado) {
+        this.fixado = fixado;
     }
 
     public LocalDateTime getDataCriacao() {
