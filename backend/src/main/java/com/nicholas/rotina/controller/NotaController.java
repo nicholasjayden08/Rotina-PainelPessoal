@@ -22,7 +22,7 @@ public class NotaController {
 
     @GetMapping
     public List<Nota> listar() {
-        return repository.findAllByOrderByDataAtualizacaoDesc();
+        return repository.findAllByOrderByFixadoDescDataAtualizacaoDesc();
     }
 
     @GetMapping("/{id}")
@@ -45,6 +45,14 @@ public class NotaController {
         return repository.findById(id).map(nota -> {
             nota.setTitulo(request.getTitulo());
             nota.setConteudo(request.getConteudo() != null ? request.getConteudo() : "");
+            return ResponseEntity.ok(repository.save(nota));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/fixar")
+    public ResponseEntity<Nota> alternarFixado(@PathVariable Long id) {
+        return repository.findById(id).map(nota -> {
+            nota.setFixado(!nota.isFixado());
             return ResponseEntity.ok(repository.save(nota));
         }).orElse(ResponseEntity.notFound().build());
     }
