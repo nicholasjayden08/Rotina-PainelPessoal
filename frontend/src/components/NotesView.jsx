@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Plus, Trash2, FileText, Eye, Edit3, Search, Pin } from 'lucide-react';
+import { Plus, Trash2, FileText, Eye, Edit3, Columns2, Search, Pin, Bold, Italic, Heading2, List, Link2, Code } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { LoadingBlock, ErrorBlock, EmptyHint } from './Shared';
 
@@ -10,6 +10,15 @@ function fmtDataNota(iso) {
         ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
+const FERRAMENTAS_MARKDOWN = [
+    { icon: Bold, title: 'negrito', prefixo: '**', sufixo: '**', placeholder: 'texto em negrito' },
+    { icon: Italic, title: 'itálico', prefixo: '*', sufixo: '*', placeholder: 'texto em itálico' },
+    { icon: Heading2, title: 'título', prefixo: '## ', sufixo: '', placeholder: 'título', linha: true },
+    { icon: List, title: 'lista', prefixo: '- ', sufixo: '', placeholder: 'item da lista', linha: true },
+    { icon: Link2, title: 'link', prefixo: '[', sufixo: '](url)', placeholder: 'texto do link' },
+    { icon: Code, title: 'código', prefixo: '`', sufixo: '`', placeholder: 'código' },
+];
+
 export function NotesView({ notas, loading, error, criar, atualizar, excluir, fixar }) {
     const [idSelecionado, setIdSelecionado] = useState(null);
     const [titulo, setTitulo] = useState('');
@@ -19,6 +28,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
     const [busca, setBusca] = useState('');
     const saveTimeout = useRef(null);
     const ultimoSalvo = useRef({ titulo: '', conteudo: '' });
+    const textareaRef = useRef(null);
 
     const notaSelecionada = notas.find((n) => n.id === idSelecionado) || null;
 
@@ -61,6 +71,34 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
     function handleConteudoChange(e) {
         setConteudo(e.target.value);
         salvarComDebounce(titulo, e.target.value);
+    }
+
+    function aplicarFormatacao(ferramenta) {
+        const el = textareaRef.current;
+        if (!el) return;
+        const { selectionStart, selectionEnd } = el;
+        const selecionado = conteudo.slice(selectionStart, selectionEnd);
+        let novoConteudo, novaSelecaoInicio, novaSelecaoFim;
+
+        if (ferramenta.linha) {
+            const inicioLinha = conteudo.lastIndexOf('\n', selectionStart - 1) + 1;
+            novoConteudo = conteudo.slice(0, inicioLinha) + ferramenta.prefixo + conteudo.slice(inicioLinha);
+            novaSelecaoInicio = selectionStart + ferramenta.prefixo.length;
+            novaSelecaoFim = selectionEnd + ferramenta.prefixo.length;
+        } else {
+            const texto = selecionado || ferramenta.placeholder;
+            novoConteudo = conteudo.slice(0, selectionStart) + ferramenta.prefixo + texto + ferramenta.sufixo + conteudo.slice(selectionEnd);
+            novaSelecaoInicio = selectionStart + ferramenta.prefixo.length;
+            novaSelecaoFim = novaSelecaoInicio + texto.length;
+        }
+
+        setConteudo(novoConteudo);
+        salvarComDebounce(titulo, novoConteudo);
+
+        requestAnimationFrame(() => {
+            el.focus();
+            el.setSelectionRange(novaSelecaoInicio, novaSelecaoFim);
+        });
     }
 
     async function handleNova() {
@@ -159,24 +197,57 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
                                 <div className="notes-editor-actions">
                                     {salvando && <span className="notes-save-status">salvando...</span>}
                                     {!salvando && <span className="notes-save-status notes-save-status-saved">salvo</span>}
-                                    <button className="secondary-btn" onClick={() => setModo(modo === 'editar' ? 'preview' : 'editar')}>
-                                        {modo === 'editar' ? <><Eye size={13} /> preview</> : <><Edit3 size={13} /> editar</>}
-                                    </button>
+                                    <div className="notes-mode-toggle">
+                                        <button
+                                            className={`notes-mode-btn ${modo === 'editar' ? 'notes-mode-btn-active' : ''}`}
+                                            onClick={() => setModo('editar')}
+                                            title="editar"
+                                        ><Edit3 size={13} /></button>
+                                        <button
+                                            className={`notes-mode-btn ${modo === 'split' ? 'notes-mode-btn-active' : ''}`}
+                                            onClick={() => setModo('split')}
+                                            title="split"
+                                        ><Columns2 size={13} /></button>
+                                        <button
+                                            className={`notes-mode-btn ${modo === 'preview' ? 'notes-mode-btn-active' : ''}`}
+                                            onClick={() => setModo('preview')}
+                                            title="preview"
+                                        ><Eye size={13} /></button>
+                                    </div>
                                 </div>
                             </div>
 
-                            {modo === 'editar' ? (
-                                <textarea
-                                    value={conteudo}
-                                    onChange={handleConteudoChange}
-                                    placeholder={`escreva sua nota em markdown...\n\n# título\n**negrito**, *itálico*\n- item de lista`}
-                                    className="notes-textarea"
-                                />
-                            ) : (
-                                <div className="notes-preview-body markdown-preview">
-                                    {conteudo ? <ReactMarkdown>{conteudo}</ReactMarkdown> : <p className="notes-preview-empty">nenhum conteúdo pra visualizar ainda.</p>}
+                            {modo !== 'preview' && (
+                                <div className="notes-toolbar">
+                                    {FERRAMENTAS_MARKDOWN.map((f) => (
+                                        <button
+                                            key={f.title}
+                                            className="notes-toolbar-btn"
+                                            title={f.title}
+                                            onClick={() => aplicarFormatacao(f)}
+                                        >
+                                            <f.icon size={14} />
+                                        </button>
+                                    ))}
                                 </div>
                             )}
+
+                            <div className={`notes-editor-body ${modo === 'split' ? 'notes-editor-body-split' : ''}`}>
+                                {modo !== 'preview' && (
+                                    <textarea
+                                        ref={textareaRef}
+                                        value={conteudo}
+                                        onChange={handleConteudoChange}
+                                        placeholder={`escreva sua nota em markdown...\n\n# título\n**negrito**, *itálico*\n- item de lista`}
+                                        className="notes-textarea"
+                                    />
+                                )}
+                                {modo !== 'editar' && (
+                                    <div className="notes-preview-body markdown-preview">
+                                        {conteudo ? <ReactMarkdown>{conteudo}</ReactMarkdown> : <p className="notes-preview-empty">nenhum conteúdo pra visualizar ainda.</p>}
+                                    </div>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>
