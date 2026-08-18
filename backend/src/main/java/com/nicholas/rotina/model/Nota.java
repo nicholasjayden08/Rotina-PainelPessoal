@@ -18,7 +18,7 @@ public class Nota {
     @Column(columnDefinition = "TEXT")
     private String conteudo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean fixado = false;
 
     @Column(nullable = false)
