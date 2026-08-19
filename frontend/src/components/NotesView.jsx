@@ -10,6 +10,17 @@ function fmtDataNota(iso) {
         ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
+function fmtSnippet(conteudo) {
+    if (!conteudo) return '';
+    const semMarkdown = conteudo
+        .replace(/```[\s\S]*?```/g, ' ')
+        .replace(/[#*_`>~-]/g, ' ')
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return semMarkdown.length > 90 ? semMarkdown.slice(0, 90) + '…' : semMarkdown;
+}
+
 const FERRAMENTAS_MARKDOWN = [
     { icon: Bold, title: 'negrito', prefixo: '**', sufixo: '**', placeholder: 'texto em negrito' },
     { icon: Italic, title: 'itálico', prefixo: '*', sufixo: '*', placeholder: 'texto em itálico' },
@@ -162,6 +173,9 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
                                             {n.titulo || 'sem título'}
                                         </p>
                                         <p className="notes-list-item-meta">{fmtDataNota(n.dataAtualizacao)}</p>
+                                        {fmtSnippet(n.conteudo) && (
+                                            <p className="notes-list-item-snippet">{fmtSnippet(n.conteudo)}</p>
+                                        )}
                                     </div>
                                     <button
                                         className={`icon-btn notes-list-item-pin ${n.fixado ? 'notes-list-item-pin-active' : ''}`}
