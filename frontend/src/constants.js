@@ -47,6 +47,18 @@ export const SLEEP_QUALITY = [
 
 export const WATER_GOAL = 4;
 
+// Hábitos atômicos rastreados individualmente pra streak de motivação.
+// 'campo' é a chave no registro atômico; 'qualifica' decide se aquele dia conta.
+export const HABITOS_STREAK = [
+  { campo: 'acordarCedo', label: 'acordando cedo', qualifica: (r) => !!r.acordarCedo },
+  { campo: 'estudos', label: 'estudando', qualifica: (r) => !!r.estudos },
+  { campo: 'trabalho', label: 'trabalhando', qualifica: (r) => !!r.trabalho },
+  { campo: 'academia', label: 'na academia', qualifica: (r) => !!r.academia },
+  { campo: 'agua', label: 'batendo a meta de água', qualifica: (r) => (r.agua || 0) >= WATER_GOAL },
+];
+
+export const STREAK_MARCOS = [5, 10, 15, 30, 60, 100, 150, 200, 365];
+
 export function findLabel(list, id) {
   const item = list.find((x) => x.id === id);
   return item ? item.label : '';
