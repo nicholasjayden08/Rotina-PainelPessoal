@@ -1,5 +1,5 @@
 import { daysAgo } from './date';
-import { WATER_GOAL } from '../constants';
+import { WATER_GOAL, HABITOS_STREAK } from '../constants';
 
 function qualifica(entry) {
   if (!entry) return false;
@@ -29,4 +29,28 @@ export function computeStreakInfo(historico) {
 
 export function computeStreak(historico) {
   return computeStreakInfo(historico).current;
+}
+
+// Streak individual por hábito (ex: "5 dias acordando cedo"), reaproveitando
+// a mesma varredura de calendário — dia sem registro quebra a sequência.
+export function computeHabitStreaks(historico) {
+  const map = {};
+  historico.forEach((e) => { map[e.data] = e; });
+
+  const resultado = {};
+  HABITOS_STREAK.forEach(({ campo, qualifica: qualificaHabito }) => {
+    let current = 0;
+    for (let i = 364; i >= 0; i--) {
+      const iso = daysAgo(i);
+      const isHoje = i === 0;
+      const entry = map[iso];
+      if (entry && qualificaHabito(entry)) {
+        current++;
+      } else if (!isHoje) {
+        current = 0;
+      }
+    }
+    resultado[campo] = current;
+  });
+  return resultado;
 }
