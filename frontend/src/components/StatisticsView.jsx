@@ -3,15 +3,16 @@ import { MonthSelector } from './MonthSelector';
 import { LoadingBlock, ErrorBlock, MetricCard } from './Shared';
 import { useResumoEstatisticas } from '../hooks/useEstatisticas';
 import { useInsights } from '../hooks/useInsights';
+import { COLORS } from '../constants';
 
-function StatBar({ label, dias, percentual, color = '#3DDC84' }) {
+function StatBar({ label, dias, percentual, color = COLORS.success }) {
     return (
         <div style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <span style={{ fontSize: 12, color: '#f0efed' }}>{label}</span>
-                <span style={{ fontSize: 12, color: '#5A5F68' }}>{dias} dias · {percentual}%</span>
+                <span style={{ fontSize: 12, color: COLORS.textSecondary }}>{label}</span>
+                <span style={{ fontSize: 12, color: COLORS.textMuted }}>{dias} dias · {percentual}%</span>
             </div>
-            <div style={{ height: 6, background: '#2c2c2c', borderRadius: 4 }}>
+            <div style={{ height: 6, background: COLORS.cellInactive, borderRadius: 4 }}>
                 <div style={{ height: 6, background: color, borderRadius: 4, width: `${Math.min(percentual, 100)}%`, transition: 'width 0.4s ease' }} />
             </div>
         </div>
@@ -19,9 +20,9 @@ function StatBar({ label, dias, percentual, color = '#3DDC84' }) {
 }
 
 const INSIGHT_CORES = {
-    sono: '#5B9FED',
-    humor: '#E8A33D',
-    agua: '#3DDC84',
+    sono: COLORS.info,
+    humor: COLORS.warning,
+    agua: COLORS.success,
 };
 
 function InsightsCard({ insights, dadosSuficientes, loading }) {
@@ -34,12 +35,12 @@ function InsightsCard({ insights, dadosSuficientes, loading }) {
             </div>
             <div style={{ marginTop: 16 }}>
                 {!dadosSuficientes && (
-                    <p style={{ fontSize: 13, color: '#5A5F68', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 13, color: COLORS.textMuted, lineHeight: 1.5 }}>
                         ainda não há registros suficientes para gerar insights confiáveis esse mês.
                     </p>
                 )}
                 {dadosSuficientes && insights.length === 0 && (
-                    <p style={{ fontSize: 13, color: '#5A5F68', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: 13, color: COLORS.textMuted, lineHeight: 1.5 }}>
                         nenhum padrão relevante encontrado nos dados desse mês.
                     </p>
                 )}
@@ -50,11 +51,11 @@ function InsightsCard({ insights, dadosSuficientes, loading }) {
                             display: 'flex',
                             gap: 10,
                             padding: '10px 0',
-                            borderBottom: i < insights.length - 1 ? '1px solid #2c2c2c' : 'none',
+                            borderBottom: i < insights.length - 1 ? `1px solid ${COLORS.cellInactive}` : 'none',
                         }}
                     >
-                        <span style={{ width: 4, borderRadius: 2, background: INSIGHT_CORES[insight.tipo] || '#3DDC84', flexShrink: 0 }} />
-                        <span style={{ fontSize: 13, color: '#d8d7d4', lineHeight: 1.5 }}>{insight.mensagem}</span>
+                        <span style={{ width: 4, borderRadius: 2, background: INSIGHT_CORES[insight.tipo] || COLORS.success, flexShrink: 0 }} />
+                        <span style={{ fontSize: 13, color: COLORS.textBody, lineHeight: 1.5 }}>{insight.mensagem}</span>
                     </div>
                 ))}
             </div>
@@ -149,10 +150,10 @@ export function StatisticsView({ meses, loading, error }) {
                             <span className="panel-sub">sobre dias registrados</span>
                         </div>
                         <div style={{ marginTop: 16 }}>
-                            <StatBar label="estudos" dias={r.diasEstudo} percentual={r.percentualEstudo} color="#3DDC84" />
-                            <StatBar label="trabalho" dias={r.diasTrabalho} percentual={r.percentualTrabalho} color="#5B9FED" />
-                            <StatBar label="academia" dias={r.diasAcademia} percentual={r.percentualAcademia} color="#E05C5C" />
-                            <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} color="#E8A33D" />
+                            <StatBar label="estudos" dias={r.diasEstudo} percentual={r.percentualEstudo} color={COLORS.success} />
+                            <StatBar label="trabalho" dias={r.diasTrabalho} percentual={r.percentualTrabalho} color={COLORS.info} />
+                            <StatBar label="academia" dias={r.diasAcademia} percentual={r.percentualAcademia} color={COLORS.danger} />
+                            <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} color={COLORS.warning} />
                         </div>
                     </section>
 
