@@ -1,9 +1,10 @@
 import { ServerOff } from 'lucide-react';
+import { COLORS } from '../constants';
 
 export function ApiOfflineScreen() {
   return (
     <div className="api-offline-screen">
-      <ServerOff size={36} color="#E2504A" strokeWidth={1.5} />
+      <ServerOff size={36} color={COLORS.danger} strokeWidth={1.5} />
       <h1>não consegui falar com o servidor</h1>
       <p>
         O backend Spring Boot não está rodando em <code>http://localhost:8080</code>.
