@@ -1,4 +1,5 @@
 import { AlertTriangle, Droplets, Flame } from 'lucide-react';
+import { COLORS } from '../constants';
 
 export function HomeAlerts({
                                aguaAtual,
@@ -12,7 +13,7 @@ export function HomeAlerts({
 
     if (faltaAgua > 0) {
         alertas.push({
-            icon: <Droplets size={16} color="#5B9FED" />,
+            icon: <Droplets size={16} color={COLORS.info} />,
             text: `Faltam ${faltaAgua.toFixed(1)}L para atingir sua meta diária.`,
             action: onAbrirHabitosAtomicos
         });
@@ -20,7 +21,7 @@ export function HomeAlerts({
 
     if (!registrouHoje) {
         alertas.push({
-            icon: <AlertTriangle size={16} color="#E8A33D" />,
+            icon: <AlertTriangle size={16} color={COLORS.warning} />,
             text: 'Você ainda não registrou seus hábitos atômicos hoje.',
             action: onAbrirHabitosAtomicos
         });
@@ -28,7 +29,7 @@ export function HomeAlerts({
 
     if (streakEmRisco) {
         alertas.push({
-            icon: <Flame size={16} color="#E2504A" />,
+            icon: <Flame size={16} color={COLORS.danger} />,
             text: 'Seu streak está em risco. Registre seus hábitos antes do fim do dia.',
             action: onAbrirHabitosAtomicos
         });
