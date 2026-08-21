@@ -1,6 +1,6 @@
 import { FormField } from './Shared';
 import { Check } from 'lucide-react';
-import { MOODS, SLEEP_QUALITY } from '../constants';
+import { MOODS, SLEEP_QUALITY, COLORS } from '../constants';
 
 export function TodayForm({ registro, onChange }) {
   if (!registro) return null;
@@ -64,13 +64,13 @@ function CheckboxPill({ label, checked, onChange }) {
       onClick={() => onChange(!checked)}
       className="pill-btn"
       style={{
-        borderColor: checked ? '#3DDC84' : '#2A2E35',
-        color: checked ? '#3DDC84' : '#9398A1',
-        background: checked ? '#3DDC8414' : 'transparent',
+        borderColor: checked ? COLORS.success : COLORS.border,
+        color: checked ? COLORS.success : COLORS.textMutedLight,
+        background: checked ? `${COLORS.success}14` : 'transparent',
       }}
     >
       <span className={`habit-check-box ${checked ? 'habit-check-box-done' : ''}`}>
-            {checked && <Check size={11} strokeWidth={3} color="#0D0F12" />}
+            {checked && <Check size={11} strokeWidth={3} color={COLORS.textInverse} />}
       </span>
         {label}
     </button>
