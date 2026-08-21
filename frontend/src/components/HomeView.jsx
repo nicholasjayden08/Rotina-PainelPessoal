@@ -6,7 +6,7 @@ import { computeStreak } from '../utils/streak';
 import { getTarefaMaisUrgente } from '../utils/tarefas';
 import { fmtDatePT, rangeDays } from '../utils/date';
 import { HomeAlerts} from "./HomeAlerts";
-import { WATER_GOAL } from '../constants';
+import { WATER_GOAL, COLORS } from '../constants';
 
 export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {
   const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
@@ -46,14 +46,14 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
           <h1 className="page-title">bom te ver de volta</h1>
         </div>
         <div className="streak-badge">
-          <Flame size={16} color="#E8A33D" strokeWidth={2} />
+          <Flame size={16} color={COLORS.warning} strokeWidth={2} />
           <span>{streak} {streak === 1 ? 'dia' : 'dias'} de streak</span>
         </div>
       </header>
 
       {proximoPasso && (
           <button className="overdue-banner" onClick={() => setView('tasks')}>
-            <AlertTriangle size={16} color="#E2504A" strokeWidth={2} />
+            <AlertTriangle size={16} color={COLORS.danger} strokeWidth={2} />
             <div className="overdue-banner-text">
               <span className="overdue-banner-label">próximo passo</span>
               <span className="overdue-banner-task">
@@ -74,7 +74,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
         <section className="panel">
           <div className="panel-header">
             <h2 className="panel-title">água de hoje</h2>
-            <Droplet size={16} color="#5B9FED" strokeWidth={1.75} />
+            <Droplet size={16} color={COLORS.info} strokeWidth={1.75} />
           </div>
           {registroHoje ? (
             <WaterRing value={agua} onChange={onAtualizarAgua} />
@@ -96,7 +96,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
               {habitos.slice(0, 5).map((h) => (
                 <div key={h.id} className="mini-item">
                   <span className={`habit-check-box ${h.feito ? 'habit-check-box-done' : ''}`}>
-                        {h.feito && <Check size={11} strokeWidth={3} color="#0D0F12" />}
+                        {h.feito && <Check size={11} strokeWidth={3} color={COLORS.textInverse} />}
                   </span>
                   <span className="mini-item-text" style={{ textDecoration: h.feito ? 'line-through' : 'none', opacity: h.feito ? 0.55 : 1 }}>
                     {h.nome}
@@ -124,7 +124,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
             <div className="mini-list">
               {altas.map((t) => (
                 <div key={t.id} className="mini-item">
-                  <span className="dot" style={{ background: '#E2504A' }} />
+                  <span className="dot" style={{ background: COLORS.danger }} />
                   <span className="mini-item-text">{t.nome}</span>
                   {t.prazo && (
                     <span className="mini-item-meta">
