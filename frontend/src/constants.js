@@ -1,19 +1,50 @@
+export const COLORS = {
+  // status/semântico
+  success: '#3DDC84',
+  info: '#5B9FED',
+  warning: '#E8A33D',
+  danger: '#E2504A',
+  accent: '#9652F6',
+
+  // texto
+  textPrimary: '#EDEFF2',
+  textSecondary: '#f0efed',
+  textBody: '#d8d7d4',
+  textMuted: '#5A5F68',
+  textMutedLight: '#7A7F88',
+  textInverse: '#0D0F12',
+
+  // superfícies e bordas
+  border: '#2A2E35',
+  gridLine: '#1F2329',
+  tooltipBg: '#1B1F26',
+  cellInactive: '#2c2c2c',
+  trackBg: '#21252B',
+};
+
+// Escala de intensidade usada no heatmap anual e na faixa de heatmap curta.
+// Único lugar que define essa progressão - antes YearHeatmap e HeatmapStrip
+// tinham cada um a sua própria escala, ligeiramente diferentes.
+export const HEATMAP_SCALE = [
+  COLORS.cellInactive, '#143824', '#1A5A35', '#238A4A', '#2FCB6B', COLORS.success,
+];
+
 export const TASK_TYPES = [
-  { id: 'CARREIRA', label: 'Carreira', color: '#E8A33D' },
-  { id: 'PESSOAL', label: 'Pessoal', color: '#5B9FED' },
-  { id: 'FACULDADE', label: 'Faculdade', color: '#3DDC84' },
+  { id: 'CARREIRA', label: 'Carreira', color: COLORS.warning },
+  { id: 'PESSOAL', label: 'Pessoal', color: COLORS.info },
+  { id: 'FACULDADE', label: 'Faculdade', color: COLORS.success },
 ];
 
 export const EFFORT_LEVELS = [
-  { id: 'PEQUENO', label: 'Pequeno', color: '#3DDC84' },
-  { id: 'MEDIA', label: 'Média', color: '#E8A33D' },
-  { id: 'GRANDE', label: 'Grande', color: '#E2504A' },
+  { id: 'PEQUENO', label: 'Pequeno', color: COLORS.success },
+  { id: 'MEDIA', label: 'Média', color: COLORS.warning },
+  { id: 'GRANDE', label: 'Grande', color: COLORS.danger },
 ];
 
 export const PRIORITIES = [
-  { id: 'ALTA', label: 'Alta', color: '#E2504A' },
-  { id: 'MEDIA', label: 'Média', color: '#E8A33D' },
-  { id: 'BAIXA', label: 'Baixa', color: '#3DDC84' },
+  { id: 'ALTA', label: 'Alta', color: COLORS.danger },
+  { id: 'MEDIA', label: 'Média', color: COLORS.warning },
+  { id: 'BAIXA', label: 'Baixa', color: COLORS.success },
 ];
 
 export const STATUSES = [
@@ -30,11 +61,11 @@ export const PERIODS = [
 ];
 
 export const MOODS = [
-  { id: 'PRODUTIVO', label: 'Produtivo', color: '#5B9FED' },
-  { id: 'NORMAL', label: 'Normal', color: '#3DDC84' },
-  { id: 'ANSIOSO', label: 'Ansioso', color: '#E8A33D' },
-  { id: 'CANSADO', label: 'Cansado', color: '#E8A33D' },
-  { id: 'TRISTE', label: 'Triste', color: '#E2504A' },
+  { id: 'PRODUTIVO', label: 'Produtivo', color: COLORS.info },
+  { id: 'NORMAL', label: 'Normal', color: COLORS.success },
+  { id: 'ANSIOSO', label: 'Ansioso', color: COLORS.warning },
+  { id: 'CANSADO', label: 'Cansado', color: COLORS.warning },
+  { id: 'TRISTE', label: 'Triste', color: COLORS.danger },
 ];
 
 export const SLEEP_QUALITY = [
@@ -66,5 +97,5 @@ export function findLabel(list, id) {
 
 export function findColor(list, id) {
   const item = list.find((x) => x.id === id);
-  return item ? item.color : '#5A5F68';
+  return item ? item.color : COLORS.textMuted;
 }
