@@ -1,7 +1,7 @@
 import { Trash2, CheckSquare } from 'lucide-react';
 import { EmptyHint } from './Shared';
 import { fmtDatePT, fmtTimePT } from '../utils/date';
-import { MOODS, SLEEP_QUALITY, findLabel } from '../constants';
+import { MOODS, SLEEP_QUALITY, findLabel, COLORS } from '../constants';
 
 export function HistoryTable({ historico, onDelete }) {
   if (historico.length === 0) return <EmptyHint text="nenhum registro ainda." />;
@@ -33,10 +33,10 @@ export function HistoryTable({ historico, onDelete }) {
               <td className="td">{(e.agua || 0)}L</td>
               <td className="td">{findLabel(MOODS, e.humor) || '—'}</td>
               <td className="td">{findLabel(SLEEP_QUALITY, e.sono) || '—'}</td>
-              <td className="td">{e.acordarCedo ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
-              <td className="td">{e.estudos ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
-              <td className="td">{e.trabalho ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
-              <td className="td">{e.academia ? <CheckSquare size={14} color="#3DDC84" /> : '—'}</td>
+              <td className="td">{e.acordarCedo ? <CheckSquare size={14} color={COLORS.success} /> : '—'}</td>
+              <td className="td">{e.estudos ? <CheckSquare size={14} color={COLORS.success} /> : '—'}</td>
+              <td className="td">{e.trabalho ? <CheckSquare size={14} color={COLORS.success} /> : '—'}</td>
+              <td className="td">{e.academia ? <CheckSquare size={14} color={COLORS.success} /> : '—'}</td>
               <td className="td">
                 <button className="icon-btn" onClick={() => onDelete(e.id)} aria-label="excluir registro">
                   <Trash2 size={13} />
