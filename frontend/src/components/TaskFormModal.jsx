@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import { Save } from 'lucide-react';
 import { ModalShell, FormField } from './Shared';
-import { TASK_TYPES, EFFORT_LEVELS, PRIORITIES, STATUSES } from '../constants';
+import { TASK_TYPES, EFFORT_LEVELS, PRIORITIES, STATUSES, COLORS } from '../constants';
 
 export function TaskFormModal({ initial, onSave, onClose, onDraftChange }) {
   const [nome, setNome] = useState(initial?.nome || '');
@@ -97,8 +97,8 @@ export function TaskFormModal({ initial, onSave, onClose, onDraftChange }) {
               onClick={() => toggleTipo(t.id)}
               className="chip"
               style={{
-                borderColor: tipos.includes(t.id) ? t.color : '#2A2E35',
-                color: tipos.includes(t.id) ? t.color : '#7A7F88',
+                borderColor: tipos.includes(t.id) ? t.color : COLORS.border,
+                color: tipos.includes(t.id) ? t.color : COLORS.textMutedLight,
                 background: tipos.includes(t.id) ? t.color + '14' : 'transparent',
               }}
             >
