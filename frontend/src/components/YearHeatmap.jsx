@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
-import { WATER_GOAL } from '../constants';
+import { WATER_GOAL, COLORS, HEATMAP_SCALE } from '../constants';
 import { computeStreakInfo } from '../utils/streak';
 
-const COLORS = ['#2c2c2c', '#143824', '#1A5A35', '#238A4A', '#2FCB6B', '#3DDC84'];
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
 function scoreFor(entry) {
@@ -70,7 +69,7 @@ export function YearHeatmap({ historico }) {
                         const next = i + 1 < monthPositions.length ? monthPositions[i + 1].weekIndex : totalWeeks;
                         const span = next - mp.weekIndex;
                         return (
-                            <div key={mp.month} style={{ width: span * 13, fontSize: 10, color: '#5A5F68', flexShrink: 0 }}>
+                            <div key={mp.month} style={{ width: span * 13, fontSize: 10, color: COLORS.textMuted, flexShrink: 0 }}>
                                 {MONTHS[mp.month]}
                             </div>
                         );
@@ -80,7 +79,7 @@ export function YearHeatmap({ historico }) {
                 <div style={{ display: 'flex', gap: 3 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginRight: 2 }}>
                         {['', 'seg', '', 'qua', '', 'sex', ''].map((l, i) => (
-                            <div key={i} style={{ height: 10, lineHeight: '10px', fontSize: 9, color: '#5A5F68', width: 18 }}>{l}</div>
+                            <div key={i} style={{ height: 10, lineHeight: '10px', fontSize: 9, color: COLORS.textMuted, width: 18 }}>{l}</div>
                         ))}
                     </div>
 
@@ -95,7 +94,7 @@ export function YearHeatmap({ historico }) {
                                             width: 10,
                                             height: 10,
                                             borderRadius: 3,
-                                            background: day.score === -1 ? 'transparent' : COLORS[day.score],
+                                            background: day.score === -1 ? 'transparent' : HEATMAP_SCALE[day.score],
                                             flexShrink: 0,
                                         }}
                                     />
@@ -106,16 +105,16 @@ export function YearHeatmap({ historico }) {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: '1px solid #2c2c2c' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${COLORS.cellInactive}` }}>
                 <div style={{ display: 'flex', gap: 16 }}>
-                    <span style={{ fontSize: 11, color: '#5A5F68' }}>dias ativos: <span style={{ color: '#f0efed', fontWeight: 500 }}>{totalActive}</span></span>
-                    <span style={{ fontSize: 11, color: '#5A5F68' }}>sequência atual: <span style={{ color: '#f0efed', fontWeight: 500 }}>{currentStreak}</span> dias</span>
-                    <span style={{ fontSize: 11, color: '#5A5F68' }}>melhor sequência: <span style={{ color: '#f0efed', fontWeight: 500 }}>{bestStreak}</span> dias</span>
+                    <span style={{ fontSize: 11, color: COLORS.textMuted }}>dias ativos: <span style={{ color: COLORS.textSecondary, fontWeight: 500 }}>{totalActive}</span></span>
+                    <span style={{ fontSize: 11, color: COLORS.textMuted }}>sequência atual: <span style={{ color: COLORS.textSecondary, fontWeight: 500 }}>{currentStreak}</span> dias</span>
+                    <span style={{ fontSize: 11, color: COLORS.textMuted }}>melhor sequência: <span style={{ color: COLORS.textSecondary, fontWeight: 500 }}>{bestStreak}</span> dias</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#5A5F68' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: COLORS.textMuted }}>
                     menos
                     <div style={{ display: 'flex', gap: 2 }}>
-                        {COLORS.map((c, i) => <div key={i} style={{ width: 10, height: 10, borderRadius: 3, background: c }} />)}
+                        {HEATMAP_SCALE.map((c, i) => <div key={i} style={{ width: 10, height: 10, borderRadius: 3, background: c }} />)}
                     </div>
                     mais
                 </div>
