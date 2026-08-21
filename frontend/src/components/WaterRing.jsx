@@ -1,4 +1,4 @@
-import { WATER_GOAL } from '../constants';
+import { WATER_GOAL, COLORS } from '../constants';
 
 export function WaterRing({ value, onChange }) {
   const v = value || 0;
@@ -10,17 +10,17 @@ export function WaterRing({ value, onChange }) {
   return (
     <div className="water-wrap">
       <svg width="140" height="140" viewBox="0 0 140 140">
-        <circle cx="70" cy="70" r={r} fill="none" stroke="#21252B" strokeWidth="10" />
+        <circle cx="70" cy="70" r={r} fill="none" stroke={COLORS.trackBg} strokeWidth="10" />
         <circle
-          cx="70" cy="70" r={r} fill="none" stroke="#5B9FED" strokeWidth="10"
+          cx="70" cy="70" r={r} fill="none" stroke={COLORS.info} strokeWidth="10"
           strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
           transform="rotate(-90 70 70)"
           style={{ transition: 'stroke-dashoffset 0.3s ease' }}
         />
-        <text x="70" y="65" textAnchor="middle" fontSize="22" fontWeight="600" fill="#EDEFF2" fontFamily="system-ui, -apple-system, sans-serif">
+        <text x="70" y="65" textAnchor="middle" fontSize="22" fontWeight="600" fill={COLORS.textPrimary} fontFamily="system-ui, -apple-system, sans-serif">
           {v.toFixed(1)}L
         </text>
-        <text x="70" y="84" textAnchor="middle" fontSize="11" fill="#7A7F88">
+        <text x="70" y="84" textAnchor="middle" fontSize="11" fill={COLORS.textMutedLight}>
           de {WATER_GOAL}L
         </text>
       </svg>
