@@ -17,7 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { DailyHabitFormModal } from './DailyHabitFormModal';
 import { EmptyHint, LoadingBlock, ErrorBlock, ModalShell} from './Shared';
-import { PERIODS } from '../constants';
+import { PERIODS, COLORS } from '../constants';
 
 export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alternarFeito, reordenar, resetarDia, excluir }) {
   const [showForm, setShowForm] = useState(false);
@@ -123,7 +123,7 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
 
         {showResetConfirm && (
             <ModalShell title="RESETAR DIA" onClose={() => setShowResetConfirm(false)}>
-              <p style={{ fontSize: 13, color: '#d8d7d4', lineHeight: 1.5, marginBottom: 4 }}>
+              <p style={{ fontSize: 13, color: COLORS.textBody, lineHeight: 1.5, marginBottom: 4 }}>
                 isso vai desmarcar todos os {habitos.length} hábitos de hoje como não feitos. essa ação não pode ser desfeita.
               </p>
               <div className="modal-actions">
@@ -132,7 +132,7 @@ export function DailyHabitsView({ habitos, loading, error, criar, atualizar, alt
                 </button>
                 <button
                     className="primary-btn"
-                    style={{ background: '#E2504A' }}
+                    style={{ background: COLORS.danger }}
                     onClick={() => { resetarDia(); setShowResetConfirm(false); }}
                 >
                   resetar mesmo assim
@@ -151,7 +151,7 @@ function PeriodGroup({ group, onToggle, onEdit, onDelete }) {
   return (
       <div className="period-group">
         <p className="period-label">{group.label}</p>
-        <div ref={setNodeRef} className="task-list" style={{ minHeight: 8, outline: isOver ? '1px dashed #5B9FED' : 'none', outlineOffset: 4, borderRadius: 8 }}>
+        <div ref={setNodeRef} className="task-list" style={{ minHeight: 8, outline: isOver ? `1px dashed ${COLORS.info}` : 'none', outlineOffset: 4, borderRadius: 8 }}>
           <SortableContext items={ids} strategy={verticalListSortingStrategy}>
             {group.items.length === 0 ? (
                 <p className="habit-meta" style={{ padding: '6px 2px', opacity: 0.5 }}>arraste um hábito pra cá</p>
@@ -173,11 +173,11 @@ function SortableHabitRow({ habito, onToggle, onEdit, onDelete }) {
   return (
       <div ref={setNodeRef} style={style} className="habit-row">
         <button {...attributes} {...listeners} className="icon-btn" aria-label="arrastar para reordenar" style={{ cursor: 'grab', touchAction: 'none' }}>
-          <GripVertical size={14} color="#5A5F68" />
+          <GripVertical size={14} color={COLORS.textMuted} />
         </button>
         <button onClick={() => onToggle(habito.id)} className="habit-check-btn" aria-label="marcar como feito">
         <span className={`habit-check-box ${habito.feito ? 'habit-check-box-done' : ''}`}>
-          {habito.feito && <Check size={13} strokeWidth={3} color="#0D0F12" />}
+          {habito.feito && <Check size={13} strokeWidth={3} color={COLORS.textInverse} />}
         </span>
         </button>
         <div style={{ flex: 1 }}>
