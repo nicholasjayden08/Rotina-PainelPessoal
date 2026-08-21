@@ -1,7 +1,5 @@
 import { rangeDays, fmtDateLabel } from '../utils/date';
-import { WATER_GOAL } from '../constants';
-
-const COLORS = ['#1A1D22', '#163826', '#1C5235', '#1F7A45', '#2FCB6B', '#3DDC84'];
+import { WATER_GOAL, HEATMAP_SCALE } from '../constants';
 
 function scoreFor(entry) {
   if (!entry) return 0;
@@ -27,7 +25,7 @@ export function HeatmapStrip({ historico }) {
         const score = scoreFor(map[d]);
         return (
           <div key={d} className="heatmap-cell">
-            <div className="heatmap-box" style={{ background: COLORS[score] }} title={`${d}: ${score}/5`} />
+            <div className="heatmap-box" style={{ background: HEATMAP_SCALE[score] }} title={`${d}: ${score}/5`} />
             <span className="heatmap-label">{fmtDateLabel(d).split(' ')[0]}</span>
           </div>
         );
