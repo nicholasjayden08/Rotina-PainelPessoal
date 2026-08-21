@@ -1,11 +1,11 @@
 import { Calendar, Edit3, Trash2 } from 'lucide-react';
-import { TASK_TYPES, PRIORITIES, EFFORT_LEVELS, STATUSES, findLabel, findColor } from '../constants';
+import { TASK_TYPES, PRIORITIES, EFFORT_LEVELS, STATUSES, findLabel, findColor, COLORS } from '../constants';
 import { fmtDatePT } from '../utils/date';
 
 export function TaskRow({ task, onCycleStatus, onEdit, onDelete }) {
   const priority = PRIORITIES.find((p) => p.id === task.prioridade);
   const effort = EFFORT_LEVELS.find((e) => e.id === task.esforco);
-  const statusColor = task.status === 'CONCLUIDO' ? '#3DDC84' : task.status === 'EM_ANDAMENTO' ? '#5B9FED' : '#5A5F68';
+  const statusColor = task.status === 'CONCLUIDO' ? COLORS.success : task.status === 'EM_ANDAMENTO' ? COLORS.info : COLORS.textMuted;
   const statusLabel = findLabel(STATUSES, task.status);
 
   return (
