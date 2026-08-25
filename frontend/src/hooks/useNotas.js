@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { notasApi } from '../api/notas';
 
+function ordenarNotas(lista) {
+    return [...lista].sort((a, b) => {
+        if (a.fixado !== b.fixado) return a.fixado ? -1 : 1;
+        return new Date(b.dataAtualizacao) - new Date(a.dataAtualizacao);
+    });
+}
+
 export function useNotas() {
     const [notas, setNotas] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,13 +32,13 @@ export function useNotas() {
 
     async function criar(dados) {
         const nova = await notasApi.criar(dados);
-        setNotas((prev) => [nova, ...prev]);
+        setNotas((prev) => ordenarNotas([nova, ...prev]));
         return nova;
     }
 
     async function atualizar(id, dados) {
         const atualizada = await notasApi.atualizar(id, dados);
-        setNotas((prev) => prev.map((n) => n.id === id ? atualizada : n));
+        setNotas((prev) => ordenarNotas(prev.map((n) => n.id === id ? atualizada : n)));
         return atualizada;
     }
 
@@ -42,13 +49,7 @@ export function useNotas() {
 
     async function fixar(id) {
         const atualizada = await notasApi.fixar(id);
-        setNotas((prev) => {
-            const proximas = prev.map((n) => n.id === id ? atualizada : n);
-            return [...proximas].sort((a, b) => {
-                if (a.fixado !== b.fixado) return a.fixado ? -1 : 1;
-                return new Date(b.dataAtualizacao) - new Date(a.dataAtualizacao);
-            });
-        });
+        setNotas((prev) => ordenarNotas(prev.map((n) => n.id === id ? atualizada : n)));
         return atualizada;
     }
 
