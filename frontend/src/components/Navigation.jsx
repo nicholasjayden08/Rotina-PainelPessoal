@@ -1,4 +1,4 @@
-import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap, Target } from 'lucide-react';
+import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap, Target, CalendarRange } from 'lucide-react';
 import { COLORS } from '../constants';
 
 function Logo() {
@@ -16,6 +16,7 @@ const NAV_ITEMS = [
     { id: 'daily', label: 'hábitos', icon: Sun },
     { id: 'atomic', label: 'atômicos', icon: Activity },
     { id: 'notes', label: 'anotações', icon: BookOpen },
+    { id: 'planning', label: 'planejamento', icon: CalendarRange },
     { id: 'statistics', label: 'estatísticas', icon: ChartColumn},
     { id: 'focus', label: 'foco', icon: Target },
 ];
