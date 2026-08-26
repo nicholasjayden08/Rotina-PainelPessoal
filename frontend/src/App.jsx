@@ -12,6 +12,8 @@ import { useHabitosDiarios } from './hooks/useHabitosDiarios';
 import { useRegistroHoje, useHistoricoAtomico, useHistoricoCompleto } from './hooks/useRegistrosAtomicos';
 import { NotesView } from './components/NotesView';
 import { useNotas } from './hooks/useNotas';
+import { PlanningView } from './components/PlanningView';
+import { usePlanejamentoSemanal } from './hooks/usePlanejamentoSemanal';
 import { StatisticsView } from './components/StatisticsView'
 import { useMesesEstatisticas } from './hooks/useEstatisticas';
 import { FocusView } from './components/FocusView';
@@ -21,7 +23,7 @@ import { useStreakToasts } from "./hooks/useStreakToasts.js";
 import './index.css';
 
 export default function App() {
-  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes', 'statistics', 'focus'];
+  const VALID_VIEWS = ['home', 'tasks', 'daily', 'atomic', 'notes', 'planning', 'statistics', 'focus'];
   const hashView = window.location.hash.replace('#', '');
   const [view, setViewState] = useState(VALID_VIEWS.includes(hashView) ? hashView : 'home');
 
@@ -38,7 +40,8 @@ export default function App() {
   const historicoState = useHistoricoAtomico(range);
   const historicoAnualState = useHistoricoAtomico(365);
   const historicoCompletoState = useHistoricoCompleto();
-  const notasState = useNotas();
+   const notasState = useNotas();
+  const planejamentoState = usePlanejamentoSemanal();
   const estatisticasState = useMesesEstatisticas();
   const focoState = useFoco();
   const streakToastsState = useStreakToasts(historicoAnualState.historico);
@@ -118,6 +121,20 @@ export default function App() {
                   atualizar={notasState.atualizar}
                   excluir={notasState.excluir}
                   fixar={notasState.fixar}
+              />
+          )}
+
+{view === 'planning' && (
+              <PlanningView
+                  planejamento={planejamentoState.planejamento}
+                  historico={planejamentoState.historico}
+                  loading={planejamentoState.loading}
+                  error={planejamentoState.error}
+                  criar={planejamentoState.criar}
+                  atualizarRascunho={planejamentoState.atualizarRascunho}
+                  fechar={planejamentoState.fechar}
+                  reabrir={planejamentoState.reabrir}
+                  concluirItem={planejamentoState.concluirItem}
               />
           )}
 
