@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CalendarRange, Check, Pencil, Lock } from 'lucide-react';
 import { ModalShell, EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
 import { fmtDatePT } from '../utils/date';
@@ -21,6 +21,7 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
     const [salvando, setSalvando] = useState(false);
     const [confirmandoReabrir, setConfirmandoReabrir] = useState(false);
     const [erroAcao, setErroAcao] = useState(null);
+    const emAndamento = useRef(false);
 
     useEffect(() => {
         if (planejamento?.status === 'RASCUNHO') {
@@ -31,6 +32,8 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
     }, [planejamento?.id, planejamento?.status]);
 
     async function handleCriar() {
+        if (emAndamento.current) return;
+        emAndamento.current = true;
         setSalvando(true);
         setErroAcao(null);
         try {
@@ -38,11 +41,14 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
         } catch (e) {
             setErroAcao(e.message);
         } finally {
+            emAndamento.current = false;
             setSalvando(false);
         }
     }
 
     async function handleSalvarRascunho() {
+        if (emAndamento.current) return;
+        emAndamento.current = true;
         setSalvando(true);
         setErroAcao(null);
         try {
@@ -50,11 +56,14 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
         } catch (e) {
             setErroAcao(e.message);
         } finally {
+            emAndamento.current = false;
             setSalvando(false);
         }
     }
 
     async function handleFechar() {
+        if (emAndamento.current) return;
+        emAndamento.current = true;
         setSalvando(true);
         setErroAcao(null);
         try {
@@ -63,11 +72,14 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
         } catch (e) {
             setErroAcao(e.message);
         } finally {
+            emAndamento.current = false;
             setSalvando(false);
         }
     }
 
     async function handleConfirmarReabrir() {
+        if (emAndamento.current) return;
+        emAndamento.current = true;
         setSalvando(true);
         setErroAcao(null);
         try {
@@ -76,6 +88,7 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
         } catch (e) {
             setErroAcao(e.message);
         } finally {
+            emAndamento.current = false;
             setSalvando(false);
         }
     }
