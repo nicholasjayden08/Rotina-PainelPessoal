@@ -1,5 +1,6 @@
 package com.nicholas.rotina.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class ItemMetaSemanal {
 
     @ManyToOne
     @JoinColumn(name = "planejamento_id", nullable = false)
+    @JsonIgnore
     private PlanejamentoSemanal planejamento;
 
     @Column(nullable = false, columnDefinition = "TEXT")
