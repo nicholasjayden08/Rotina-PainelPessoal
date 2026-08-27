@@ -440,26 +440,39 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 
 /* ---------- WEEKLY PLANNING ---------- */
 
-.planning-card { background: #202020; border: 1px solid #1F2329; border-radius: 10px; padding: 16px; margin-bottom: 1.5rem; }
-.planning-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.planning-card { background: #202020; border: 1px solid #1F2329; border-radius: 10px; padding: 16px 18px; margin-bottom: 1.5rem; }
+.planning-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .planning-week-label { font-size: 13px; color: #f0efed; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .planning-week-label-muted { color: #7A7F88; }
-.planning-status-tag { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-.planning-textarea { width: 100%; min-height: 140px; resize: vertical; line-height: 1.7; }
+.planning-header-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.planning-status-tag { display: flex; align-items: center; gap: 4px; }
+.planning-progress-badge { font-size: 11.5px; color: #3DDC84; background: rgba(61, 220, 132, 0.12); padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.planning-progress-badge-muted { color: #9398A1; background: rgba(255, 255, 255, 0.05); }
+.planning-meta-badge { font-size: 11.5px; color: #5B9FED; background: rgba(91, 159, 237, 0.1); padding: 3px 9px; border-radius: 20px; }
 
-.planning-item-list { margin-bottom: 4px; }
-.planning-item-row { text-align: left; width: 100%; }
+.planning-progress-bar { height: 4px; background: #2A2E35; border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
+.planning-progress-bar-fill { height: 100%; background: #3DDC84; border-radius: 4px; transition: width 0.25s ease; }
+.planning-progress-bar-fill-muted { background: #5A5F68; }
+.planning-progress-bar-thin { height: 3px; margin-bottom: 0; }
+
+.planning-textarea { width: 100%; min-height: 140px; resize: vertical; line-height: 1.7; }
+.planning-textarea-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+
+.planning-item-list { margin-bottom: 4px; display: flex; flex-direction: column; gap: 2px; }
+.planning-item-row { text-align: left; width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 8px; border-radius: 8px; transition: background 0.15s ease; }
+.planning-item-row-done { background: rgba(61, 220, 132, 0.06); }
 .planning-check {
   display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;
-  border-radius: 5px; border: 1.5px solid #2A2E35; color: #191919; flex-shrink: 0;
+  border-radius: 5px; border: 1.5px solid #3A3E45; color: #0B2E1B; flex-shrink: 0;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
-.planning-check-done { background: #3DDC84; border-color: #3DDC84; }
+.planning-check-done { background: #3DDC84; border-color: #3DDC84; transform: scale(1.05); }
 .planning-item-text { font-size: 13.5px; color: #f0efed; }
 .planning-item-text-done { color: #5A5F68; text-decoration: line-through; }
 
 .planning-history-title { font-size: 13px; color: #7A7F88; font-weight: 500; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.05em; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .planning-history-list { display: flex; flex-direction: column; gap: 10px; }
-.planning-history-card { margin-bottom: 0; }
+.planning-history-card { margin-bottom: 0; background: #1A1A1A; }
 .planning-history-items { margin: 0; padding-left: 2px; list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .planning-history-items li { font-size: 12.5px; color: #9398A1; }
 .planning-history-item-done { color: #5A5F68; text-decoration: line-through; }
