@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarRange, Check, Pencil, Lock } from 'lucide-react';
 import { ModalShell, EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
 import { fmtDatePT } from '../utils/date';
@@ -16,6 +16,17 @@ function rotuloSemana(inicioISO) {
     return `${fmtDatePT(inicioISO)} a ${fmtDatePT(fimDaSemana(inicioISO))}`;
 }
 
+function contarLinhas(texto) {
+    return texto.split('\n').map((l) => l.trim()).filter(Boolean).length;
+}
+
+function progresso(itens) {
+    const total = itens.length;
+    const feitas = itens.filter((i) => i.concluida).length;
+    const pct = total === 0 ? 0 : Math.round((feitas / total) * 100);
+    return { total, feitas, pct };
+}
+
 export function PlanningView({ planejamento, historico, loading, error, criar, atualizarRascunho, fechar, reabrir, concluirItem }) {
     const [texto, setTexto] = useState('');
     const [salvando, setSalvando] = useState(false);
@@ -30,6 +41,8 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
             setTexto('');
         }
     }, [planejamento?.id, planejamento?.status]);
+
+    const qtdMetasDigitadas = useMemo(() => contarLinhas(texto), [texto]);
 
     async function handleCriar() {
         if (emAndamento.current) return;
@@ -93,6 +106,8 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
         }
     }
 
+    const prog = planejamento?.status === 'FECHADO' ? progresso(planejamento.itens) : null;
+
     return (
         <div className="view-wrap fade-in">
             <header className="page-header page-header-responsive">
@@ -108,18 +123,29 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                 <LoadingBlock text="carregando planejamento..." />
             ) : (
                 <>
-                    <div className="planning-card">
+                    <div className={`planning-card ${planejamento ? 'planning-card-active' : ''}`}>
                         <div className="planning-card-header">
                             <CalendarRange size={14} color="#5B9FED" />
                             <span className="planning-week-label">
                                 {planejamento ? rotuloSemana(planejamento.dataInicioSemana) : 'semana atual'}
                             </span>
-                            {planejamento?.status === 'FECHADO' && (
-                                <span className="tag-neutral planning-status-tag">
-                                    <Lock size={11} /> fechado
-                                </span>
-                            )}
+                            <div className="planning-header-right">
+                                {prog && (
+                                    <span className="planning-progress-badge">{prog.feitas}/{prog.total} concluídas</span>
+                                )}
+                                {planejamento?.status === 'FECHADO' && (
+                                    <span className="tag-neutral planning-status-tag">
+                                        <Lock size={11} /> fechado
+                                    </span>
+                                )}
+                            </div>
                         </div>
+
+                        {prog && prog.total > 0 && (
+                            <div className="planning-progress-bar">
+                                <div className="planning-progress-bar-fill" style={{ width: `${prog.pct}%` }} />
+                            </div>
+                        )}
 
                         {!planejamento && (
                             <>
@@ -130,7 +156,10 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                                     value={texto}
                                     onChange={(e) => setTexto(e.target.value)}
                                 />
-                                <div className="modal-actions">
+                                <div className="planning-textarea-footer">
+                                    <span className="planning-meta-badge">
+                                        {qtdMetasDigitadas} {qtdMetasDigitadas === 1 ? 'meta detectada' : 'metas detectadas'}
+                                    </span>
                                     <button className="primary-btn" onClick={handleCriar} disabled={salvando || !texto.trim()}>
                                         {salvando ? 'criando...' : 'criar planejamento da semana'}
                                     </button>
@@ -146,13 +175,18 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                                     value={texto}
                                     onChange={(e) => setTexto(e.target.value)}
                                 />
-                                <div className="modal-actions">
-                                    <button className="secondary-btn" onClick={handleSalvarRascunho} disabled={salvando}>
-                                        salvar rascunho
-                                    </button>
-                                    <button className="primary-btn" onClick={handleFechar} disabled={salvando || !texto.trim()}>
-                                        <Lock size={14} /> fechar planejamento
-                                    </button>
+                                <div className="planning-textarea-footer">
+                                    <span className="planning-meta-badge">
+                                        {qtdMetasDigitadas} {qtdMetasDigitadas === 1 ? 'meta detectada' : 'metas detectadas'}
+                                    </span>
+                                    <div className="modal-actions" style={{ marginTop: 0 }}>
+                                        <button className="secondary-btn" onClick={handleSalvarRascunho} disabled={salvando}>
+                                            salvar rascunho
+                                        </button>
+                                        <button className="primary-btn" onClick={handleFechar} disabled={salvando || !texto.trim()}>
+                                            <Lock size={14} /> fechar planejamento
+                                        </button>
+                                    </div>
                                 </div>
                             </>
                         )}
@@ -166,7 +200,7 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                                         {planejamento.itens.map((item) => (
                                             <button
                                                 key={item.id}
-                                                className="habit-row planning-item-row"
+                                                className={`habit-row planning-item-row ${item.concluida ? 'planning-item-row-done' : ''}`}
                                                 onClick={() => concluirItem(item.id)}
                                             >
                                                 <span className={`planning-check ${item.concluida ? 'planning-check-done' : ''}`}>
@@ -193,27 +227,31 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                         <EmptyHint text="nenhum planejamento anterior ainda." />
                     ) : (
                         <div className="planning-history-list">
-                            {historico.map((p) => (
-                                <div key={p.id} className="planning-card planning-history-card">
-                                    <div className="planning-card-header">
-                                        <CalendarRange size={13} color="#5A5F68" />
-                                        <span className="planning-week-label planning-week-label-muted">
-                                            {rotuloSemana(p.dataInicioSemana)}
-                                        </span>
+                            {historico.map((p) => {
+                                const progHist = p.status === 'FECHADO' ? progresso(p.itens) : null;
+                                return (
+                                    <div key={p.id} className="planning-card planning-history-card">
+                                        <div className="planning-card-header" style={{ marginBottom: progHist && progHist.total > 0 ? 10 : 0 }}>
+                                            <CalendarRange size={13} color="#5A5F68" />
+                                            <span className="planning-week-label planning-week-label-muted">
+                                                {rotuloSemana(p.dataInicioSemana)}
+                                            </span>
+                                            {progHist && progHist.total > 0 && (
+                                                <span className="planning-progress-badge planning-progress-badge-muted" style={{ marginLeft: 'auto' }}>
+                                                    {progHist.feitas}/{progHist.total}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {progHist && progHist.total > 0 ? (
+                                            <div className="planning-progress-bar planning-progress-bar-thin">
+                                                <div className="planning-progress-bar-fill planning-progress-bar-fill-muted" style={{ width: `${progHist.pct}%` }} />
+                                            </div>
+                                        ) : (
+                                            <p className="mini-item-meta">sem metas fechadas nessa semana</p>
+                                        )}
                                     </div>
-                                    {p.status === 'FECHADO' && p.itens.length > 0 ? (
-                                        <ul className="planning-history-items">
-                                            {p.itens.map((item) => (
-                                                <li key={item.id} className={item.concluida ? 'planning-history-item-done' : ''}>
-                                                    {item.concluida ? '✓' : '·'} {item.texto}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p className="mini-item-meta">sem metas fechadas nessa semana</p>
-                                    )}
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </>
