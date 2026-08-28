@@ -318,7 +318,7 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .chip { padding: 7px 13px; border-radius: 7px; border: 1px solid; font-size: 12.5px; cursor: pointer; }
 
 
-/* ── Markdown Preview ─────────────────────────────────── */
+/* ── MARKDOWN PREVIEW ─────────────────────────────────── */
 .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
   color: #f0efed; font-weight: 600; margin: 16px 0 8px;
 }
