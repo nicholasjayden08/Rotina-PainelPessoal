@@ -1,5 +1,5 @@
 import { AlertTriangle, Droplets, Flame } from 'lucide-react';
-import { COLORS } from '../constants';
+import { COLORS, WATER_GOAL } from '../constants';
 
 export function HomeAlerts({
                                aguaAtual,
@@ -8,7 +8,7 @@ export function HomeAlerts({
                                onAbrirHabitosAtomicos
                            }) {
 
-    const faltaAgua = Math.max(0, 4 - aguaAtual);
+    const faltaAgua = Math.max(0, WATER_GOAL - aguaAtual);
     const alertas = [];
 
     if (faltaAgua > 0) {
