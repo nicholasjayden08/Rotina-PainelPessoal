@@ -136,7 +136,6 @@ export default function App() {
                   reabrir={planejamentoState.reabrir}
                   concluirItem={planejamentoState.concluirItem}
               />
-
           )}
 
           {view === 'statistics' && (
