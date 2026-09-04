@@ -3,7 +3,7 @@ import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
 import { YearHeatmap } from './YearHeatmap';
 import { computeStreak } from '../utils/streak';
-import { getTarefaMaisUrgente } from '../utils/tarefas';
+import { getTarefaMaisUrgente, getTarefaProximaAVencer } from '../utils/tarefas';
 import { fmtDatePT, rangeDays } from '../utils/date';
 import { HomeAlerts} from "./HomeAlerts";
 import { WATER_GOAL, COLORS } from '../constants';
@@ -17,6 +17,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
   const agua = registroHoje?.agua || 0;
   const streak = computeStreak(historicoAnual);
   const proximoPasso = getTarefaMaisUrgente(tarefas);
+  const proximaAVencer = !proximoPasso ? getTarefaProximaAVencer(tarefas) : null;
   const registrouHabitosHoje =
       !!registroHoje &&
       (
@@ -58,6 +59,18 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
               <span className="overdue-banner-label">próximo passo</span>
               <span className="overdue-banner-task">
               {proximoPasso.nome} — atrasada há {proximoPasso.diasAtraso} {proximoPasso.diasAtraso === 1 ? 'dia' : 'dias'}
+            </span>
+            </div>
+          </button>
+      )}
+
+      {proximaAVencer && (
+          <button className="overdue-banner overdue-banner-warning" onClick={() => setView('tasks')}>
+            <AlertTriangle size={16} color={COLORS.warning} strokeWidth={2} />
+            <div className="overdue-banner-text">
+              <span className="overdue-banner-label">de olho no prazo</span>
+              <span className="overdue-banner-task">
+              {proximaAVencer.nome} — {proximaAVencer.diasRestantes === 0 ? 'vence hoje' : proximaAVencer.diasRestantes === 1 ? 'vence amanhã' : `vence em ${proximaAVencer.diasRestantes} dias`}
             </span>
             </div>
           </button>
