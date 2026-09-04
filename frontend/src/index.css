@@ -167,6 +167,8 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .overdue-banner-text { display: flex; flex-direction: column; gap: 2px; }
 .overdue-banner-label { font-size: 11px; color: #E2504A; text-transform: uppercase; letter-spacing: 0.04em; }
 .overdue-banner-task { font-size: 13.5px; color: #f0efed; }
+.overdue-banner-warning { background: #241C10; border: 1px solid #453218; }
+.overdue-banner-warning .overdue-banner-label { color: #E8A33D; }
 
 /* ---------- METRICS / PANELS ---------- */
 
