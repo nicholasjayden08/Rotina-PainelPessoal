@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { WATER_GOAL, COLORS, HEATMAP_SCALE } from '../constants';
 import { computeStreakInfo } from '../utils/streak';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
@@ -16,6 +17,12 @@ function scoreFor(entry) {
 }
 
 export function YearHeatmap({ historico }) {
+    const isMobile = useIsMobile();
+    const scrollRef = useRef(null);
+    const CELL = isMobile ? 12 : 10;
+    const GAP = 2;
+    const PITCH = CELL + GAP;
+
     const { weeks, monthPositions, totalActive, currentStreak, bestStreak } = useMemo(() => {
         const map = {};
         historico.forEach((e) => { map[e.data] = e; });
@@ -61,15 +68,21 @@ export function YearHeatmap({ historico }) {
 
     const totalWeeks = weeks.length;
 
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+        }
+    }, [weeks]);
+
     return (
         <div>
-            <div style={{ overflowX: 'auto' }}>
+            <div ref={scrollRef} className="heatmap-scroll" style={{ overflowX: 'auto' }}>
                 <div style={{ display: 'flex', marginBottom: 4, marginLeft: 22 }}>
                     {monthPositions.map((mp, i) => {
                         const next = i + 1 < monthPositions.length ? monthPositions[i + 1].weekIndex : totalWeeks;
                         const span = next - mp.weekIndex;
                         return (
-                            <div key={mp.month} style={{ width: span * 13, fontSize: 10, color: COLORS.textMuted, flexShrink: 0 }}>
+                            <div key={mp.month} style={{ width: span * PITCH, fontSize: 10, color: COLORS.textMuted, flexShrink: 0 }}>
                                 {MONTHS[mp.month]}
                             </div>
                         );
@@ -79,11 +92,11 @@ export function YearHeatmap({ historico }) {
                 <div style={{ display: 'flex', gap: 3 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginRight: 2 }}>
                         {['', 'seg', '', 'qua', '', 'sex', ''].map((l, i) => (
-                            <div key={i} style={{ height: 10, lineHeight: '10px', fontSize: 9, color: COLORS.textMuted, width: 18 }}>{l}</div>
+                            <div key={i} style={{ height: CELL, lineHeight: `${CELL}px`, fontSize: 9, color: COLORS.textMuted, width: 18 }}>{l}</div>
                         ))}
                     </div>
 
-                    <div style={{ display: 'flex', gap: 2 }}>
+                    <div style={{ display: 'flex', gap: GAP }}>
                         {weeks.map((week, wi) => (
                             <div key={wi} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 {week.map((day, di) => (
@@ -91,8 +104,8 @@ export function YearHeatmap({ historico }) {
                                         key={di}
                                         title={day.iso && day.score >= 0 ? `${day.iso}: ${day.score}/5 hábitos` : undefined}
                                         style={{
-                                            width: 10,
-                                            height: 10,
+                                            width: CELL,
+                                            height: CELL,
                                             borderRadius: 3,
                                             background: day.score === -1 ? 'transparent' : HEATMAP_SCALE[day.score],
                                             flexShrink: 0,
@@ -105,7 +118,9 @@ export function YearHeatmap({ historico }) {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${COLORS.cellInactive}` }}>
+            {isMobile && <p className="heatmap-scroll-hint">← arraste para ver meses anteriores</p>}
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12, paddingTop: 12, borderTop: `1px solid ${COLORS.cellInactive}`, flexWrap: 'wrap', gap: 8 }}>
                 <div style={{ display: 'flex', gap: 16 }}>
                     <span style={{ fontSize: 11, color: COLORS.textMuted }}>dias ativos: <span style={{ color: COLORS.textSecondary, fontWeight: 500 }}>{totalActive}</span></span>
                     <span style={{ fontSize: 11, color: COLORS.textMuted }}>sequência atual: <span style={{ color: COLORS.textSecondary, fontWeight: 500 }}>{currentStreak}</span> dias</span>
