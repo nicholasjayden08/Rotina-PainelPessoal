@@ -121,6 +121,7 @@ export default function App() {
                   atualizar={notasState.atualizar}
                   excluir={notasState.excluir}
                   fixar={notasState.fixar}
+                  isMobile={isMobile}
               />
           )}
 
