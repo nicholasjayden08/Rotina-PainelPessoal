@@ -70,25 +70,27 @@ export function HabitsConsistencyGrid({ historico, dias }) {
   return (
       <div className="chart-block">
         <p className="chart-title">consistência de hábitos</p>
-        <div className="grid-chart">
-          {rows.map((row) => (
-              <div key={row.key} className="grid-chart-row">
-                <span className="grid-chart-label">{row.label}</span>
-                <div className="grid-chart-cells">
-                  {data.map((d) => {
-                    const on = !!d.entry?.[row.key];
-                    return (
-                        <div
-                            key={d.date}
-                            title={`${d.date}: ${on ? 'feito' : 'não feito'}`}
-                            className="grid-chart-cell"
-                            style={{ background: on ? row.color : COLORS.cellInactive }}
-                        />
-                    );
-                  })}
+        <div className="grid-chart-scroll">
+          <div className="grid-chart">
+            {rows.map((row) => (
+                <div key={row.key} className="grid-chart-row">
+                  <span className="grid-chart-label">{row.label}</span>
+                  <div className="grid-chart-cells">
+                    {data.map((d) => {
+                      const on = !!d.entry?.[row.key];
+                      return (
+                          <div
+                              key={d.date}
+                              title={`${d.date}: ${on ? 'feito' : 'não feito'}`}
+                              className="grid-chart-cell"
+                              style={{ background: on ? row.color : COLORS.cellInactive }}
+                          />
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
   );
