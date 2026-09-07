@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Plus, Trash2, FileText, Eye, Edit3, Columns2, Search, Pin, Bold, Italic, Heading2, List, Link2, Code } from 'lucide-react';
+import { Plus, Trash2, FileText, Eye, Edit3, Columns2, Search, Pin, Bold, Italic, Heading2, List, Link2, Code, ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { LoadingBlock, ErrorBlock, EmptyHint } from './Shared';
 
@@ -30,7 +30,7 @@ const FERRAMENTAS_MARKDOWN = [
     { icon: Code, title: 'código', prefixo: '`', sufixo: '`', placeholder: 'código' },
 ];
 
-export function NotesView({ notas, loading, error, criar, atualizar, excluir, fixar }) {
+export function NotesView({ notas, loading, error, criar, atualizar, excluir, fixar, isMobile }) {
     const [idSelecionado, setIdSelecionado] = useState(null);
     const [titulo, setTitulo] = useState('');
     const [conteudo, setConteudo] = useState('');
@@ -128,11 +128,12 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
         await fixar(id);
     }
 
-    return (
+ return (
         <div className="view-wrap fade-in" style={{ padding: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div className="notes-layout">
+            <div className={`notes-layout ${isMobile ? 'notes-layout-mobile' : ''}`}>
 
                 {/* Lista de notas */}
+                {(!isMobile || !notaSelecionada) && (
                 <div className="notes-sidebar">
                     <div className="notes-sidebar-header">
                         <div>
@@ -190,8 +191,10 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
                         )}
                     </div>
                 </div>
+                )}
 
                 {/* Editor */}
+                {(!isMobile || notaSelecionada) && (
                 <div className="notes-editor">
                     {!notaSelecionada ? (
                         <div className="notes-editor-empty">
@@ -202,6 +205,13 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
                     ) : (
                         <>
                             <div className="notes-editor-header">
+                                {isMobile && (
+                                    <button
+                                        className="icon-btn notes-back-btn"
+                                        onClick={() => setIdSelecionado(null)}
+                                        title="voltar"
+                                    ><ArrowLeft size={16} /></button>
+                                )}
                                 <input
                                     value={titulo}
                                     onChange={handleTituloChange}
@@ -265,6 +275,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
                         </>
                     )}
                 </div>
+                )}
             </div>
         </div>
     );
