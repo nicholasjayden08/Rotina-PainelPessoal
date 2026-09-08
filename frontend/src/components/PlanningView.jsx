@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarRange, Check, Pencil, Lock } from 'lucide-react';
+import { CalendarRange, Check, Pencil, Lock, ChevronDown } from 'lucide-react';
 import { ModalShell, EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
 import { fmtDatePT } from '../utils/date';
 
@@ -32,6 +32,7 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
     const [salvando, setSalvando] = useState(false);
     const [confirmandoReabrir, setConfirmandoReabrir] = useState(false);
     const [erroAcao, setErroAcao] = useState(null);
+    const [semanaExpandida, setSemanaExpandida] = useState(null);
     const emAndamento = useRef(false);
 
     useEffect(() => {
@@ -229,8 +230,16 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                         <div className="planning-history-list">
                             {historico.map((p) => {
                                 const progHist = p.status === 'FECHADO' ? progresso(p.itens) : null;
+                                const expandida = semanaExpandida === p.id;
+                                const podeExpandir = p.status === 'FECHADO' && p.itens.length > 0;
                                 return (
-                                    <div key={p.id} className="planning-card planning-history-card">
+                                    <div
+                                        key={p.id}
+                                        className={`planning-card planning-history-card ${podeExpandir ? 'planning-history-card-clickable' : ''}`}
+                                        onClick={() => podeExpandir && setSemanaExpandida(expandida ? null : p.id)}
+                                        role={podeExpandir ? 'button' : undefined}
+                                        tabIndex={podeExpandir ? 0 : undefined}
+                                    >
                                         <div className="planning-card-header" style={{ marginBottom: progHist && progHist.total > 0 ? 10 : 0 }}>
                                             <CalendarRange size={13} color="#5A5F68" />
                                             <span className="planning-week-label planning-week-label-muted">
@@ -241,6 +250,14 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                                                     {progHist.feitas}/{progHist.total}
                                                 </span>
                                             )}
+                                            {podeExpandir && (
+                                                <ChevronDown
+                                                    size={14}
+                                                    color="#5A5F68"
+                                                    className={`planning-history-chevron ${expandida ? 'planning-history-chevron-open' : ''}`}
+                                                    style={{ marginLeft: progHist && progHist.total > 0 ? 4 : 'auto' }}
+                                                />
+                                            )}
                                         </div>
                                         {progHist && progHist.total > 0 ? (
                                             <div className="planning-progress-bar planning-progress-bar-thin">
@@ -248,6 +265,15 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                                             </div>
                                         ) : (
                                             <p className="mini-item-meta">sem metas fechadas nessa semana</p>
+                                        )}
+                                        {expandida && (
+                                            <ul className="planning-history-items planning-history-items-expanded">
+                                                {p.itens.map((item) => (
+                                                    <li key={item.id} className={item.concluida ? 'planning-history-item-done' : ''}>
+                                                        {item.texto}
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         )}
                                     </div>
                                 );
