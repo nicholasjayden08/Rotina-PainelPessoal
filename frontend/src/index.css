@@ -505,7 +505,12 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .planning-history-title { font-size: 13px; color: #7A7F88; font-weight: 500; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.05em; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .planning-history-list { display: flex; flex-direction: column; gap: 10px; }
 .planning-history-card { margin-bottom: 0; background: #1A1A1A; }
+.planning-history-card-clickable { cursor: pointer; transition: background 0.15s ease; }
+.planning-history-card-clickable:hover { background: #202020; }
+.planning-history-chevron { transition: transform 0.15s ease; flex-shrink: 0; }
+.planning-history-chevron-open { transform: rotate(180deg); }
 .planning-history-items { margin: 0; padding-left: 2px; list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .planning-history-items li { font-size: 12.5px; color: #9398A1; }
 .planning-history-item-done { color: #5A5F68; text-decoration: line-through; }
+.planning-history-items-expanded { margin-top: 12px; padding-top: 12px; border-top: 1px solid #2c2c2c; }
 .planning-confirm-text { font-size: 13px; color: #C8CBD2; line-height: 1.6; margin: 0 0 1rem; }
