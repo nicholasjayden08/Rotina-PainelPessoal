@@ -223,6 +223,7 @@ export function PlanningView({ planejamento, historico, loading, error, criar, a
                         )}
                     </div>
 
+
                     <h2 className="planning-history-title">histórico</h2>
                     {historico.length === 0 ? (
                         <EmptyHint text="nenhum planejamento anterior ainda." />
