@@ -351,7 +351,10 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 
 /* ---------- NOTES ---------- */
 
-.notes-layout { display: flex; flex: 1; overflow: hidden; }
+.notes-layout {
+  display: flex; flex: 1; overflow: hidden;
+  border: 1px solid #1F2329; border-radius: 12px;
+}
 
 .notes-sidebar { width: 240px; min-width: 240px; background: #202020; border-right: 1px solid #2c2c2c; display: flex; flex-direction: column; height: 100%; }
 .notes-sidebar-header { padding: 16px 14px 12px; border-bottom: 1px solid #2c2c2c; display: flex; align-items: center; justify-content: space-between; }
