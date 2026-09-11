@@ -1,22 +1,12 @@
+import { CustomSelect } from './CustomSelect';
+
 export function MonthSelector({ value, onChange, options }) {
     return (
-        <select
-            className="input"
+        <CustomSelect
             value={value}
-            onChange={(e) => onChange(e.target.value)}
-            style={{
-                maxWidth: 240,
-                cursor: 'pointer',
-            }}
-        >
-            {options.map((option) => (
-                <option
-                    key={option.value}
-                    value={option.value}
-                >
-                    {option.label}
-                </option>
-            ))}
-        </select>
+            onChange={onChange}
+            options={options}
+            style={{ maxWidth: 240 }}
+        />
     );
 }
