@@ -12,19 +12,19 @@ function average(arr) {
 }
 
 export function AtomicHabitsView({
-  registroHoje,
-  loadingHoje,
-  erroHoje,
-  onAtualizarHoje,
-  historico,
-  loadingHistorico,
-  erroHistorico,
-  range,
-  setRange,
-  historicoCompleto,
-  loadingCompleto,
-  onExcluirRegistro,
-}) {
+                                   registroHoje,
+                                   loadingHoje,
+                                   erroHoje,
+                                   onAtualizarHoje,
+                                   historico,
+                                   loadingHistorico,
+                                   erroHistorico,
+                                   range,
+                                   setRange,
+                                   historicoCompleto,
+                                   loadingCompleto,
+                                   onExcluirRegistro,
+                                 }) {
   const days = rangeDays(range);
   const map = {};
   historico.forEach((e) => { map[e.data] = e; });
@@ -36,69 +36,71 @@ export function AtomicHabitsView({
   const gymDays = days.filter((d) => map[d]?.academia).length;
 
   return (
-    <div className="view-wrap fade-in">
-      <header className="page-header page-header-responsive">
-        <div>
-          <p className="eyebrow">registro diário</p>
-          <h1 className="page-title">hábitos atômicos</h1>
-        </div>
-      </header>
-
-      <section className="panel">
-        <div className="panel-header">
-          <h2 className="panel-title">hoje · {fmtDatePT(todayISO())}</h2>
-        </div>
-        <ErrorBlock text={erroHoje} />
-        {loadingHoje ? <LoadingBlock /> : <TodayForm registro={registroHoje} onChange={onAtualizarHoje} />}
-      </section>
-
-      <section className="panel" style={{ marginTop: '1.25rem' }}>
-        <div className="panel-header">
-          <h2 className="panel-title">evolução</h2>
-          <div className="range-toggle">
-            {[7, 14, 30].map((r) => (
-              <button
-                key={r}
-                onClick={() => setRange(r)}
-                className={`range-btn ${range === r ? 'range-btn-active' : ''}`}
-              >
-                {r}d
-              </button>
-            ))}
+      <div className="view-wrap fade-in">
+        <header className="page-header page-header-responsive">
+          <div>
+            <p className="eyebrow">registro diário</p>
+            <h1 className="page-title">hábitos atômicos</h1>
           </div>
-        </div>
+        </header>
 
-        <ErrorBlock text={erroHistorico} />
+        <section className="panel">
+          <div className="panel-header">
+            <h2 className="panel-title">hoje · {fmtDatePT(todayISO())}</h2>
+          </div>
+          <ErrorBlock text={erroHoje} />
+          {loadingHoje ? <LoadingBlock /> : <TodayForm registro={registroHoje} onChange={onAtualizarHoje} />}
+        </section>
 
-        <div className="metrics-grid-small">
-          <MetricCard label="água média" value={`${avgWater.toFixed(1)}L`} sub={`meta ${WATER_GOAL}L`} />
-          <MetricCard label="dias de estudo" value={studyDays} sub={`de ${range} dias`} />
-          <MetricCard label="dias de trabalho" value={workDays} sub={`de ${range} dias`} />
-          <MetricCard label="acordou cedo" value={earlyDays} sub={`de ${range} dias`} />
-          <MetricCard label="dias de academia" value={gymDays} sub={`de ${range} dias`}/>
-        </div>
+        <section className="panel" style={{ marginTop: '1.25rem' }}>
+          <div className="panel-header">
+            <h2 className="panel-title">evolução</h2>
+            <div className="range-toggle">
+              {[7, 14, 30].map((r) => (
+                  <button
+                      key={r}
+                      onClick={() => setRange(r)}
+                      className={`range-btn ${range === r ? 'range-btn-active' : ''}`}
+                  >
+                    {r}d
+                  </button>
+              ))}
+            </div>
+          </div>
 
-        {loadingHistorico ? (
-          <LoadingBlock text="carregando gráficos..." />
-        ) : (
-          <>
-            <WaterChart historico={historico} dias={range} />
-            <HabitsConsistencyGrid historico={historico} dias={range} />
-            <MoodSleepChart historico={historico} dias={range} />
-          </>
-        )}
-      </section>
+          <ErrorBlock text={erroHistorico} />
 
-      <section className="panel" style={{ marginTop: '1.25rem' }}>
-        <div className="panel-header">
-          <h2 className="panel-title">histórico completo</h2>
-        </div>
-        {loadingCompleto ? (
-          <LoadingBlock text="carregando histórico..." />
-        ) : (
-          <HistoryTable historico={historicoCompleto} onDelete={onExcluirRegistro} />
-        )}
-      </section>
-    </div>
+          <div className="metrics-grid-small">
+            <MetricCard label="água média" value={`${avgWater.toFixed(1)}L`} sub={`meta ${WATER_GOAL}L`} />
+            <MetricCard label="dias de estudo" value={studyDays} sub={`de ${range} dias`} />
+            <MetricCard label="dias de trabalho" value={workDays} sub={`de ${range} dias`} />
+            <MetricCard label="acordou cedo" value={earlyDays} sub={`de ${range} dias`} />
+            <MetricCard label="dias de academia" value={gymDays} sub={`de ${range} dias`}/>
+          </div>
+
+          {loadingHistorico ? (
+              <LoadingBlock text="carregando gráficos..." />
+          ) : (
+              <>
+                <WaterChart historico={historico} dias={range} />
+                <HabitsConsistencyGrid historico={historico} dias={range} />
+                <MoodSleepChart historico={historico} dias={range} />
+              </>
+          )}
+        </section>
+
+        <section className="panel" style={{ marginTop: '1.25rem' }}>
+          {loadingCompleto ? (
+              <>
+                <div className="panel-header">
+                  <h2 className="panel-title">histórico completo</h2>
+                </div>
+                <LoadingBlock text="carregando histórico..." />
+              </>
+          ) : (
+              <HistoryTable historico={historicoCompleto} onDelete={onExcluirRegistro} />
+          )}
+        </section>
+      </div>
   );
 }
