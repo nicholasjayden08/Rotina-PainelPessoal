@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFocusTimer } from '../hooks/useFocusTimer';
 import { FocusHistoryTable } from './FocusHistoryTable';
+import { CustomSelect } from './CustomSelect';
 import { LoadingBlock, ErrorBlock } from './Shared';
 
 function tocarBeep(ctx) {
@@ -115,8 +116,8 @@ export function FocusView({ sessions, loading, error, criarSessao, excluirSessao
         reset();
     }
 
-    function handleTimeChange(e) {
-        setFocusTime(Number(e.target.value));
+    function handleTimeChange(valor) {
+        setFocusTime(Number(valor));
         reset();
     }
 
@@ -170,17 +171,17 @@ export function FocusView({ sessions, loading, error, criarSessao, excluirSessao
                                 Duração da sessão
                             </label>
 
-                            <select
-                                className="input"
+                            <CustomSelect
                                 value={focusTime}
                                 onChange={handleTimeChange}
-                            >
-                                <option value={15}>15 minutos</option>
-                                <option value={25}>25 minutos</option>
-                                <option value={45}>45 minutos</option>
-                                <option value={60}>60 minutos</option>
-                                <option value={90}>90 minutos</option>
-                            </select>
+                                options={[
+                                    { value: 15, label: '15 minutos' },
+                                    { value: 25, label: '25 minutos' },
+                                    { value: 45, label: '45 minutos' },
+                                    { value: 60, label: '60 minutos' },
+                                    { value: 90, label: '90 minutos' },
+                                ]}
+                            />
 
                         </div>
                         <div className="focus-timer">
