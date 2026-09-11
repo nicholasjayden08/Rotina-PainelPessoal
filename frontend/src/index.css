@@ -232,6 +232,37 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
   background: transparent; border: 1px solid #1F2329; color: #7A7F88; cursor: pointer;
 }
 
+/* ---------- CUSTOM SELECT ---------- */
+
+.custom-select { position: relative; width: 100%; }
+.custom-select-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 9px 11px; border-radius: 7px; background: #191919; border: 1px solid #262A30;
+  color: #f0efed; font-size: 13px; font-family: inherit; cursor: pointer; text-align: left;
+  transition: border-color 0.15s ease;
+}
+.custom-select-trigger:hover { border-color: #3A3E45; }
+.custom-select-trigger-open { border-color: #3DDC84; }
+.custom-select-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.custom-select-placeholder { color: #5A5F68; }
+.custom-select-chevron { flex-shrink: 0; color: #7A7F88; transition: transform 0.15s ease; }
+.custom-select-trigger-open .custom-select-chevron { transform: rotate(180deg); }
+
+.custom-select-menu {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 50;
+  background: #202020; border: 1px solid #2A2E35; border-radius: 8px;
+  padding: 4px; max-height: 240px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.custom-select-option {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 10px; border-radius: 6px; background: transparent; border: none;
+  color: #d8d7d4; font-size: 13px; font-family: inherit; cursor: pointer; text-align: left;
+}
+.custom-select-option:hover { background: #2c2c2c; }
+.custom-select-option-active { color: #3DDC84; }
+.custom-select-option-active svg { color: #3DDC84; flex-shrink: 0; }
+
 /* ---------- TASKS ---------- */
 
 .filter-row { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
