@@ -30,7 +30,9 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  transition: opacity 0.15s ease;
 }
+.habit-check-btn:hover { opacity: 0.8; }
 .habit-check-box {
   width: 20px;
   height: 20px;
@@ -92,7 +94,8 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
   background: transparent; border: none; color: #9398A1; font-size: 13.5px; cursor: pointer;
   text-align: left; width: 100%; transition: background 0.15s, color 0.15s;
 }
-.nav-item-active { background: #2c2c2c; color: #f0efed; }
+.nav-item:hover { background: #252525; color: #C8CBD2; }
+.nav-item-active, .nav-item-active:hover { background: #2c2c2c; color: #f0efed; }
 
 .sidebar-footer { padding-top: 1rem; border-top: 1px solid #1C2026; }
 .connection-indicator {
@@ -142,8 +145,9 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .api-offline-steps ol { padding-left: 18px; color: #9398A1; font-size: 13px; line-height: 1.8; }
 .retry-btn {
   margin-top: 8px; padding: 9px 16px; border-radius: 8px; background: #3DDC84; border: none;
-  color: #191919; font-weight: 600; font-size: 13px; cursor: pointer;
+  color: #191919; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.15s ease;
 }
+.retry-btn:hover { background: #34c979; }
 
 /* ---------- PAGE HEADER ---------- */
 
@@ -161,20 +165,23 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .overdue-banner {
   display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
   padding: 12px 14px; border-radius: 10px; margin-bottom: 1.25rem; cursor: pointer;
-  background: #1F1414; border: 1px solid #3D2222;
+  background: #1F1414; border: 1px solid #3D2222; transition: border-color 0.15s ease;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+.overdue-banner:hover { border-color: #5A2E2E; }
 .overdue-banner-text { display: flex; flex-direction: column; gap: 2px; }
 .overdue-banner-label { font-size: 11px; color: #E2504A; text-transform: uppercase; letter-spacing: 0.04em; }
 .overdue-banner-task { font-size: 13.5px; color: #f0efed; }
 .overdue-banner-warning { background: #241C10; border: 1px solid #453218; }
+.overdue-banner-warning:hover { border-color: #6B4B1F; }
 .overdue-banner-warning .overdue-banner-label { color: #E8A33D; }
 
 /* ---------- METRICS / PANELS ---------- */
 
 .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
 .metrics-grid-small { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
-.metric-card { background: #202020; border: 1px solid #1F2329; border-radius: 10px; padding: 14px 16px; }
+.metric-card { background: #202020; border: 1px solid #1F2329; border-radius: 10px; padding: 14px 16px; transition: border-color 0.15s ease, background 0.15s ease; }
+.metric-card-clickable:hover { border-color: #2A2E35; background: #232323; }
 .metric-label { font-size: 11.5px; color: #7A7F88; margin: 0 0 6px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .metric-value { font-size: 22px; font-weight: 600; margin: 0 0 4px; color: #f0efed; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .metric-sub { font-size: 11.5px; color: #5A5F68; margin: 0; }
@@ -203,11 +210,14 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .water-btn {
   font-size: 12px; padding: 6px 11px; border-radius: 7px; background: #2c2c2c;
   border: 1px solid #2A2E35; color: #5B9FED; cursor: pointer; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.15s ease;
 }
+.water-btn:hover { background: #343434; }
 .water-btn-reset {
   font-size: 12px; padding: 6px 11px; border-radius: 7px; background: transparent;
-  border: 1px solid #2A2E35; color: #7A7F88; cursor: pointer;
+  border: 1px solid #2A2E35; color: #7A7F88; cursor: pointer; transition: border-color 0.15s ease, color 0.15s ease;
 }
+.water-btn-reset:hover { border-color: #3A3E45; color: #C8CBD2; }
 
 /* ---------- HEATMAP ---------- */
 
@@ -221,16 +231,22 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .primary-btn {
   display: flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px;
   background: #3DDC84; border: none; color: #191919; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s ease;
 }
+.primary-btn:hover:not(:disabled) { background: #34c979; }
 .primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .secondary-btn {
   display: flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px;
   background: transparent; border: 1px solid #2A2E35; color: #C8CBD2; font-size: 13px; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
+.secondary-btn:hover { border-color: #3A3E45; color: #f0efed; }
 .icon-btn {
   display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px;
   background: transparent; border: 1px solid #1F2329; color: #7A7F88; cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
+.icon-btn:hover { border-color: #3A3E45; color: #C8CBD2; }
 
 /* ---------- CUSTOM SELECT ---------- */
 
@@ -269,8 +285,10 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .filter-chip {
   padding: 6px 12px; border-radius: 7px; background: #202020; border: 1px solid #1F2329;
   color: #7A7F88; font-size: 12.5px; cursor: pointer; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
-.filter-chip-active { background: #2c2c2c; color: #f0efed; border-color: #2A2E35; }
+.filter-chip:hover { border-color: #2A2E35; color: #C8CBD2; }
+.filter-chip-active, .filter-chip-active:hover { background: #2c2c2c; color: #f0efed; border-color: #2A2E35; }
 
 .task-list { display: flex; flex-direction: column; gap: 8px; }
 .task-row {
@@ -279,8 +297,9 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 }
 .status-btn {
   display: flex; flex-direction: column; align-items: center; gap: 5px; background: transparent;
-  border: none; cursor: pointer; min-width: 88px; padding-top: 2px;
+  border: none; cursor: pointer; min-width: 88px; padding-top: 2px; transition: opacity 0.15s ease;
 }
+.status-btn:hover { opacity: 0.8; }
 .status-dot { width: 9px; height: 9px; border-radius: 50%; }
 .status-label { font-size: 10.5px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; text-align: center; line-height: 1.3; }
 .task-main { flex: 1; min-width: 180px; }
@@ -296,7 +315,8 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .period-groups { display: flex; flex-direction: column; gap: 20px; }
 .period-label { font-size: 11.5px; color: #5B9FED; text-transform: uppercase; letter-spacing: 0.06em; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0 0 8px; }
 .habit-row { display: flex; gap: 12px; align-items: center; padding: 12px 16px; background: #202020; border: 1px solid #1F2329; border-radius: 10px; flex-wrap: wrap; }
-.check-btn { display: flex; background: transparent; border: none; cursor: pointer; padding: 0; }
+.check-btn { display: flex; background: transparent; border: none; cursor: pointer; padding: 0; transition: opacity 0.15s ease; }
+.check-btn:hover { opacity: 0.8; }
 .habit-name { font-size: 13.5px; margin: 0 0 2px; color: #f0efed; }
 .habit-meta { font-size: 11.5px; color: #5A5F68; margin: 0; }
 
@@ -308,11 +328,13 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 
 .today-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
 .checkbox-row { display: flex; gap: 8px; grid-column: 1 / -1; margin-top: 4px; flex-wrap: wrap; }
-.pill-btn { display: flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 8px; border: 1px solid; font-size: 12.5px; cursor: pointer; }
+.pill-btn { display: flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 8px; border: 1px solid; font-size: 12.5px; cursor: pointer; transition: filter 0.15s ease; }
+.pill-btn:hover { filter: brightness(1.2); }
 
 .range-toggle { display: flex; gap: 4px; }
-.range-btn { padding: 5px 10px; border-radius: 6px; background: transparent; border: 1px solid #1F2329; color: #7A7F88; font-size: 11.5px; cursor: pointer; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.range-btn-active { background: #2c2c2c; color: #f0efed; border-color: #2A2E35; }
+.range-btn { padding: 5px 10px; border-radius: 6px; background: transparent; border: 1px solid #1F2329; color: #7A7F88; font-size: 11.5px; cursor: pointer; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; transition: border-color 0.15s ease, color 0.15s ease; }
+.range-btn:hover { border-color: #2A2E35; color: #C8CBD2; }
+.range-btn-active, .range-btn-active:hover { background: #2c2c2c; color: #f0efed; border-color: #2A2E35; }
 
 .chart-block { margin-top: 1.5rem; }
 .chart-title { font-size: 12.5px; color: #9398A1; margin: 0 0 12px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -357,7 +379,8 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .field-label { display: block; font-size: 11.5px; color: #7A7F88; margin-bottom: 6px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .input { width: 100%; padding: 9px 11px; border-radius: 7px; background: #191919; border: 1px solid #262A30; color: #f0efed; font-size: 13px; outline: none; }
 .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.chip { padding: 7px 13px; border-radius: 7px; border: 1px solid; font-size: 12.5px; cursor: pointer; }
+.chip { padding: 7px 13px; border-radius: 7px; border: 1px solid; font-size: 12.5px; cursor: pointer; transition: filter 0.15s ease; }
+.chip:hover { filter: brightness(1.2); }
 
 
 /* ---------- MARKDOWN PREVIEW ---------- */
@@ -440,8 +463,9 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
 .notes-save-status-saved { color: #3DDC84; opacity: 0.75; }
 
 .notes-mode-toggle { display: flex; align-items: center; background: #191919; border: 1px solid #2c2c2c; border-radius: 6px; padding: 2px; }
-.notes-mode-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 24px; background: transparent; border: none; border-radius: 4px; color: #5A5F68; cursor: pointer; }
-.notes-mode-btn-active { background: #2c2c2c; color: #3DDC84; }
+.notes-mode-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 24px; background: transparent; border: none; border-radius: 4px; color: #5A5F68; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; }
+.notes-mode-btn:hover { background: #2c2c2c; color: #d8d7d4; }
+.notes-mode-btn-active, .notes-mode-btn-active:hover { background: #2c2c2c; color: #3DDC84; }
 
 .notes-toolbar { display: flex; align-items: center; gap: 2px; padding: 6px 32px; border-bottom: 1px solid #2c2c2c; }
 .notes-toolbar-btn { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: transparent; border: none; border-radius: 4px; color: #5A5F68; cursor: pointer; }
