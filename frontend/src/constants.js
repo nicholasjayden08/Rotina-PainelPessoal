@@ -78,8 +78,6 @@ export const SLEEP_QUALITY = [
 
 export const WATER_GOAL = 4;
 
-// Hábitos atômicos rastreados individualmente pra streak de motivação.
-// 'campo' é a chave no registro atômico; 'qualifica' decide se aquele dia conta.
 export const HABITOS_STREAK = [
   { campo: 'acordarCedo', label: 'acordando cedo', qualifica: (r) => !!r.acordarCedo },
   { campo: 'estudos', label: 'estudando', qualifica: (r) => !!r.estudos },
