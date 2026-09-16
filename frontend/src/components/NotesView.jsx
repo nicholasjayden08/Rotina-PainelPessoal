@@ -118,6 +118,7 @@ export function NotesView({ notas, loading, error, criar, atualizar, excluir, fi
             novaSelecaoFim = novaSelecaoInicio + texto.length;
         }
 
+
         setConteudo(novoConteudo);
         salvarComDebounce(titulo, novoConteudo);
 
