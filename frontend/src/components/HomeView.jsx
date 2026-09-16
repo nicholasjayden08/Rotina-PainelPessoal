@@ -29,9 +29,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
           registroHoje.estudos ||
           registroHoje.trabalho ||
           registroHoje.academia
-      );  const horaAtual = new Date().getHours();
-  const streakEmRisco = horaAtual >= 18 && !registroHoje;
-
+      );
 
   const dataStr = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -154,8 +152,11 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
         <HomeAlerts
             aguaAtual={agua}
             registrouHoje={registrouHabitosHoje}
-            streakEmRisco={streakEmRisco}
+            streak={streak}
+            habitosFeitos={feitos}
+            habitosTotal={total}
             onAbrirHabitosAtomicos={() => setView('atomic')}
+            onAbrirHabitosDiarios={() => setView('daily')}
         />
       </div>
     </div>
