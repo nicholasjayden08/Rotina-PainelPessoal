@@ -40,7 +40,6 @@ export function FocusView({ sessions, loading, error, criarSessao, excluirSessao
     const [immersiveMode, setImmersiveMode] = useState(false);
     const audioCtxRef = useRef(null);
 
-
     function handleFocusFinish() {
 
         tocarBeep(audioCtxRef.current);
