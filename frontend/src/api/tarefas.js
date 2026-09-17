@@ -1,3 +1,5 @@
+// Wrapper fino sobre /tarefas (CRUD + atualizar status isoladamente).
+
 import { api } from './client';
 
 export const tarefasApi = {
