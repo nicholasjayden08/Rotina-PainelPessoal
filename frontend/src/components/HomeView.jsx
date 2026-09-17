@@ -1,3 +1,12 @@
+/**
+ * Dashboard principal — agrega dados de tarefas, hábitos diários,
+ * registro de hoje e histórico anual, todos calculados aqui em cima das
+ * props brutas (streak, % de hábitos feitos, tarefa mais urgente, etc).
+ * Os dois banners de alerta (atrasada / vence em breve) usam
+ * getTarefaMaisUrgente / getTarefaProximaAVencer de utils/tarefas —
+ * só um dos dois aparece por vez (prioriza atrasada).
+ */
+
 import { Flame, Check, Droplet, Calendar, AlertTriangle } from 'lucide-react';
 import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
