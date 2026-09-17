@@ -1,3 +1,13 @@
+/**
+ * Cliente HTTP central — todo o resto de api/ passa por aqui.
+ *
+ * request() já resolve a BASE_URL, injeta Content-Type: application/json,
+ * lança ApiError com o status HTTP quando a resposta não é ok (tentando
+ * extrair a mensagem do corpo JSON do erro), e trata os dois casos
+ * especiais: 204 No Content (retorna null) e corpo vazio em geral
+ * (evita JSON.parse('') quebrar).
+ */
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 class ApiError extends Error {
