@@ -1,3 +1,11 @@
+/**
+ * Tabela do histórico completo de registros atômicos, com filtro por
+ * hábito (FILTROS_HABITO). Com "todos" selecionado mostra a tabela
+ * completa (uma coluna por hábito); com um hábito específico, mostra só
+ * data + valor daquele campo via formatarValor(). BOOLEAN_FIELDS decide
+ * se o valor vira ✓/— ou é formatado de outro jeito (litros, horário etc).
+ */
+
 import { useState } from 'react';
 import { Trash2, CheckSquare } from 'lucide-react';
 import { EmptyHint } from './Shared';
