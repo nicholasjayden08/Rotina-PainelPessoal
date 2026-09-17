@@ -1,3 +1,12 @@
+/**
+ * Tela de tarefas do dia: filtro (pendentes/concluídas/todas) + lista
+ * ordenada por prioridade. cycleStatus() avança o status da tarefa
+ * ciclicamente na ordem definida em STATUSES (ex: pendente -> em
+ * andamento -> concluído -> pendente de novo). draftNovaTarefa guarda
+ * o rascunho do modal de nova tarefa entre re-renders (não perde o que
+ * foi digitado se o modal re-renderizar).
+ */
+
 import { useState, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { TaskRow } from './TaskRow';
