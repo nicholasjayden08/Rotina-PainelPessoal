@@ -1,3 +1,11 @@
+/**
+ * Monta a lista de avisos da Home dinamicamente (água faltando, hábitos
+ * do dia ainda não registrados, streak em risco) — só aparecem os que
+ * se aplicam; se nenhum se aplica, o componente retorna null (sem
+ * seção vazia na tela). Todo aviso, ao clicar, leva pra tela de
+ * hábitos atômicos via onAbrirHabitosAtomicos.
+ */
+
 import { AlertTriangle, Droplets, Flame } from 'lucide-react';
 import { COLORS, WATER_GOAL } from '../constants';
 
