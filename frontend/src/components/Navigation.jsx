@@ -1,3 +1,10 @@
+/**
+ * Toda a navegação do app num arquivo só, com 3 variações pro mesmo
+ * NAV_ITEMS: Sidebar (desktop), MobileHeader (topo no mobile) e
+ * MobileTabBar (tab bar fixa embaixo no mobile) — qual delas renderiza
+ * é decidido no App.jsx via useIsMobile.
+ */
+
 import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap, Target, CalendarRange } from 'lucide-react';
 import { COLORS } from '../constants';
 
