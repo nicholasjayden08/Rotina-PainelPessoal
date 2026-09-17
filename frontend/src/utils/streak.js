@@ -1,3 +1,19 @@
+/**
+ * Cálculo de sequências (streaks) de hábitos.
+ *
+ * A ideia central: percorre os últimos 365 dias do CALENDÁRIO (não só os
+ * dias que têm registro no banco), então um dia sem nenhum registro conta
+ * como "hábito não cumprido" e quebra a sequência corretamente — em vez
+ * de simplesmente pular esse dia.
+ *
+ * "Hoje" é tratado como exceção: se ainda não tem registro hoje, a
+ * sequência não quebra ainda (dá pra completar o hábito até o fim do dia).
+ *
+ * computeStreakInfo(): streak geral (qualquer hábito do dia conta).
+ * computeHabitStreaks(): streak individual por hábito (ex: "5 dias
+ * acordando cedo"), usando os critérios de HABITOS_STREAK em constants.js.
+ */
+
 import { daysAgo } from './date';
 import { WATER_GOAL, HABITOS_STREAK } from '../constants';
 
