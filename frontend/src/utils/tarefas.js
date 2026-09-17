@@ -1,3 +1,15 @@
+/**
+ * Lógica de priorização de tarefas pra Home (alertas de tarefa urgente).
+ *
+ * getTarefaMaisUrgente(): entre as tarefas ATRASADAS (prazo < hoje, não
+ * concluídas), acha a mais crítica — ordena por prazo mais antigo primeiro,
+ * desempate por prioridade (ALTA > MEDIA > BAIXA). Retorna com diasAtraso
+ * calculado.
+ *
+ * getTarefaProximaAVencer(): mesma lógica, mas pra tarefas que vencem nos
+ * próximos 2 dias (ainda não atrasadas). Retorna com diasRestantes.
+ */
+
 import { todayISO } from './date';
 
 const ORDEM_PRIORIDADE = { ALTA: 0, MEDIA: 1, BAIXA: 2 };
