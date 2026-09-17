@@ -1,3 +1,12 @@
+/**
+ * Grab-bag de componentes de UI reaproveitados em várias telas:
+ * MetricCard (card de métrica clicável ou não), EmptyHint (texto de
+ * "lista vazia"), FormField (label + input padronizado), ModalShell
+ * (esqueleto de modal com overlay + header + botão de fechar) e
+ * LoadingBlock/ErrorBlock (estados de carregando/erro). Se um componente
+ * novo for usado em 2+ telas, o lugar dele é aqui.
+ */
+
 import { X } from 'lucide-react';
 
 export function MetricCard({ label, value, sub, onClick }) {
