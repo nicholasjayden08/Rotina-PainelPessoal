@@ -1,3 +1,11 @@
+/**
+ * Tela de estatísticas mensais: seletor de mês + resumo (useResumoEstatisticas)
+ * + insights automáticos (useInsights). StatBar é a barrinha de progresso
+ * reaproveitada pra cada hábito na seção "consistência de hábitos".
+ * INSIGHT_CORES mapeia o tipo do insight (sono/humor/agua) pra cor da
+ * barrinha lateral de cada item.
+ */
+
 import { useEffect, useState } from 'react';
 import { MonthSelector } from './MonthSelector';
 import { LoadingBlock, ErrorBlock, MetricCard } from './Shared';
