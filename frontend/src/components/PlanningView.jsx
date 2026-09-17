@@ -1,3 +1,17 @@
+/**
+ * Tela de planejamento semanal, com 3 estados possíveis pro planejamento
+ * atual: sem planejamento ainda (textarea de criação), RASCUNHO (editável,
+ * salva ou fecha) e FECHADO (checklist de itens, read-only exceto o botão
+ * "editar metas" que reabre com confirmação, já que reabrir some com o
+ * progresso marcado).
+ *
+ * emAndamento (useRef) trava chamadas duplicadas nos handlers async
+ * (equivalente ao padrão de double-click lock usado em outros lugares
+ * do app). contarLinhas() conta metas digitadas (1 por linha) pro
+ * contador "X metas detectadas". Histórico é expansível por semana
+ * (semanaExpandida) pra ver os itens de semanas passadas.
+ */
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarRange, Check, Pencil, Lock, ChevronDown } from 'lucide-react';
 import { ModalShell, EmptyHint, LoadingBlock, ErrorBlock } from './Shared';
