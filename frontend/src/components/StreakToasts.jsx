@@ -1,3 +1,10 @@
+/**
+ * Renderiza a fila de toasts de marco de streak (gerada pelo hook
+ * useStreakToasts). Cada toast some sozinho depois de DURACAO_MS (6s)
+ * ou ao clicar no X — o timer é por item, então vários toasts empilhados
+ * somem de forma independente.
+ */
+
 import { useEffect } from 'react';
 import { Flame, X } from 'lucide-react';
 
