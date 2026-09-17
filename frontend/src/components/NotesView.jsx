@@ -1,3 +1,20 @@
+/**
+ * Editor de notas markdown com autosave.
+ *
+ * salvarComDebounce(): espera 1s sem digitar antes de salvar (debounce
+ * via setTimeout), e só salva de fato se o conteúdo mudou desde o
+ * último save (ultimoSalvo ref) — evita PUT desnecessário. modo controla
+ * editar/split/preview (ReactMarkdown renderiza o preview).
+ *
+ * aplicarFormatacao(): aplica a barra de ferramentas markdown (negrito,
+ * lista etc) na seleção atual do textarea, manipulando selectionStart/
+ * selectionEnd manualmente — ferramentas "de linha" (título, lista) vão
+ * pro início da linha em vez de envolver a seleção.
+ *
+ * fmtSnippet() gera a prévia da nota na lista removendo a sintaxe
+ * markdown (regex) pra mostrar só o texto puro.
+ */
+
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Plus, Trash2, FileText, Eye, Edit3, Columns2, Search, Pin, Bold, Italic, Heading2, List, Link2, Code, ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
