@@ -1,3 +1,18 @@
+/**
+ * Tela do timer de foco (Pomodoro-like), com modo imersão (fullscreen).
+ *
+ * tocarBeep() gera 3 bips via Web Audio API na hora que o timer zera
+ * (sem depender de arquivo de áudio). notificarFimDoFoco() dispara uma
+ * Notification do navegador se o usuário já deu permissão.
+ *
+ * O AudioContext só é criado no primeiro clique em "iniciar" (audioCtxRef)
+ * porque navegadores bloqueiam criar/tocar áudio sem interação do usuário.
+ *
+ * immersiveMode entra em fullscreen real (requestFullscreen) e sai com
+ * Esc ou saindo do fullscreen nativo — os 3 useEffects sincronizam esse
+ * estado com a API de Fullscreen do navegador.
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import { useFocusTimer } from '../hooks/useFocusTimer';
 import { FocusHistoryTable } from './FocusHistoryTable';
