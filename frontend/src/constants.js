@@ -1,3 +1,14 @@
+/**
+ * Todos os enums/opções fixas do app num lugar só (cores, tipos de
+ * tarefa, prioridade, esforço, status, períodos do dia, humor, qualidade
+ * de sono) — o resto do front monta os <CustomSelect> e tags a partir
+ * daqui, em vez de espalhar strings mágicas pelos componentes.
+ *
+ * HABITOS_STREAK e STREAK_MARCOS alimentam o cálculo de streak por
+ * hábito (utils/streak.js + useStreakToasts). findLabel/findColor são
+ * helpers pra buscar o label/cor de um id nessas listas de opções.
+ */
+
 export const COLORS = {
   // status/semântico
   success: '#3DDC84',
