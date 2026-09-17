@@ -1,3 +1,13 @@
+/**
+ * Tela de hábitos diários, com drag-and-drop entre períodos (manhã/tarde/
+ * noite/dia) via @dnd-kit. PeriodGroup é uma zona "droppable" por período;
+ * SortableHabitRow é cada linha arrastável. handleDragEnd decide o período
+ * de destino (se soltou em cima de outro hábito, herda o período dele; se
+ * soltou no cabeçalho vazio do grupo "group-{periodo}", usa esse período
+ * direto) e recalcula a posição na lista antes de mandar pro backend via
+ * reordenar(). "resetar dia" tem confirmação porque desmarca tudo de uma vez.
+ */
+
 import { useState, useMemo } from 'react';
 import { Plus, Clock, Edit3, Trash2, Check, GripVertical } from 'lucide-react';
 import {
