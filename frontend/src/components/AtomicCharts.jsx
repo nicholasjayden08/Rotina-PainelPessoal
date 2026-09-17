@@ -1,3 +1,16 @@
+/**
+ * Os 3 gráficos (recharts) da tela de hábitos atômicos:
+ * - WaterChart: barras de água por dia, com linha de referência na meta.
+ * - HabitsConsistencyGrid: grade tipo heatmap (feito/não feito) por hábito.
+ * - MoodSleepChart: linha de qualidade do sono, com tooltip customizado
+ *   (SleepTooltip) que também mostra humor e horas dormidas.
+ *
+ * buildSeries() é o helper comum: gera os últimos N dias e casa cada um
+ * com o registro correspondente do histórico (ou null se não tiver).
+ * calcularHorasSono() trata o caso de dormir antes da meia-noite e
+ * acordar no dia seguinte (soma 24h quando fim < início).
+ */
+
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   ReferenceLine, LineChart, Line, Legend,
