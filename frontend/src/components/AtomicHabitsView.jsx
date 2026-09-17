@@ -1,3 +1,10 @@
+/**
+ * Tela de hábitos atômicos: formulário de hoje + gráficos de evolução
+ * (7/14/30 dias) + histórico completo. As métricas do meio (água média,
+ * dias de estudo etc) são calculadas aqui em cima do `historico` bruto
+ * — não vêm prontas do backend.
+ */
+
 import { useState } from 'react';
 import { MetricCard, LoadingBlock, ErrorBlock } from './Shared';
 import { TodayForm } from './TodayForm';
