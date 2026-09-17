@@ -1,3 +1,9 @@
+/**
+ * Faixa dos últimos 14 dias (mini-heatmap da Home, não confundir com
+ * o YearHeatmap). scoreFor() dá uma pontuação de 0 a 5 por dia (água na
+ * meta + 4 hábitos booleanos) que vira a cor da célula via HEATMAP_SCALE.
+ */
+
 import { rangeDays, fmtDateLabel } from '../utils/date';
 import { WATER_GOAL, HEATMAP_SCALE } from '../constants';
 
