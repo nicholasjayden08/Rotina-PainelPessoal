@@ -1,3 +1,15 @@
+/**
+ * Componente raiz — junta todos os hooks de dados (um por domínio:
+ * tarefas, hábitos, registros atômicos, notas, planejamento, etc) e
+ * roteia pra view ativa via renderização condicional simples (sem
+ * react-router). A view atual fica sincronizada com o hash da URL
+ * (#tasks, #daily...) pra sobreviver a um F5.
+ *
+ * Enquanto `online` (useApiHealth) ainda não respondeu, mostra o app
+ * normalmente — só troca pra ApiOfflineScreen quando confirma que a
+ * API está fora, pra não piscar a tela de erro à toa.
+ */
+
 import { useState } from 'react';
 import { Sidebar, MobileHeader, MobileTabBar } from './components/Navigation';
 import { ApiOfflineScreen } from './components/ApiOfflineScreen';
