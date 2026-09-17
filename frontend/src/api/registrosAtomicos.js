@@ -1,3 +1,5 @@
+// Wrapper fino sobre /registros-atomicos: listar, hoje, buscar por intervalo, PATCH parcial por data, excluir.
+
 import { api } from './client';
 
 export const registrosAtomicosApi = {
