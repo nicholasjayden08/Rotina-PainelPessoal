@@ -1,3 +1,13 @@
+/**
+ * Helpers de data centralizados no app inteiro.
+ *
+ * toLocalISO() é a peça-chave: monta a string YYYY-MM-DD manualmente a
+ * partir de getFullYear/getMonth/getDate (hora local), em vez de usar
+ * date.toISOString() (que converte pra UTC e pode "voltar" um dia pra
+ * quem tá em fuso negativo, tipo o Brasil). Todo o resto do arquivo
+ * depende dela pra não introduzir esse bug de novo.
+ */
+
 function toLocalISO(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
