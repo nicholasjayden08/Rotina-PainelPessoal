@@ -1,3 +1,5 @@
+// Wrapper fino sobre /planejamentos: semana atual, histórico, CRUD, fechar/reabrir e concluir item.
+
 import { api } from './client';
 
 export const planejamentosApi = {
