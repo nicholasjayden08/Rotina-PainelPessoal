@@ -1,3 +1,11 @@
+/**
+ * Modal de criar/editar tarefa. onDraftChange (opcional, só usado na
+ * criação) reporta o estado do formulário a cada mudança pro pai
+ * guardar como rascunho — assim, se o modal fechar e abrir de novo
+ * sem salvar, o texto digitado não se perde (ver draftNovaTarefa em
+ * TasksView).
+ */
+
 import {useEffect, useState} from 'react';
 import { Save } from 'lucide-react';
 import { ModalShell, FormField } from './Shared';
