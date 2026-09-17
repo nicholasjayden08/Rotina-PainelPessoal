@@ -1,3 +1,11 @@
+/**
+ * Formulário do registro atômico de hoje (dormiu/acordou, água, humor,
+ * sono, checkboxes de hábito). Não tem estado próprio — cada onChange
+ * já dispara direto pro pai (que faz o PATCH otimista via useRegistroHoje).
+ * CheckboxPill é um botão-pílula reaproveitado só aqui pros 4 hábitos
+ * booleanos (acordar cedo, estudos, trabalho, academia).
+ */
+
 import { FormField } from './Shared';
 import { CustomSelect } from './CustomSelect';
 import { Check } from 'lucide-react';
