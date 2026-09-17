@@ -1,3 +1,5 @@
+// Wrapper fino sobre /notas (CRUD + fixar).
+
 import { api } from './client';
 
 export const notasApi = {
