@@ -1,3 +1,14 @@
+/**
+ * Heatmap estilo "GitHub contributions" do ano inteiro (visão anual de
+ * consistência, diferente da HeatmapStrip que é só os últimos 14 dias).
+ *
+ * Monta uma grade de semanas a partir do domingo antes de 1º de janeiro
+ * até hoje; dias fora do ano corrente (score -1) ficam transparentes.
+ * monthPositions calcula em qual semana cada mês "começa" pra posicionar
+ * os rótulos de mês no topo. scrollRef força o scroll horizontal pro
+ * final (mês atual) ao carregar/atualizar.
+ */
+
 import { useMemo, useRef, useEffect } from 'react';
 import { WATER_GOAL, COLORS, HEATMAP_SCALE } from '../constants';
 import { computeStreakInfo } from '../utils/streak';
