@@ -1,3 +1,10 @@
+/**
+ * CRUD de notas + fixar(). ordenarNotas() mantém a lista sempre com
+ * fixadas primeiro, depois por data de atualização mais recente — é
+ * reaplicada depois de toda operação que muda a lista (criar, atualizar,
+ * fixar) pra ordem não ficar inconsistente na tela.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { notasApi } from '../api/notas';
 
