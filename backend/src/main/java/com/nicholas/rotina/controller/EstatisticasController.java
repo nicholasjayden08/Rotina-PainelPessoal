@@ -16,6 +16,12 @@ import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.*;
 
+/**
+ * Resumo estatístico de um mês: percentuais de hábito, humor
+ * predominante, média de sono e horários médios de dormir/acordar.
+ * listarMeses() usa os registros existentes pra descobrir quais
+ * meses têm dado suficiente pra aparecer no seletor da tela.
+ */
 @RestController
 @RequestMapping("/api/estatisticas")
 public class EstatisticasController {
@@ -166,6 +172,14 @@ public class EstatisticasController {
         return response;
     }
 
+    /**
+     * Média "normal" de horário quebra perto da meia-noite (23:50 e
+     * 00:10 deveriam dar ~00:00, mas a média aritmética ingênua dá
+     * meio-dia). Solução: trata cada horário como um ângulo num círculo
+     * de 24h, tira a média dos vetores (seno/cosseno) e converte o
+     * ângulo resultante de volta pra horário — assim 23:50 e 00:10
+     * corretamente resultam em 00:00.
+     */
     private String mediaCircular(List<java.time.LocalTime> horarios) {
         if (horarios.isEmpty()) return "—";
 
