@@ -161,7 +161,7 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
         <HomeAlerts
             aguaAtual={agua}
             registrouHoje={registrouHabitosHoje}
-            streak={streak}
+            streakEmRisco={streak > 0 && !registrouHabitosHoje}
             habitosFeitos={feitos}
             habitosTotal={total}
             onAbrirHabitosAtomicos={() => setView('atomic')}
