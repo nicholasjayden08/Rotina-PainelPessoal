@@ -1,3 +1,17 @@
+/**
+ * Três hooks pros registros atômicos (água, sono, humor, etc):
+ *
+ * useRegistroHoje() — registro do dia atual. atualizarCampo() faz
+ * update otimista (PATCH parcial) e recarrega do zero se der erro,
+ * pra garantir que a tela não fique com dado divergente do banco.
+ *
+ * useHistoricoAtomico(dias) — histórico dos últimos N dias (usado em
+ * gráficos/heatmap).
+ *
+ * useHistoricoCompleto() — histórico completo ordenado por data desc,
+ * usado na tabela de histórico com exclusão.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { registrosAtomicosApi } from '../api/registrosAtomicos';
 import { todayISO, daysAgo } from '../utils/date';
