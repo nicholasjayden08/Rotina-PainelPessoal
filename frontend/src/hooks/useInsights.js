@@ -1,3 +1,9 @@
+/**
+ * Busca os insights automáticos do mês (ano, mes). dadosSuficientes
+ * indica se já tem histórico o bastante pro backend gerar insight —
+ * a UI usa isso pra mostrar um aviso em vez de lista vazia.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { insightsApi } from '../api/insights';
 
