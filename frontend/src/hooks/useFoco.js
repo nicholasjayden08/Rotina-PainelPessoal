@@ -1,3 +1,9 @@
+/**
+ * CRUD das sessões de foco (Focus Timer). Nada especial aqui além do
+ * padrão do app: carrega na montagem, criar/excluir atualizam o estado
+ * local sem precisar recarregar a lista inteira.
+ */
+
 import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api/client';
 
