@@ -1,3 +1,9 @@
+/**
+ * CRUD de tarefas + atualizarStatus() (usado pro drag/toggle de status
+ * sem precisar reenviar a tarefa inteira). Padrão igual aos outros
+ * hooks de CRUD do app.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { tarefasApi } from '../api/tarefas';
 
