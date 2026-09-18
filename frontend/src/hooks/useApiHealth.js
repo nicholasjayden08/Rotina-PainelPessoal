@@ -1,3 +1,9 @@
+/**
+ * Monitora se o backend está no ar, checando GET /tarefas a cada 10s.
+ * `online` começa null (ainda não checou) até true/false. Usado pra
+ * mostrar a ApiOfflineScreen quando o backend cai.
+ */
+
 import { useState, useEffect } from 'react';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
