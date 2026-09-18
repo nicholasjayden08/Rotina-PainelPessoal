@@ -1,3 +1,11 @@
+/**
+ * Anel de progresso de água (SVG). O "truque" do anel é
+ * strokeDasharray = circunferência total, strokeDashoffset = quanto
+ * esconder — daí pct de progresso vira offset = circunferência * (1 - pct).
+ * Os botões de incremento (+0.25L etc) chamam onChange já com o novo
+ * valor somado (o componente não guarda estado próprio).
+ */
+
 import { WATER_GOAL, COLORS } from '../constants';
 
 export function WaterRing({ value, onChange }) {
