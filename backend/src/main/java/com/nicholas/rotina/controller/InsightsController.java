@@ -16,6 +16,20 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Gera insights automáticos comparando o mês inteiro em dois grupos por
+ * hábito (academia, estudos, trabalho, acordar cedo): dias em que o
+ * hábito foi feito vs dias em que não foi. Pra cada hábito, compara a
+ * média de sono, humor e água entre os dois grupos (avaliarSono/
+ * avaliarHumor/avaliarAgua) e só considera a diferença relevante se
+ * passar tanto o mínimo de ocorrências (MIN_OCORRENCIAS_POR_GRUPO)
+ * quanto o limiar de diferença (LIMIAR_*) — evita insight tipo "1 dia
+ * de academia então dormiu melhor" com amostra pequena demais.
+ *
+ * Cada diferença relevante vira um Candidato com uma "força" (diferença
+ * normalizada pela média do grupo sem o hábito); no fim, pega só os
+ * MAX_INSIGHTS mais fortes pra mostrar.
+ */
 @RestController
 @RequestMapping("/api/insights")
 public class InsightsController {
