@@ -26,6 +26,10 @@ public class HabitoDiarioController {
         return repository.findAllByOrderByOrdemAsc();
     }
 
+    /**
+     * A ordem do novo hábito é calculada automaticamente (max atual + 1),
+     * então ele sempre entra no fim da lista do seu período.
+     */
     @PostMapping
     public ResponseEntity<HabitoDiario> criar(@Valid @RequestBody HabitoDiarioRequest request) {
         HabitoDiario habito = new HabitoDiario();
@@ -63,6 +67,11 @@ public class HabitoDiarioController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Recebe a lista completa de hábitos já na ordem/período finais
+     * (o frontend calcula isso no drag-and-drop) e só persiste — o
+     * backend não decide a nova posição, apenas grava o que chegou.
+     */
     @PutMapping("/reordenar")
     public ResponseEntity<List<HabitoDiario>> reordenar(@Valid @RequestBody ReordenarHabitosRequest request) {
         List<HabitoDiario> atualizados = request.getHabitos().stream().map(item -> {
