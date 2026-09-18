@@ -1,3 +1,10 @@
+/**
+ * Dados de estatísticas mensais (tela de Statistics). Dois hooks:
+ * useMesesEstatisticas() lista os meses que têm dados disponíveis;
+ * useResumoEstatisticas(ano, mes) busca o resumo de um mês específico
+ * (recarrega sozinho quando ano/mes mudam).
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { estatisticasApi } from '../api/estatisticas';
 
