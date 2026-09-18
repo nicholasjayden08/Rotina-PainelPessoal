@@ -1,3 +1,11 @@
+/**
+ * CRUD + reordenação dos hábitos diários (checklist da Home).
+ *
+ * alternarFeito() e reordenar() fazem atualização otimista: mudam o
+ * estado local ANTES da resposta do servidor (pra não parecer travado
+ * em cliques rápidos) e revertem manualmente se a chamada falhar.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { habitosDiariosApi } from '../api/habitosDiarios';
 
