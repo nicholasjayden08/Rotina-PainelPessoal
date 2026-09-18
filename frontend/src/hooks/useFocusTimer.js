@@ -1,3 +1,15 @@
+/**
+ * Motor do cronômetro de foco (contagem regressiva).
+ *
+ * Em vez de decrementar um contador a cada tick, guarda o horário de
+ * término (endTimeRef) e recalcula timeLeft a partir de Date.now() —
+ * assim o timer não atrasa/desincroniza se a aba ficar em background
+ * (setInterval é pausado pelo navegador). O listener de
+ * visibilitychange força um recálculo assim que a aba volta ao foco.
+ *
+ * finishedRef evita disparar onFinish mais de uma vez.
+ */
+
 import { useEffect, useRef, useState } from 'react';
 
 export function useFocusTimer(initialMinutes, onFinish) {
