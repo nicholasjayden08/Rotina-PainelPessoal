@@ -1,3 +1,13 @@
+/**
+ * Detecta marcos de streak batidos (5, 10, 15, 30... dias definidos em
+ * STREAK_MARCOS) e enfileira toasts motivacionais.
+ *
+ * Roda só uma vez por carregamento da página (jaProcessado ref) e usa
+ * localStorage pra lembrar quais marcos já foram exibidos, então o
+ * mesmo toast não repete a cada refresh — só quando um NOVO marco é
+ * atingido.
+ */
+
 import { useEffect, useState, useRef } from 'react';
 import { computeHabitStreaks } from '../utils/streak';
 import { HABITOS_STREAK, STREAK_MARCOS } from '../constants';
