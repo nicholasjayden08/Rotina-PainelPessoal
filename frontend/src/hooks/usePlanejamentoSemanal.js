@@ -1,3 +1,10 @@
+/**
+ * Planejamento semanal: carrega a semana atual + histórico em paralelo
+ * (Promise.all). criar/atualizarRascunho/fechar/reabrir/concluirItem
+ * operam sobre o planejamento atual e atualizam o estado local direto
+ * com a resposta do backend (sem recarregar tudo).
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { planejamentosApi } from '../api/planejamentos';
 
