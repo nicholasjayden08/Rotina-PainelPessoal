@@ -15,6 +15,13 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
+/**
+ * Planejamento semanal: cada semana (chave = segunda-feira, calculada em
+ * segundaFeiraAtual()) tem no máximo um planejamento. O texto digitado
+ * pelo usuário (uma meta por linha) só vira uma lista de ItemMetaSemanal
+ * de verdade quando fecha() a semana — antes disso, fica só como texto
+ * bruto no rascunho.
+ */
 @RestController
 @RequestMapping("/api/planejamentos")
 public class PlanejamentoSemanalController {
@@ -68,6 +75,11 @@ public class PlanejamentoSemanalController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Fechar: quebra o textoBruto por linha e transforma cada linha
+     * não-vazia num ItemMetaSemanal (com checkbox próprio). A partir
+     * daqui o planejamento vira um checklist, não texto livre.
+     */
     @PatchMapping("/{id}/fechar")
     public ResponseEntity<PlanejamentoSemanal> fechar(@PathVariable Long id) {
         return repository.findById(id).map(planejamento -> {
@@ -94,6 +106,12 @@ public class PlanejamentoSemanalController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Reabrir é o inverso de fechar: junta o texto dos itens de volta
+     * num textoBruto (uma linha por item) e apaga os itens — por isso
+     * o frontend confirma com o usuário antes de chamar isso, já que
+     * o progresso marcado nos checkboxes se perde.
+     */
     @PatchMapping("/{id}/reabrir")
     public ResponseEntity<PlanejamentoSemanal> reabrir(@PathVariable Long id) {
         return repository.findById(id).map(planejamento -> {
