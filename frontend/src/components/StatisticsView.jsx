@@ -31,6 +31,7 @@ const INSIGHT_CORES = {
     sono: COLORS.info,
     humor: COLORS.warning,
     agua: COLORS.success,
+    dia_semana: COLORS.accent,
 };
 
 function InsightsCard({ insights, dadosSuficientes, loading }) {
