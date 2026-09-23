@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
@@ -43,6 +44,21 @@ public class InsightsController {
     private static final double LIMIAR_HUMOR = 0.5;
     private static final double LIMIAR_AGUA = 0.3;
     private static final int MAX_INSIGHTS = 3;
+
+    // dias mínimos registrados NUM dia da semana específico pra comparação valer
+    private static final int MIN_DIAS_POR_DIA_SEMANA = 3;
+    // diferença mínima de taxa de conclusão (pontos percentuais) pra insight de hábito por dia da semana
+    private static final double LIMIAR_TAXA_HABITO = 0.3;
+
+    private static final Map<DayOfWeek, String> NOMES_DIAS_SEMANA = Map.of(
+            DayOfWeek.MONDAY, "segundas-feiras",
+            DayOfWeek.TUESDAY, "terças-feiras",
+            DayOfWeek.WEDNESDAY, "quartas-feiras",
+            DayOfWeek.THURSDAY, "quintas-feiras",
+            DayOfWeek.FRIDAY, "sextas-feiras",
+            DayOfWeek.SATURDAY, "sábados",
+            DayOfWeek.SUNDAY, "domingos"
+    );
 
     private final RegistroAtomicoRepository repository;
 
@@ -86,7 +102,12 @@ public class InsightsController {
             avaliarSono(nome, comHabito, semHabito, candidatos);
             avaliarHumor(nome, comHabito, semHabito, candidatos);
             avaliarAgua(nome, comHabito, semHabito, candidatos);
+            avaliarDiaSemanaHabito(nome, predicado, registros, candidatos);
         }
+
+        avaliarDiaSemanaSono(registros, candidatos);
+        avaliarDiaSemanaHumor(registros, candidatos);
+        avaliarDiaSemanaAgua(registros, candidatos);
 
         List<InsightItemRequest> selecionados = candidatos.stream()
                 .sorted(Comparator.comparingDouble(Candidato::forca).reversed())
@@ -198,6 +219,109 @@ public class InsightsController {
         );
 
         candidatos.add(new Candidato("agua", mensagem, Math.abs(diff) / Math.max(mediaSem, 0.1)));
+    }
+
+    private void avaliarDiaSemanaSono(List<RegistroAtomico> registros, List<Candidato> candidatos) {
+        for (DayOfWeek dia : DayOfWeek.values()) {
+            List<RegistroAtomico> nesseDia = registros.stream().filter(r -> r.getData().getDayOfWeek() == dia).collect(Collectors.toList());
+            List<RegistroAtomico> outrosDias = registros.stream().filter(r -> r.getData().getDayOfWeek() != dia).collect(Collectors.toList());
+
+            List<Long> minutosNesseDia = minutosSono(nesseDia);
+            List<Long> minutosOutrosDias = minutosSono(outrosDias);
+
+            if (minutosNesseDia.size() < MIN_DIAS_POR_DIA_SEMANA || minutosOutrosDias.size() < MIN_OCORRENCIAS_POR_GRUPO) continue;
+
+            double mediaNesseDia = minutosNesseDia.stream().mapToLong(Long::longValue).average().orElse(0);
+            double mediaOutrosDias = minutosOutrosDias.stream().mapToLong(Long::longValue).average().orElse(0);
+            double diff = mediaNesseDia - mediaOutrosDias;
+
+            if (Math.abs(diff) < LIMIAR_SONO_MINUTOS) continue;
+
+            String direcao = diff > 0 ? "a mais" : "a menos";
+            String mensagem = String.format(
+                    "Suas %s costumam ter sono %d minutos %s que a média.",
+                    NOMES_DIAS_SEMANA.get(dia), Math.round(Math.abs(diff)), direcao
+            );
+
+            candidatos.add(new Candidato("dia_semana", mensagem, Math.abs(diff) / Math.max(mediaOutrosDias, 1)));
+        }
+    }
+
+    private void avaliarDiaSemanaHumor(List<RegistroAtomico> registros, List<Candidato> candidatos) {
+        for (DayOfWeek dia : DayOfWeek.values()) {
+            List<Integer> humorNesseDia = registros.stream()
+                    .filter(r -> r.getData().getDayOfWeek() == dia)
+                    .map(RegistroAtomico::getHumor).filter(Objects::nonNull).map(this::scoreHumor)
+                    .collect(Collectors.toList());
+            List<Integer> humorOutrosDias = registros.stream()
+                    .filter(r -> r.getData().getDayOfWeek() != dia)
+                    .map(RegistroAtomico::getHumor).filter(Objects::nonNull).map(this::scoreHumor)
+                    .collect(Collectors.toList());
+
+            if (humorNesseDia.size() < MIN_DIAS_POR_DIA_SEMANA || humorOutrosDias.size() < MIN_OCORRENCIAS_POR_GRUPO) continue;
+
+            double mediaNesseDia = humorNesseDia.stream().mapToInt(Integer::intValue).average().orElse(0);
+            double mediaOutrosDias = humorOutrosDias.stream().mapToInt(Integer::intValue).average().orElse(0);
+            double diff = mediaNesseDia - mediaOutrosDias;
+
+            if (Math.abs(diff) < LIMIAR_HUMOR) continue;
+
+            String direcao = diff > 0 ? "melhor" : "pior";
+            String mensagem = String.format(
+                    "Seu humor tende a ser %s às %s.",
+                    direcao, NOMES_DIAS_SEMANA.get(dia)
+            );
+
+            candidatos.add(new Candidato("dia_semana", mensagem, Math.abs(diff) / Math.max(mediaOutrosDias, 1)));
+        }
+    }
+
+    private void avaliarDiaSemanaAgua(List<RegistroAtomico> registros, List<Candidato> candidatos) {
+        for (DayOfWeek dia : DayOfWeek.values()) {
+            List<Double> aguaNesseDia = registros.stream()
+                    .filter(r -> r.getData().getDayOfWeek() == dia)
+                    .map(RegistroAtomico::getAgua).filter(a -> a > 0).collect(Collectors.toList());
+            List<Double> aguaOutrosDias = registros.stream()
+                    .filter(r -> r.getData().getDayOfWeek() != dia)
+                    .map(RegistroAtomico::getAgua).filter(a -> a > 0).collect(Collectors.toList());
+
+            if (aguaNesseDia.size() < MIN_DIAS_POR_DIA_SEMANA || aguaOutrosDias.size() < MIN_OCORRENCIAS_POR_GRUPO) continue;
+
+            double mediaNesseDia = aguaNesseDia.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+            double mediaOutrosDias = aguaOutrosDias.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+            double diff = mediaNesseDia - mediaOutrosDias;
+
+            if (Math.abs(diff) < LIMIAR_AGUA) continue;
+
+            String direcao = diff > 0 ? "a mais" : "a menos";
+            String mensagem = String.format(
+                    "Você bebe em média %.1fL %s de água às %s.",
+                    Math.abs(diff), direcao, NOMES_DIAS_SEMANA.get(dia)
+            );
+
+            candidatos.add(new Candidato("dia_semana", mensagem, Math.abs(diff) / Math.max(mediaOutrosDias, 0.1)));
+        }
+    }
+
+    private void avaliarDiaSemanaHabito(String nomeHabito, Predicate<RegistroAtomico> predicado, List<RegistroAtomico> registros, List<Candidato> candidatos) {
+        for (DayOfWeek dia : DayOfWeek.values()) {
+            List<RegistroAtomico> nesseDia = registros.stream().filter(r -> r.getData().getDayOfWeek() == dia).collect(Collectors.toList());
+            List<RegistroAtomico> outrosDias = registros.stream().filter(r -> r.getData().getDayOfWeek() != dia).collect(Collectors.toList());
+
+            if (nesseDia.size() < MIN_DIAS_POR_DIA_SEMANA || outrosDias.size() < MIN_OCORRENCIAS_POR_GRUPO) continue;
+
+            double taxaNesseDia = nesseDia.stream().filter(predicado).count() / (double) nesseDia.size();
+            double taxaOutrosDias = outrosDias.stream().filter(predicado).count() / (double) outrosDias.size();
+            double diff = taxaNesseDia - taxaOutrosDias;
+
+            if (Math.abs(diff) < LIMIAR_TAXA_HABITO) continue;
+
+            String mensagem = diff > 0
+                    ? String.format("Você costuma manter %s em dia às %s.", nomeHabito, NOMES_DIAS_SEMANA.get(dia))
+                    : String.format("Você costuma deixar %s de lado às %s.", nomeHabito, NOMES_DIAS_SEMANA.get(dia));
+
+            candidatos.add(new Candidato("dia_semana", mensagem, Math.abs(diff)));
+        }
     }
 
     private record Candidato(String tipo, String mensagem, double forca) {
