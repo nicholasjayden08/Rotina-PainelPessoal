@@ -75,6 +75,7 @@ export default function App() {
               habitos={habitosState.habitos}
               registroHoje={registroHojeState.registro}
               historicoAnual={historicoAnualState.historico}
+              sessoesFoco={focoState.sessions}
               onAtualizarAgua={(v) => registroHojeState.atualizarCampo({ agua: v })}
               setView={setView}
               loadingResumo={habitosState.loading}
