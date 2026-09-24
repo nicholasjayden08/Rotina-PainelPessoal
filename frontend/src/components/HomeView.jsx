@@ -17,7 +17,7 @@ import { fmtDatePT, rangeDays } from '../utils/date';
 import { HomeAlerts} from "./HomeAlerts";
 import { WATER_GOAL, COLORS } from '../constants';
 
-export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtualizarAgua, setView, loadingResumo }) {
+export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, sessoesFoco, onAtualizarAgua, setView, loadingResumo }) {
   const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
   const altas = pendentes.filter((t) => t.prioridade === 'ALTA');
   const feitos = habitos.filter((h) => h.feito).length;
@@ -27,6 +27,18 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
   const streak = computeStreak(historicoAnual);
   const proximoPasso = getTarefaMaisUrgente(tarefas);
   const proximaAVencer = !proximoPasso ? getTarefaProximaAVencer(tarefas) : null;
+
+  const diasSemFoco = (() => {
+    if (!sessoesFoco || sessoesFoco.length === 0) return null;
+    const maisRecente = sessoesFoco.reduce(
+        (max, s) => {
+          const data = new Date(s.concluidaEm);
+          return data > max ? data : max;
+        },
+        new Date(0)
+    );
+    return Math.floor((Date.now() - maisRecente.getTime()) / (1000 * 60 * 60 * 24));
+  })();
   const registrouHabitosHoje =
       !!registroHoje &&
       (
@@ -164,8 +176,10 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, onAtu
             streakEmRisco={streak > 0 && !registrouHabitosHoje}
             habitosFeitos={feitos}
             habitosTotal={total}
+            diasSemFoco={diasSemFoco}
             onAbrirHabitosAtomicos={() => setView('atomic')}
             onAbrirHabitosDiarios={() => setView('daily')}
+            onAbrirFoco={() => setView('focus')}
         />
       </div>
     </div>
