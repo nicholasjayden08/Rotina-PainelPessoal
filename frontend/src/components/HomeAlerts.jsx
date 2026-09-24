@@ -6,14 +6,18 @@
  * hábitos atômicos via onAbrirHabitosAtomicos.
  */
 
-import { AlertTriangle, Droplets, Flame } from 'lucide-react';
+import { AlertTriangle, Droplets, Flame, Target } from 'lucide-react';
 import { COLORS, WATER_GOAL } from '../constants';
+
+const DIAS_SEM_FOCO_LIMIAR = 3;
 
 export function HomeAlerts({
                                aguaAtual,
                                registrouHoje,
                                streakEmRisco,
-                               onAbrirHabitosAtomicos
+                               diasSemFoco,
+                               onAbrirHabitosAtomicos,
+                               onAbrirFoco
                            }) {
 
     const faltaAgua = Math.max(0, WATER_GOAL - aguaAtual);
@@ -40,6 +44,14 @@ export function HomeAlerts({
             icon: <Flame size={16} color={COLORS.danger} />,
             text: 'Seu streak está em risco. Registre seus hábitos antes do fim do dia.',
             action: onAbrirHabitosAtomicos
+        });
+    }
+
+    if (diasSemFoco !== null && diasSemFoco !== undefined && diasSemFoco >= DIAS_SEM_FOCO_LIMIAR) {
+        alertas.push({
+            icon: <Target size={16} color={COLORS.accent} />,
+            text: `Você não faz uma sessão de foco há ${diasSemFoco} dias.`,
+            action: onAbrirFoco
         });
     }
 
