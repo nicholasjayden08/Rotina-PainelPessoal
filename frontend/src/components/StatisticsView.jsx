@@ -38,9 +38,20 @@ const INSIGHT_CORES = {
 function DestaqueBloco({ titulo, dataLabel, motivos }) {
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textBody }}>{titulo}</span>
-                <span style={{ fontSize: 12, color: COLORS.textMuted }}>{dataLabel}</span>
+                <span
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: COLORS.textSecondary,
+                        background: COLORS.cellInactive,
+                        padding: '4px 10px',
+                        borderRadius: 6,
+                    }}
+                >
+                    {dataLabel}
+                </span>
             </div>
             <p style={{ fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5, margin: 0 }}>
                 {motivos.length > 0
