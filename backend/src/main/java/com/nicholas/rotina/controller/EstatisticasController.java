@@ -293,7 +293,7 @@ public class EstatisticasController {
         long acordouCedo = dias.stream().filter(RegistroAtomico::isAcordarCedo).count();
         long metaAgua = dias.stream().filter(r -> r.getAgua() >= WATER_GOAL).count();
 
-        if (academia > 0) motivos.add(String.format("academia em %d de %d dias", academia, total));
+        if (academia > 0) motivos.add(String.format("fez academia em %d de %d dias", academia, total));
         if (estudos > 0) motivos.add(String.format("estudou em %d de %d dias", estudos, total));
         if (trabalho > 0) motivos.add(String.format("trabalhou em %d de %d dias", trabalho, total));
         if (acordouCedo > 0) motivos.add(String.format("acordou cedo em %d de %d dias", acordouCedo, total));
