@@ -1,9 +1,9 @@
 /**
  * Tela de estatísticas mensais: seletor de mês + resumo (useResumoEstatisticas)
- * + insights automáticos (useInsights). StatBar é a barrinha de progresso
- * reaproveitada pra cada hábito na seção "consistência de hábitos".
- * INSIGHT_CORES mapeia o tipo do insight (sono/humor/agua) pra cor da
- * barrinha lateral de cada item.
+ * + destaques do mês (melhor dia/semana, com o porquê) + insights automáticos
+ * (useInsights). StatBar é a barrinha de progresso reaproveitada pra cada
+ * hábito na seção "consistência de hábitos". INSIGHT_CORES mapeia o tipo do
+ * insight (sono/humor/agua/dia_semana) pra cor da barrinha lateral de cada item.
  */
 
 import { useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { LoadingBlock, ErrorBlock, MetricCard } from './Shared';
 import { useResumoEstatisticas } from '../hooks/useEstatisticas';
 import { useInsights } from '../hooks/useInsights';
 import { COLORS } from '../constants';
+import { fmtDateLabel, fmtDatePT } from '../utils/date';
 
 function StatBar({ label, dias, percentual, color = COLORS.success }) {
     return (
@@ -33,6 +34,53 @@ const INSIGHT_CORES = {
     agua: COLORS.success,
     dia_semana: COLORS.accent,
 };
+
+function DestaqueBloco({ titulo, dataLabel, motivos }) {
+    return (
+        <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textBody }}>{titulo}</span>
+                <span style={{ fontSize: 12, color: COLORS.textMuted }}>{dataLabel}</span>
+            </div>
+            <p style={{ fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5, margin: 0 }}>
+                {motivos.length > 0
+                    ? `Você ${motivos.join(', ')}.`
+                    : 'sem detalhes suficientes pra explicar o porquê.'}
+            </p>
+        </div>
+    );
+}
+
+function DestaquesCard({ melhorDia, melhorSemana }) {
+    if (!melhorDia && !melhorSemana) return null;
+
+    return (
+        <section className="panel" style={{ marginTop: 16 }}>
+            <div className="panel-header">
+                <h2 className="panel-title">destaques do mês</h2>
+            </div>
+            <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {melhorDia && (
+                    <DestaqueBloco
+                        titulo="melhor dia"
+                        dataLabel={fmtDateLabel(melhorDia.data)}
+                        motivos={melhorDia.motivos}
+                    />
+                )}
+                {melhorDia && melhorSemana && (
+                    <div style={{ height: 1, background: COLORS.cellInactive }} />
+                )}
+                {melhorSemana && (
+                    <DestaqueBloco
+                        titulo="melhor semana"
+                        dataLabel={`${fmtDatePT(melhorSemana.inicio)} – ${fmtDatePT(melhorSemana.fim)}`}
+                        motivos={melhorSemana.motivos}
+                    />
+                )}
+            </div>
+        </section>
+    );
+}
 
 function InsightsCard({ insights, dadosSuficientes, loading }) {
     if (loading) return null;
@@ -165,6 +213,11 @@ export function StatisticsView({ meses, loading, error }) {
                             <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} color={COLORS.warning} />
                         </div>
                     </section>
+
+                    <DestaquesCard
+                        melhorDia={r.melhorDia}
+                        melhorSemana={r.melhorSemana}
+                    />
 
                     <InsightsCard
                         insights={insightsState.insights}
