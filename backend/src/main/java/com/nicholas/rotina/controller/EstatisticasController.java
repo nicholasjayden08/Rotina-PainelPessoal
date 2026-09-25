@@ -2,23 +2,31 @@ package com.nicholas.rotina.controller;
 
 import com.nicholas.rotina.dto.EstatisticaMesRequest;
 import com.nicholas.rotina.dto.EstatisticasRequest;
+import com.nicholas.rotina.dto.MelhorDiaRequest;
+import com.nicholas.rotina.dto.MelhorSemanaRequest;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.nicholas.rotina.model.Humor;
+import com.nicholas.rotina.model.QualidadeSono;
 import com.nicholas.rotina.model.RegistroAtomico;
 import com.nicholas.rotina.repository.RegistroAtomicoRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Resumo estatístico de um mês: percentuais de hábito, humor
- * predominante, média de sono e horários médios de dormir/acordar.
+ * predominante, média de sono, horários médios de dormir/acordar, e o
+ * melhor dia e a melhor semana do mês (com o porquê — ver pontuarDia()).
  * listarMeses() usa os registros existentes pra descobrir quais
  * meses têm dado suficiente pra aparecer no seletor da tela.
  */
@@ -28,10 +36,12 @@ public class EstatisticasController {
 
     private final RegistroAtomicoRepository repository;
 
+    private static final double WATER_GOAL = 4.0;
+    private static final int MIN_DIAS_SEMANA = 3;
+
     public EstatisticasController(RegistroAtomicoRepository repository) {
         this.repository = repository;
     }
-
     @GetMapping("/meses")
     public List<EstatisticaMesRequest> listarMeses() {
 
@@ -169,6 +179,9 @@ public class EstatisticasController {
         response.setMediaDormiAs(mediaCircular(horariosDormir));
         response.setMediaAcordeiAs(mediaCircular(horariosAcordar));
 
+        response.setMelhorDia(calcularMelhorDia(registros));
+        response.setMelhorSemana(calcularMelhorSemana(registros));
+
         return response;
     }
 
@@ -200,7 +213,148 @@ public class EstatisticasController {
         return String.format("%02d:%02d", h, m);
     }
 
-    private String traduzirHumor(com.nicholas.rotina.model.Humor humor) {
+    /**
+     * Pontuação de "quão bom foi o dia", pra achar o melhor dia/semana do mês.
+     * Cada hábito feito vale 1 ponto (até 4), humor e qualidade do sono
+     * entram com o score que já têm (1 a 5 cada, reaproveitando o que já
+     * existe em Humor/QualidadeSono), e bater a meta de água vale 2 pontos.
+     */
+    private int pontuarDia(RegistroAtomico r) {
+        int score = 0;
+        if (r.isAcademia()) score += 1;
+        if (r.isEstudos()) score += 1;
+        if (r.isTrabalho()) score += 1;
+        if (r.isAcordarCedo()) score += 1;
+        if (r.getHumor() != null) score += scoreHumor(r.getHumor());
+        if (r.getSono() != null) score += r.getSono().getScore();
+        if (r.getAgua() >= WATER_GOAL) score += 2;
+        return score;
+    }
+
+    private int scoreHumor(Humor humor) {
+        return switch (humor) {
+            case PRODUTIVO -> 5;
+            case NORMAL -> 4;
+            case ANSIOSO -> 3;
+            case CANSADO -> 2;
+            case TRISTE -> 1;
+        };
+    }
+
+    private String traduzirSono(QualidadeSono sono) {
+        return switch (sono) {
+            case PERFEITO -> "perfeito";
+            case MUITO_BOM -> "muito bom";
+            case BOM -> "bom";
+            case MAIS_OU_MENOS -> "mais ou menos";
+            case RUIM -> "ruim";
+        };
+    }
+
+    private List<String> motivosDia(RegistroAtomico r) {
+        List<String> motivos = new ArrayList<>();
+        if (r.isAcademia()) motivos.add("foi pra academia");
+        if (r.isEstudos()) motivos.add("estudou");
+        if (r.isTrabalho()) motivos.add("trabalhou");
+        if (r.isAcordarCedo()) motivos.add("acordou cedo");
+        if (r.getHumor() != null && scoreHumor(r.getHumor()) >= 4) {
+            motivos.add("humor " + traduzirHumor(r.getHumor()).toLowerCase());
+        }
+        if (r.getSono() != null && r.getSono().getScore() >= 4) {
+            motivos.add("dormiu " + traduzirSono(r.getSono()));
+        }
+        if (r.getAgua() >= WATER_GOAL) {
+            motivos.add(String.format("bateu a meta de água (%.1fL)", r.getAgua()));
+        }
+        return motivos;
+    }
+
+    private MelhorDiaRequest calcularMelhorDia(List<RegistroAtomico> registros) {
+        RegistroAtomico melhor = registros.stream()
+                .max(Comparator.comparingInt(this::pontuarDia))
+                .orElse(null);
+
+        if (melhor == null || pontuarDia(melhor) == 0) return null;
+
+        MelhorDiaRequest resposta = new MelhorDiaRequest();
+        resposta.setData(melhor.getData().toString());
+        resposta.setPontuacao(pontuarDia(melhor));
+        resposta.setMotivos(motivosDia(melhor));
+        return resposta;
+    }
+
+    private List<String> motivosSemana(List<RegistroAtomico> dias) {
+        List<String> motivos = new ArrayList<>();
+        int total = dias.size();
+
+        long academia = dias.stream().filter(RegistroAtomico::isAcademia).count();
+        long estudos = dias.stream().filter(RegistroAtomico::isEstudos).count();
+        long trabalho = dias.stream().filter(RegistroAtomico::isTrabalho).count();
+        long acordouCedo = dias.stream().filter(RegistroAtomico::isAcordarCedo).count();
+        long metaAgua = dias.stream().filter(r -> r.getAgua() >= WATER_GOAL).count();
+
+        if (academia > 0) motivos.add(String.format("academia em %d de %d dias", academia, total));
+        if (estudos > 0) motivos.add(String.format("estudou em %d de %d dias", estudos, total));
+        if (trabalho > 0) motivos.add(String.format("trabalhou em %d de %d dias", trabalho, total));
+        if (acordouCedo > 0) motivos.add(String.format("acordou cedo em %d de %d dias", acordouCedo, total));
+        if (metaAgua > 0) motivos.add(String.format("bateu a meta de água em %d de %d dias", metaAgua, total));
+
+        OptionalDouble mediaHumor = dias.stream()
+                .map(RegistroAtomico::getHumor).filter(Objects::nonNull)
+                .mapToInt(this::scoreHumor).average();
+        if (mediaHumor.isPresent() && mediaHumor.getAsDouble() >= 4) {
+            motivos.add("humor bom na maior parte da semana");
+        }
+
+        OptionalDouble mediaSono = dias.stream()
+                .map(RegistroAtomico::getSono).filter(Objects::nonNull)
+                .mapToInt(QualidadeSono::getScore).average();
+        if (mediaSono.isPresent() && mediaSono.getAsDouble() >= 4) {
+            motivos.add("dormiu bem na maior parte da semana");
+        }
+
+        return motivos;
+    }
+
+    /**
+     * Agrupa os registros por semana (segunda a domingo) e pega a semana
+     * com maior MÉDIA de pontuação entre os dias registrados nela — usa
+     * média (não soma) pra não favorecer semana com mais dias registrados,
+     * e só considera semanas com pelo menos MIN_DIAS_SEMANA dias, senão
+     * uma semana de 1 dia ótimo ganharia injustamente de uma semana
+     * inteira consistente.
+     */
+    private MelhorSemanaRequest calcularMelhorSemana(List<RegistroAtomico> registros) {
+        Map<LocalDate, List<RegistroAtomico>> porSemana = registros.stream()
+                .collect(Collectors.groupingBy(r -> r.getData().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))));
+
+        LocalDate melhorInicio = null;
+        double melhorMedia = -1;
+        List<RegistroAtomico> melhorDias = null;
+
+        for (Map.Entry<LocalDate, List<RegistroAtomico>> entry : porSemana.entrySet()) {
+            List<RegistroAtomico> dias = entry.getValue();
+            if (dias.size() < MIN_DIAS_SEMANA) continue;
+
+            double media = dias.stream().mapToInt(this::pontuarDia).average().orElse(0);
+            if (media > melhorMedia) {
+                melhorMedia = media;
+                melhorInicio = entry.getKey();
+                melhorDias = dias;
+            }
+        }
+
+        if (melhorInicio == null) return null;
+
+        MelhorSemanaRequest resposta = new MelhorSemanaRequest();
+        resposta.setInicio(melhorInicio.toString());
+        resposta.setFim(melhorInicio.plusDays(6).toString());
+        resposta.setPontuacaoMedia(Math.round(melhorMedia * 10.0) / 10.0);
+        resposta.setMotivos(motivosSemana(melhorDias));
+        return resposta;
+    }
+
+    private String traduzirHumor(Humor humor) {
         return switch (humor) {
             case PRODUTIVO -> "Produtivo";
             case NORMAL -> "Normal";
