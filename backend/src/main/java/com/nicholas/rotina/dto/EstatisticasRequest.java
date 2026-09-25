@@ -23,6 +23,9 @@ public class EstatisticasRequest {
     private String mediaDormiAs;
     private String mediaAcordeiAs;
 
+    private MelhorDiaRequest melhorDia;
+    private MelhorSemanaRequest melhorSemana;
+
     public int getDiasRegistrados() {
         return diasRegistrados;
     }
@@ -134,4 +137,20 @@ public class EstatisticasRequest {
     public String getMediaAcordeiAs() { return mediaAcordeiAs; }
 
     public void setMediaAcordeiAs(String mediaAcordeiAs) { this.mediaAcordeiAs = mediaAcordeiAs; }
+
+    public MelhorDiaRequest getMelhorDia() {
+        return melhorDia;
+    }
+
+    public void setMelhorDia(MelhorDiaRequest melhorDia) {
+        this.melhorDia = melhorDia;
+    }
+
+    public MelhorSemanaRequest getMelhorSemana() {
+        return melhorSemana;
+    }
+
+    public void setMelhorSemana(MelhorSemanaRequest melhorSemana) {
+        this.melhorSemana = melhorSemana;
+    }
 }
