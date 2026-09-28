@@ -2,8 +2,11 @@
  * Tela de estatísticas mensais: seletor de mês + resumo (useResumoEstatisticas)
  * + destaques do mês (melhor dia/semana, com o porquê) + insights automáticos
  * (useInsights). StatBar é a barrinha de progresso reaproveitada pra cada
- * hábito na seção "consistência de hábitos". INSIGHT_CORES mapeia o tipo do
- * insight (sono/humor/agua/dia_semana) pra cor da barrinha lateral de cada item.
+ * hábito na seção "consistência de hábitos", opcionalmente com a variação em
+ * pontos percentuais vs o mês anterior (só aparece se o mês anterior existir e
+ * os dois meses tiverem pelo menos MIN_DIAS_COMPARACAO dias registrados).
+ * INSIGHT_CORES mapeia o tipo do insight (sono/humor/agua/dia_semana) pra cor
+ * da barrinha lateral de cada item.
  */
 
 import { useEffect, useState } from 'react';
@@ -14,12 +17,24 @@ import { useInsights } from '../hooks/useInsights';
 import { COLORS } from '../constants';
 import { fmtDateLabel, fmtDatePT } from '../utils/date';
 
-function StatBar({ label, dias, percentual, color = COLORS.success }) {
+const MIN_DIAS_COMPARACAO = 5;
+
+function fmtVariacao(atual, anterior, nomeMesAnterior) {
+    if (anterior === undefined || anterior === null) return null;
+    const diff = Math.round(atual - anterior);
+    if (diff === 0) return `igual a ${nomeMesAnterior}`;
+    return `${diff > 0 ? '+' : '-'}${Math.abs(diff)} pts vs ${nomeMesAnterior}`;
+}
+
+function StatBar({ label, dias, percentual, variacao, color = COLORS.success }) {
     return (
         <div style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                 <span style={{ fontSize: 12, color: COLORS.textSecondary }}>{label}</span>
-                <span style={{ fontSize: 12, color: COLORS.textMuted }}>{dias} dias · {percentual}%</span>
+                <span style={{ fontSize: 12, color: COLORS.textMuted }}>
+                    {variacao && <span style={{ fontSize: 11, marginRight: 10 }}>{variacao}</span>}
+                    {dias} dias · {percentual}%
+                </span>
             </div>
             <div style={{ height: 6, background: COLORS.cellInactive, borderRadius: 4 }}>
                 <div style={{ height: 6, background: color, borderRadius: 4, width: `${Math.min(percentual, 100)}%`, transition: 'width 0.4s ease' }} />
@@ -137,6 +152,12 @@ export function StatisticsView({ meses, loading, error }) {
     const resumoState = useResumoEstatisticas(ano, mes);
     const insightsState = useInsights(ano, mes);
 
+    const mesAnterior = ano && mes ? (mes === 1 ? { ano: ano - 1, mes: 12 } : { ano, mes: mes - 1 }) : null;
+    const entradaAnterior = mesAnterior
+        ? meses.find((m) => Number(m.ano) === mesAnterior.ano && Number(m.mes) === mesAnterior.mes)
+        : null;
+    const resumoAnteriorState = useResumoEstatisticas(entradaAnterior?.ano, entradaAnterior?.mes);
+
     useEffect(() => {
         if (!selectedMonth && meses.length > 0) {
             const primeiro = meses[0];
@@ -150,6 +171,14 @@ export function StatisticsView({ meses, loading, error }) {
     }));
 
     const r = resumoState.resumo;
+    const rAnterior = entradaAnterior && !resumoAnteriorState.loading ? resumoAnteriorState.resumo : null;
+    const nomeMesAnterior = entradaAnterior ? entradaAnterior.label.split(' ')[0].toLowerCase() : '';
+    const comparavel = Boolean(
+        r && rAnterior
+        && r.diasRegistrados >= MIN_DIAS_COMPARACAO
+        && rAnterior.diasRegistrados >= MIN_DIAS_COMPARACAO
+    );
+    const variacao = (atual, anterior) => (comparavel ? fmtVariacao(atual, anterior, nomeMesAnterior) : null);
 
     return (
         <div className="view-wrap fade-in">
@@ -218,10 +247,10 @@ export function StatisticsView({ meses, loading, error }) {
                             <span className="panel-sub">sobre dias registrados</span>
                         </div>
                         <div style={{ marginTop: 16 }}>
-                            <StatBar label="estudos" dias={r.diasEstudo} percentual={r.percentualEstudo} color={COLORS.success} />
-                            <StatBar label="trabalho" dias={r.diasTrabalho} percentual={r.percentualTrabalho} color={COLORS.info} />
-                            <StatBar label="academia" dias={r.diasAcademia} percentual={r.percentualAcademia} color={COLORS.danger} />
-                            <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} color={COLORS.warning} />
+                            <StatBar label="estudos" dias={r.diasEstudo} percentual={r.percentualEstudo} variacao={variacao(r.percentualEstudo, rAnterior?.percentualEstudo)} color={COLORS.success} />
+                            <StatBar label="trabalho" dias={r.diasTrabalho} percentual={r.percentualTrabalho} variacao={variacao(r.percentualTrabalho, rAnterior?.percentualTrabalho)} color={COLORS.info} />
+                            <StatBar label="academia" dias={r.diasAcademia} percentual={r.percentualAcademia} variacao={variacao(r.percentualAcademia, rAnterior?.percentualAcademia)} color={COLORS.danger} />
+                            <StatBar label="acordou cedo" dias={r.diasAcordouCedo} percentual={r.percentualAcordouCedo} variacao={variacao(r.percentualAcordouCedo, rAnterior?.percentualAcordouCedo)} color={COLORS.warning} />
                         </div>
                     </section>
 
