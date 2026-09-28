@@ -5,6 +5,8 @@
  * hábito na seção "consistência de hábitos", opcionalmente com a variação em
  * pontos percentuais vs o mês anterior (só aparece se o mês anterior existir e
  * os dois meses tiverem pelo menos MIN_DIAS_COMPARACAO dias registrados).
+ * Os cards de água, sono e horários também mostram a variação vs o mês
+ * anterior, mas só quando ela passa de um limiar (LIMIAR_*), pra não poluir.
  * INSIGHT_CORES mapeia o tipo do insight (sono/humor/agua/dia_semana) pra cor
  * da barrinha lateral de cada item.
  */
@@ -24,6 +26,51 @@ function fmtVariacao(atual, anterior, nomeMesAnterior) {
     const diff = Math.round(atual - anterior);
     if (diff === 0) return `igual a ${nomeMesAnterior}`;
     return `${diff > 0 ? '+' : '-'}${Math.abs(diff)} pts vs ${nomeMesAnterior}`;
+}
+
+const LIMIAR_AGUA_LITROS = 0.3;
+const LIMIAR_SONO_MINUTOS = 15;
+const LIMIAR_HORARIO_MINUTOS = 20;
+
+function hhmmParaMinutos(txt) {
+    const m = /^(\d{2}):(\d{2})$/.exec(txt || '');
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+function duracaoParaMinutos(txt) {
+    const m = /^(\d+)h(\d{2})$/.exec(txt || '');
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+function fmtMinutos(min) {
+    const abs = Math.abs(min);
+    if (abs < 60) return `${abs} min`;
+    return `${Math.floor(abs / 60)}h${String(abs % 60).padStart(2, '0')}`;
+}
+
+function variacaoAgua(atual, anterior, nomeMesAnterior) {
+    const diff = Math.round((atual - anterior) * 100) / 100;
+    if (Math.abs(diff) < LIMIAR_AGUA_LITROS) return null;
+    return `${diff > 0 ? '+' : '-'}${parseFloat(Math.abs(diff).toFixed(2))}L vs ${nomeMesAnterior}`;
+}
+
+function variacaoSono(atual, anterior, nomeMesAnterior) {
+    const a = duracaoParaMinutos(atual);
+    const b = duracaoParaMinutos(anterior);
+    if (a === null || b === null) return null;
+    const diff = a - b;
+    if (Math.abs(diff) < LIMIAR_SONO_MINUTOS) return null;
+    return `${diff > 0 ? '+' : '-'}${fmtMinutos(diff)} vs ${nomeMesAnterior}`;
+}
+
+// diferença circular: 23:50 vs 00:20 = 30 min mais cedo, não 23h
+function variacaoHorario(atual, anterior, nomeMesAnterior) {
+    const a = hhmmParaMinutos(atual);
+    const b = hhmmParaMinutos(anterior);
+    if (a === null || b === null) return null;
+    const diff = ((a - b + 720 + 1440) % 1440) - 720;
+    if (Math.abs(diff) < LIMIAR_HORARIO_MINUTOS) return null;
+    return `${fmtMinutos(diff)} ${diff > 0 ? 'mais tarde' : 'mais cedo'} que em ${nomeMesAnterior}`;
 }
 
 function StatBar({ label, dias, percentual, variacao, color = COLORS.success }) {
@@ -179,6 +226,10 @@ export function StatisticsView({ meses, loading, error }) {
         && rAnterior.diasRegistrados >= MIN_DIAS_COMPARACAO
     );
     const variacao = (atual, anterior) => (comparavel ? fmtVariacao(atual, anterior, nomeMesAnterior) : null);
+    const varAgua = comparavel ? variacaoAgua(r.mediaAgua, rAnterior.mediaAgua, nomeMesAnterior) : null;
+    const varSono = comparavel ? variacaoSono(r.mediaSono, rAnterior.mediaSono, nomeMesAnterior) : null;
+    const varDormir = comparavel ? variacaoHorario(r.mediaDormiAs, rAnterior.mediaDormiAs, nomeMesAnterior) : null;
+    const varAcordar = comparavel ? variacaoHorario(r.mediaAcordeiAs, rAnterior.mediaAcordeiAs, nomeMesAnterior) : null;
 
     return (
         <div className="view-wrap fade-in">
@@ -214,7 +265,7 @@ export function StatisticsView({ meses, loading, error }) {
                         <MetricCard
                             label="média de água"
                             value={`${r.mediaAgua}L`}
-                            sub="por dia registrado"
+                            sub={varAgua ? `por dia registrado · ${varAgua}` : 'por dia registrado'}
                         />
                         <MetricCard
                             label="humor predominante"
@@ -224,7 +275,7 @@ export function StatisticsView({ meses, loading, error }) {
                         <MetricCard
                             label="média de sono"
                             value={r.mediaSono}
-                            sub="horas por noite"
+                            sub={varSono ? `horas por noite · ${varSono}` : 'horas por noite'}
                         />
                     </div>
 
@@ -237,7 +288,7 @@ export function StatisticsView({ meses, loading, error }) {
                         <MetricCard
                             label="horário médio de acordar"
                             value={r.mediaAcordeiAs}
-                            sub="baseado no mês"
+                            sub={varAcordar || 'baseado no mês'}
                         />
                     </div>
 
