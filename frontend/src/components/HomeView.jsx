@@ -5,17 +5,22 @@
  * Os dois banners de alerta (atrasada / vence em breve) usam
  * getTarefaMaisUrgente / getTarefaProximaAVencer de utils/tarefas —
  * só um dos dois aparece por vez (prioriza atrasada).
+ * O badge de streak do topo vira "recorde" (com troféu) quando o streak atual
+ * é o melhor de todos — só a partir de MIN_STREAK_RECORDE dias, pra não
+ * comemorar sequência recém-começada.
  */
 
-import { Flame, Check, Droplet, Calendar, AlertTriangle } from 'lucide-react';
+import { Flame, Trophy, Check, Droplet, Calendar, AlertTriangle } from 'lucide-react';
 import { MetricCard, EmptyHint, LoadingBlock } from './Shared';
 import { WaterRing } from './WaterRing';
 import { YearHeatmap } from './YearHeatmap';
-import { computeStreak } from '../utils/streak';
+import { computeStreakInfo } from '../utils/streak';
 import { getTarefaMaisUrgente, getTarefaProximaAVencer } from '../utils/tarefas';
 import { fmtDatePT, rangeDays } from '../utils/date';
 import { HomeAlerts} from "./HomeAlerts";
 import { WATER_GOAL, COLORS } from '../constants';
+
+const MIN_STREAK_RECORDE = 7;
 
 export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, sessoesFoco, onAtualizarAgua, setView, loadingResumo }) {
   const pendentes = tarefas.filter((t) => t.status !== 'CONCLUIDO');
@@ -24,7 +29,8 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, sesso
   const total = habitos.length;
   const pctHabitos = total ? Math.round((feitos / total) * 100) : 0;
   const agua = registroHoje?.agua || 0;
-  const streak = computeStreak(historicoAnual);
+  const { current: streak, best: melhorStreak } = computeStreakInfo(historicoAnual);
+  const emRecorde = streak >= MIN_STREAK_RECORDE && streak >= melhorStreak;
   const proximoPasso = getTarefaMaisUrgente(tarefas);
   const proximaAVencer = !proximoPasso ? getTarefaProximaAVencer(tarefas) : null;
 
@@ -66,8 +72,14 @@ export function HomeView({ tarefas, habitos, registroHoje, historicoAnual, sesso
           <h1 className="page-title">bom te ver de volta</h1>
         </div>
         <div className="streak-badge">
-          <Flame size={16} color={COLORS.warning} strokeWidth={2} />
-          <span>{streak} {streak === 1 ? 'dia' : 'dias'} de streak</span>
+          {emRecorde
+            ? <Trophy size={16} color={COLORS.warning} strokeWidth={2} />
+            : <Flame size={16} color={COLORS.warning} strokeWidth={2} />}
+          <span>
+            {emRecorde
+              ? `recorde: ${streak} dias`
+              : `${streak} ${streak === 1 ? 'dia' : 'dias'} de streak`}
+          </span>
         </div>
       </header>
 
