@@ -9,6 +9,8 @@
  * com o registro correspondente do histórico (ou null se não tiver).
  * calcularHorasSono() trata o caso de dormir antes da meia-noite e
  * acordar no dia seguinte (soma 24h quando fim < início).
+ * resumoHorariosSono() calcula horário médio de dormir/acordar e a variação
+ * ao dormir usando média circular (23:50 e 00:10 não viram ~12h).
  */
 
 import {
@@ -130,6 +132,48 @@ function calcularHorasSono(dormiAs, acordeiAs) {
   return `${horas}h ${minutos}min`;
 }
 
+function paraMinutos(hhmm) {
+  if (!hhmm) return null;
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function fmtMinutos(min) {
+  const t = ((Math.round(min) % 1440) + 1440) % 1440;
+  const h = String(Math.floor(t / 60)).padStart(2, '0');
+  const m = String(t % 60).padStart(2, '0');
+  return `${h}:${m}`;
+}
+
+// média circular: trata o relógio como círculo de 1440 min
+function mediaCircular(minutos) {
+  const ang = (m) => (m / 1440) * 2 * Math.PI;
+  const sin = minutos.reduce((acc, m) => acc + Math.sin(ang(m)), 0);
+  const cos = minutos.reduce((acc, m) => acc + Math.cos(ang(m)), 0);
+  let a = Math.atan2(sin, cos);
+  if (a < 0) a += 2 * Math.PI;
+  return (a / (2 * Math.PI)) * 1440;
+}
+
+// desvio médio absoluto em minutos, pela menor distância no relógio
+function desvioCircular(minutos, media) {
+  const dist = (m) => Math.abs((((m - media + 720) % 1440) + 1440) % 1440 - 720);
+  return minutos.reduce((acc, m) => acc + dist(m), 0) / minutos.length;
+}
+
+function resumoHorariosSono(series) {
+  const dormir = series.map((d) => paraMinutos(d.entry?.dormiAs)).filter((m) => m !== null);
+  const acordar = series.map((d) => paraMinutos(d.entry?.acordeiAs)).filter((m) => m !== null);
+  if (dormir.length < 3 || acordar.length < 3) return null;
+
+  const mediaDormir = mediaCircular(dormir);
+  return {
+    dormir: fmtMinutos(mediaDormir),
+    acordar: fmtMinutos(mediaCircular(acordar)),
+    variacao: Math.round(desvioCircular(dormir, mediaDormir)),
+  };
+}
+
 function SleepTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   const item = payload[0].payload;
@@ -146,6 +190,12 @@ function SleepTooltip({ active, payload, label }) {
             </div>
         )}
 
+        {item.dormiAs && item.acordeiAs && (
+            <div>
+              {item.dormiAs} → {item.acordeiAs}
+            </div>
+        )}
+
         <div>
           Qualidade: {item.sono ? `${item.sono}/5` : '—'}
         </div>
@@ -154,7 +204,9 @@ function SleepTooltip({ active, payload, label }) {
 }
 
 export function MoodSleepChart({ historico, dias }) {
-  const data = buildSeries(historico, dias).map((d) => {
+  const series = buildSeries(historico, dias);
+  const resumo = resumoHorariosSono(series);
+  const data = series.map((d) => {
     const sleep = SLEEP_QUALITY.find((s) => s.id === d.entry?.sono);
     const mood = MOODS.find((m) => m.id === d.entry?.humor);
 
@@ -162,6 +214,8 @@ export function MoodSleepChart({ historico, dias }) {
       label: d.label,
       sono: sleep ? sleep.score : null,
       humorLabel: mood ? mood.label : '—',
+      dormiAs: d.entry?.dormiAs ? d.entry.dormiAs.slice(0, 5) : null,
+      acordeiAs: d.entry?.acordeiAs ? d.entry.acordeiAs.slice(0, 5) : null,
       horasSono: calcularHorasSono(
           d.entry?.dormiAs,
           d.entry?.acordeiAs
@@ -211,6 +265,12 @@ export function MoodSleepChart({ historico, dias }) {
             />
           </LineChart>
         </ResponsiveContainer>
+
+        {resumo && (
+            <p style={{ fontSize: 11, color: COLORS.textMutedLight, margin: '8px 0 0' }}>
+              horário médio: dorme {resumo.dormir} · acorda {resumo.acordar} · variação ao dormir ±{resumo.variacao}min
+            </p>
+        )}
       </div>
   );
 }
