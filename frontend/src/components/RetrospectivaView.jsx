@@ -174,7 +174,7 @@ function montarSlides(d) {
         { label: 'dias registrados', valor: String(d.diasRegistrados) },
         { label: 'de água', valor: `${fmtNum(d.agua.totalLitros)}L` },
     ];
-    if (campeao) itens.push({ label: 'hábito campeão', valor: campeao.nome });
+    if (campeao) itens.push({ label: 'hábito campeão', valor: campeao.nome.charAt(0).toUpperCase() + campeao.nome.slice(1) });
     if (d.mesMaisConsistente) itens.push({ label: 'melhor mês', valor: d.mesMaisConsistente.nome });
     if (d.sono && d.sono.mediaHoras) itens.push({ label: 'sono médio', valor: fmtHoras(d.sono.mediaHoras) });
     itens.push({ label: 'maior sequência registrando', valor: `${d.maiorSequenciaRegistros} dias` });
