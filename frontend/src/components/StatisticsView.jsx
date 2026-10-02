@@ -9,10 +9,14 @@
  * anterior, mas só quando ela passa de um limiar (LIMIAR_*), pra não poluir.
  * INSIGHT_CORES mapeia o tipo do insight (sono/humor/agua/dia_semana) pra cor
  * da barrinha lateral de cada item.
+ * O botão "retrospectiva" abre a RetrospectivaView em tela cheia, do ano do
+ * mês selecionado (ou do ano atual, se ainda não há mês selecionado).
  */
 
 import { useEffect, useState } from 'react';
+import { Sparkles } from 'lucide-react';
 import { MonthSelector } from './MonthSelector';
+import { RetrospectivaView } from './RetrospectivaView';
 import { LoadingBlock, ErrorBlock, MetricCard } from './Shared';
 import { useResumoEstatisticas } from '../hooks/useEstatisticas';
 import { useInsights } from '../hooks/useInsights';
@@ -195,6 +199,7 @@ function InsightsCard({ insights, dadosSuficientes, loading }) {
 
 export function StatisticsView({ meses, loading, error }) {
     const [selectedMonth, setSelectedMonth] = useState('');
+    const [retroAberta, setRetroAberta] = useState(false);
     const [ano, mes] = selectedMonth ? selectedMonth.split('-').map(Number) : [];
     const resumoState = useResumoEstatisticas(ano, mes);
     const insightsState = useInsights(ano, mes);
@@ -238,6 +243,13 @@ export function StatisticsView({ meses, loading, error }) {
                     <p className="eyebrow">análise</p>
                     <h1 className="page-title">estatísticas</h1>
                 </div>
+                <button
+                    className="secondary-btn"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                    onClick={() => setRetroAberta(true)}
+                >
+                    <Sparkles size={14} /> retrospectiva
+                </button>
             </header>
 
             <section className="panel" style={{ marginBottom: 16 }}>
@@ -316,6 +328,13 @@ export function StatisticsView({ meses, loading, error }) {
                         loading={insightsState.loading}
                     />
                 </>
+            )}
+
+            {retroAberta && (
+                <RetrospectivaView
+                    ano={ano || new Date().getFullYear()}
+                    onClose={() => setRetroAberta(false)}
+                />
             )}
         </div>
     );
