@@ -622,5 +622,5 @@ input[type="checkbox"] { accent-color: #3DDC84; width: 18px; height: 18px; curso
   display: flex; flex-direction: column; gap: 4px; padding: 14px 16px;
   background: #1B1F26; border: 1px solid #2A2E35; border-radius: 10px;
 }
-.retro-resumo-valor { font-size: 22px; font-weight: 600; color: #EDEFF2; text-transform: capitalize; }
+.retro-resumo-valor { font-size: 22px; font-weight: 600; color: #EDEFF2; }
 .retro-resumo-label { font-size: 12px; color: #7A7F88; }
