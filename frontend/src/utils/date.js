@@ -19,6 +19,13 @@ export function todayISO() {
   return toLocalISO(new Date());
 }
 
+// Soma (ou subtrai, com n negativo) dias a uma data ISO 'YYYY-MM-DD'.
+export function addDays(iso, n) {
+  const d = new Date(iso + 'T00:00:00');
+  d.setDate(d.getDate() + n);
+  return toLocalISO(d);
+}
+
 export function daysAgo(n) {
   const d = new Date();
   d.setDate(d.getDate() - n);
