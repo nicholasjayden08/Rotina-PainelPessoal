@@ -5,6 +5,10 @@
  * react-router). A view atual fica sincronizada com o hash da URL
  * (#tasks, #daily...) pra sobreviver a um F5.
  *
+ * A Máquina do tempo (MaquinaDoTempo) é um overlay controlado por
+ * `diaAberto` (data ISO ou null): abre pelo heatmap anual ou pelo card
+ * "neste dia" da home e usa os dados que já estão carregados aqui.
+ *
  * Enquanto `online` (useApiHealth) ainda não respondeu, mostra o app
  * normalmente — só troca pra ApiOfflineScreen quando confirma que a
  * API está fora, pra não piscar a tela de erro à toa.
@@ -30,6 +34,7 @@ import { StatisticsView } from './components/StatisticsView'
 import { useMesesEstatisticas } from './hooks/useEstatisticas';
 import { FocusView } from './components/FocusView';
 import { useFoco } from './hooks/useFoco';
+import { MaquinaDoTempo } from './components/MaquinaDoTempo';
 import { StreakToasts } from "./components/StreakToasts.jsx";
 import { useStreakToasts } from "./hooks/useStreakToasts.js";
 import './index.css';
@@ -43,6 +48,7 @@ export default function App() {
     window.location.hash = v;
     setViewState(v);
   }  const [range, setRange] = useState(14);
+  const [diaAberto, setDiaAberto] = useState(null);
   const isMobile = useIsMobile();
   const online = useApiHealth();
 
@@ -79,6 +85,7 @@ export default function App() {
               onAtualizarAgua={(v) => registroHojeState.atualizarCampo({ agua: v })}
               setView={setView}
               loadingResumo={habitosState.loading}
+              onAbrirDia={setDiaAberto}
             />
           )}
 
@@ -172,6 +179,16 @@ export default function App() {
         </main>
       </div>
       {isMobile && <MobileTabBar view={view} setView={setView} />}
+      {diaAberto && (
+        <MaquinaDoTempo
+          dia={diaAberto}
+          onMudarDia={setDiaAberto}
+          onClose={() => setDiaAberto(null)}
+          registros={historicoCompletoState.historico}
+          tarefas={tarefasState.tarefas}
+          notas={notasState.notas}
+        />
+      )}
       <StreakToasts toasts={streakToastsState.toasts} dispensar={streakToastsState.dispensar} />
     </div>
   );
