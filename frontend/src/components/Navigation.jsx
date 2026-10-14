@@ -5,8 +5,9 @@
  * é decidido no App.jsx via useIsMobile.
  */
 
-import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap, Target, CalendarRange } from 'lucide-react';
+import { Home, CheckSquare, Sun, Activity, Wifi, WifiOff, BookOpen, ChartColumn, Zap, Target, CalendarRange, HardDrive } from 'lucide-react';
 import { COLORS } from '../constants';
+import { useUltimoBackup } from '../hooks/useUltimoBackup';
 
 function Logo() {
     return (
@@ -28,7 +29,19 @@ const NAV_ITEMS = [
     { id: 'focus', label: 'foco', icon: Target },
 ];
 
+function fmtUltimoBackup(iso) {
+  const d = new Date(iso);
+  const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const hoje = new Date();
+  const ontem = new Date();
+  ontem.setDate(hoje.getDate() - 1);
+  if (d.toDateString() === hoje.toDateString()) return `hoje, ${hora}`;
+  if (d.toDateString() === ontem.toDateString()) return `ontem, ${hora}`;
+  return `${d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}, ${hora}`;
+}
+
 export function Sidebar({ view, setView, online }) {
+  const ultimoBackup = useUltimoBackup(online);
   return (
     <nav className="sidebar">
         <Logo />
@@ -50,6 +63,12 @@ export function Sidebar({ view, setView, online }) {
       </div>
       <div className="sidebar-footer">
         <ConnectionIndicator online={online} />
+        {online && (
+          <div className="connection-indicator" style={{ marginTop: 6 }}>
+            <HardDrive size={13} color={COLORS.textMutedLight} />
+            <span>{ultimoBackup ? `último backup: ${fmtUltimoBackup(ultimoBackup)}` : 'nenhum backup ainda'}</span>
+          </div>
+        )}
       </div>
     </nav>
   );
