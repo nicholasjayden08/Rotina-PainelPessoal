@@ -62,32 +62,36 @@ public class BackupService {
         return resultado;
     }
 
-    // roda todo dia às 3h enquanto o app estiver no ar
-    @Scheduled(cron = "0 0 3 * * *")
-    public void backupAgendado() {
+    // confere de hora em hora: se o último backup tem mais de 24h, cria outro
+    // (cobre o Mac dormindo ou o app aberto só durante parte do dia)
+    @Scheduled(initialDelay = 3_600_000, fixedDelay = 3_600_000)
+    public void verificarPeriodicamente() {
         try {
-            criarBackup();
+            criarSeNecessario();
         } catch (Exception e) {
-            log.error("Falha no backup agendado", e);
+            log.error("Falha na verificação periódica de backup", e);
         }
     }
 
-    // o Mac pode estar dormindo às 3h, então ao subir confere se o último backup já passou de 24h
     @EventListener(ApplicationReadyEvent.class)
     public void backupAoIniciar() {
         try {
-            List<Path> existentes = listarArquivos();
-            if (!existentes.isEmpty()) {
-                Instant ultimo = Files.getLastModifiedTime(existentes.get(0)).toInstant();
-                if (Duration.between(ultimo, Instant.now()).toHours() < HORAS_ENTRE_BACKUPS) {
-                    log.info("Backup recente encontrado, pulando backup de inicialização");
-                    return;
-                }
-            }
-            criarBackup();
+            criarSeNecessario();
         } catch (Exception e) {
             log.error("Falha no backup de inicialização", e);
         }
+    }
+
+    private void criarSeNecessario() throws IOException {
+        List<Path> existentes = listarArquivos();
+        if (!existentes.isEmpty()) {
+            Instant ultimo = Files.getLastModifiedTime(existentes.get(0)).toInstant();
+            if (Duration.between(ultimo, Instant.now()).toHours() < HORAS_ENTRE_BACKUPS) {
+                log.debug("Backup recente encontrado, nada a fazer");
+                return;
+            }
+        }
+        criarBackup();
     }
 
     // só mexe em arquivos rotina-*.zip dentro da pasta de backups, mais novo primeiro
