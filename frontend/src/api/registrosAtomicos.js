@@ -10,4 +10,3 @@ export const registrosAtomicosApi = {
   atualizarParcial: (data, dados) => api.patch(`/registros-atomicos/data/${data}`, dados),
   excluir: (id) => api.delete(`/registros-atomicos/${id}`),
 };
-
